@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "222665857066",
+    "project_id": "project-46190004-1d82-4e7b-8c0",
+    "storage_bucket": "project-46190004-1d82-4e7b-8c0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222665857066:android:3571ef54b611ec93910b53",
+        "android_client_info": {
+          "package_name": "com.nachospetcare.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "222665857066-81jhtj4cjfh5s4tppp3k34qj32v04ri9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nachospetcare.app",
+            "certificate_hash": "e0d23fad4ceda398ee2cdb387c3fed85791153f8"
+          }
+        },
+        {
+          "client_id": "222665857066-j80d6uuojqo7hvif9qmehab3up7tjbsk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKNYT9DCSBCLIg9FHh5zjj7zpIYXThr6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "222665857066-j80d6uuojqo7hvif9qmehab3up7tjbsk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
