@@ -1,0 +1,70 @@
+name: ⏰ Recordatorio de Entregas
+
+on:
+  schedule:
+    # Se ejecuta todos los días a las 09:00 UTC
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  check_deadlines:
+    name: 📅 Comprobar fechas de entrega
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📅 Comprobar fechas y notificar
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const deadlines = [
+              { name: '🟡 Anteproyecto',          date: '2026-02-22', milestone: 'Sprint 0' },
+              { name: '🟠 1ª Parcial (50%)',       date: '2026-03-15', milestone: 'Sprint 1' },
+              { name: '🔵 2ª Parcial (85%)',       date: '2026-04-05', milestone: 'Sprint 2' },
+              { name: '🟢 Entrega Final (100%)',   date: '2026-05-03', milestone: 'Sprint 3' },
+              { name: '🎤 Defensa Final',          date: '2026-05-17', milestone: 'Defensa'  },
+            ];
+
+            const today     = new Date();
+            const todayStr  = today.toISOString().split('T')[0];
+            const warnings  = [];
+
+            for (const d of deadlines) {
+              const due      = new Date(d.date);
+              const diffMs   = due - today;
+              const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+              if (diffDays > 0 && diffDays <= 7) {
+                warnings.push(
+                  `> ⚠️ **${d.name}** vence en **${diffDays} día(s)** (${d.date})`
+                );
+              }
+            }
+
+            if (warnings.length === 0) {
+              console.log('✅ No hay entregas en los próximos 7 días.');
+              return;
+            }
+
+            // Abrir un issue de aviso si hay entregas próximas
+            const body = [
+              '## ⏰ Recordatorio automático de entregas',
+              '',
+              `Fecha de comprobación: **${todayStr}**`,
+              '',
+              ...warnings,
+              '',
+              '---',
+              '_Este issue fue creado automáticamente por GitHub Actions._',
+              '_Ciérralo una vez revisado._',
+            ].join('\n');
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              title: `⏰ [Recordatorio] Entregas próximas – ${todayStr}`,
+              body,
+              labels: ['docs', 'priority-high'],
+            });
+
+            console.log(`✅ Issue de recordatorio creado para: ${warnings.join(', ')}`);
