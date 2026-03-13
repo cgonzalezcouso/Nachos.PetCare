@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🗂️ Tablero Kanban (GitHub Projects)
+    url: https://github.com/users/cgonzalezcouso/projects/10
+    about: Accede al tablero visual del proyecto para ver el estado de todas las tareas.
+  - name: 📊 Diagrama de Gantt
+    url: https://github.com/cgonzalezcouso/Nachos.PetCare/blob/main/docs/plan.md
+    about: Consulta la planificación de sprints y milestones del proyecto.
