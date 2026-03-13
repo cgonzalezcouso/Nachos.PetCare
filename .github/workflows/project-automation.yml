@@ -17,7 +17,7 @@ jobs:
         uses: actions/add-to-project@v1.0.2
         with:
           project-url: https://github.com/users/cgonzalezcouso/projects/10
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PROJECT_TOKEN }}
 
   # ─── Issue asignado → Sprint Activo ───���──────────────────────────────
   issue_assigned:
@@ -28,7 +28,7 @@ jobs:
       - name: Move issue to Sprint Activo
         uses: leonsteinhaeuser/project-beta-automations@v2.2.1
         with:
-          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          gh_token: ${{ secrets.PROJECT_TOKEN }}
           user: cgonzalezcouso
           project_id: 10
           resource_node_id: ${{ github.event.issue.node_id }}
@@ -43,7 +43,7 @@ jobs:
       - name: Move linked issue to In Progress
         uses: leonsteinhaeuser/project-beta-automations@v2.2.1
         with:
-          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          gh_token: ${{ secrets.PROJECT_TOKEN }}
           user: cgonzalezcouso
           project_id: 10
           resource_node_id: ${{ github.event.pull_request.node_id }}
@@ -58,7 +58,7 @@ jobs:
       - name: Move PR to In Review
         uses: leonsteinhaeuser/project-beta-automations@v2.2.1
         with:
-          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          gh_token: ${{ secrets.PROJECT_TOKEN }}
           user: cgonzalezcouso
           project_id: 10
           resource_node_id: ${{ github.event.pull_request.node_id }}
@@ -76,7 +76,7 @@ jobs:
       - name: Move PR to Done
         uses: leonsteinhaeuser/project-beta-automations@v2.2.1
         with:
-          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          gh_token: ${{ secrets.PROJECT_TOKEN }}
           user: cgonzalezcouso
           project_id: 10
           resource_node_id: ${{ github.event.pull_request.node_id }}
@@ -91,7 +91,7 @@ jobs:
       - name: Move issue to Done
         uses: leonsteinhaeuser/project-beta-automations@v2.2.1
         with:
-          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          gh_token: ${{ secrets.PROJECT_TOKEN }}
           user: cgonzalezcouso
           project_id: 10
           resource_node_id: ${{ github.event.issue.node_id }}
