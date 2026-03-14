@@ -5,6 +5,9 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart';
 import 'package:nachos_pet_care_flutter/models/user.dart';
 import 'package:nachos_pet_care_flutter/models/pet.dart';
+import 'package:nachos_pet_care_flutter/models/vaccine_reminder.dart';
+import 'package:nachos_pet_care_flutter/models/veterinary_report.dart';
+
 
 class DatabaseService {
   static Database? _database;
@@ -221,4 +224,87 @@ class DatabaseService {
       whereArgs: [id],
     );
   }
+
+  // --- Operaciones de Vacunas ---
+
+  Future<void> insertVaccineReminder(VaccineReminder reminder) async {
+    final db = await database;
+    await db.insert(
+      'vaccine_reminders',
+      reminder.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<VaccineReminder>> getVaccineRemindersByPet(String petId) async {
+    final db = await database;
+    final maps = await db.query(
+      'vaccine_reminders',
+      where: 'petId = ?',
+      whereArgs: [petId],
+      orderBy: 'dueDate ASC',
+    );
+    return maps.map((map) => VaccineReminder.fromJson(map)).toList();
+  }
+
+  Future<void> updateVaccineReminder(VaccineReminder reminder) async {
+    final db = await database;
+    await db.update(
+      'vaccine_reminders',
+      reminder.toJson(),
+      where: 'id = ?',
+      whereArgs: [reminder.id],
+    );
+  }
+
+  Future<void> deleteVaccineReminder(String id) async {
+    final db = await database;
+    await db.delete(
+      'vaccine_reminders',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // --- Operaciones de Historial Veterinario ---
+
+  Future<void> insertVeterinaryReport(VeterinaryReport report) async {
+    final db = await database;
+    await db.insert(
+      'veterinary_reports',
+      report.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<VeterinaryReport>> getVeterinaryReportsByPet(String petId) async {
+    final db = await database;
+    final maps = await db.query(
+      'veterinary_reports',
+      where: 'petId = ?',
+      whereArgs: [petId],
+      orderBy: 'visitDate DESC',
+    );
+    return maps.map((map) => VeterinaryReport.fromJson(map)).toList();
+  }
+
+  Future<void> updateVeterinaryReport(VeterinaryReport report) async {
+    final db = await database;
+    await db.update(
+      'veterinary_reports',
+      report.toJson(),
+      where: 'id = ?',
+      whereArgs: [report.id],
+    );
+  }
+
+  Future<void> deleteVeterinaryReport(String id) async {
+    final db = await database;
+    await db.delete(
+      'veterinary_reports',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 }
+

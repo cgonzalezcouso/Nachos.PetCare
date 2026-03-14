@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NachosPetCare</string>
-    <string name="facebook_app_id">1578344373494916</string>
-    <string name="facebook_client_token">51d4f5efedad3fba70a4ef2aa45ad70c</string>
-    <string name="fb_login_protocol_scheme">fb1578344373494916</string>
 </resources>
+

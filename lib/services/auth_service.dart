@@ -7,7 +7,7 @@ import 'package:nachos_pet_care_flutter/services/database_service.dart';
 import 'package:nachos_pet_care_flutter/services/service_locator.dart';
 import 'package:nachos_pet_care_flutter/config/supabase_config.dart';
 
-enum AuthProvider { email, google, facebook, microsoft }
+enum AuthProvider { email, google, microsoft }
 
 class AuthService {
   SupabaseClient? get _supabase {
@@ -153,66 +153,6 @@ class AuthService {
       debugPrint('❌ Error inesperado en Google Sign-In: $e');
       debugPrint('StackTrace: $stackTrace');
       rethrow;
-    }
-  }
-
-  // Login con Facebook
-  Future<app_user.User> signInWithFacebook() async {
-    if (_supabase == null) {
-      throw Exception('Supabase no está configurado');
-    }
-    
-    try {
-      // 1. Iniciar el flujo de OAuth
-      final response = await _supabase!.auth.signInWithOAuth(
-        OAuthProvider.facebook,
-        redirectTo: SupabaseConfig.redirectUrl,
-        authScreenLaunchMode: LaunchMode.externalApplication,
-      );
-
-      if (!response) {
-        throw Exception('Error al iniciar sesión con Facebook');
-      }
-
-      // 2. Esperar a que el usuario complete el login y Supabase notifique el evento
-      debugPrint('🔐 Esperando autenticación de Facebook...');
-      
-      final completer = Completer<app_user.User>();
-      StreamSubscription? subscription;
-
-      subscription = _supabase!.auth.onAuthStateChange.listen((data) async {
-        debugPrint('🔔 Evento Auth Recibido: ${data.event}'); // LOG NUEVO
-        if (data.session != null) {
-             debugPrint('   Session User: ${data.session!.user.email}');
-        } else {
-             debugPrint('   Session es NULL');
-        }
-
-        if (data.event == AuthChangeEvent.signedIn && data.session != null) {
-          debugPrint('✅ Evento de Login recibido!');
-          subscription?.cancel();
-          try {
-            final user = await _getOrCreateUser(data.session!.user);
-            if (!completer.isCompleted) completer.complete(user);
-          } catch (e) {
-            if (!completer.isCompleted) completer.completeError(e);
-          }
-        }
-      });
-
-      // 3. Timeout de seguridad (por si el usuario cancela o hay error)
-      // 60 segundos debería ser suficiente para loguearse
-      Future.delayed(const Duration(seconds: 60), () {
-        if (!completer.isCompleted) {
-          subscription?.cancel();
-          completer.completeError(Exception('Tiempo de espera agotado. Inténtalo de nuevo.'));
-        }
-      });
-
-      return completer.future;
-
-    } on AuthException catch (e) {
-      throw _handleAuthException(e);
     }
   }
 

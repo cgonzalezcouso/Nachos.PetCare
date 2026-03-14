@@ -51,38 +51,71 @@ class _AddPetScreenState extends State<AddPetScreen> {
   Future<void> _savePet() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final authProvider = context.read<AuthProvider>();
+    final petProvider = context.read<PetProvider>();
+
+    // Verificar que hay usuario autenticado
+    if (authProvider.user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error: no hay sesión activa. Por favor, inicia sesión de nuevo.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
 
-    final authProvider = context.read<AuthProvider>();
-    final petProvider = context.read<PetProvider>();
+    try {
+      final pet = Pet(
+        id: const Uuid().v4(),
+        ownerId: authProvider.user!.id,
+        name: _nameController.text.trim(),
+        type: _selectedType,
+        breed: _breedController.text.trim().isEmpty ? null : _breedController.text.trim(),
+        birthDate: _birthDate,
+        gender: _selectedGender,
+        weight: _weightController.text.isNotEmpty
+            ? double.tryParse(_weightController.text)
+            : null,
+        notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+        createdAt: DateTime.now(),
+      );
 
-    final pet = Pet(
-      id: const Uuid().v4(),
-      ownerId: authProvider.user!.id,
-      name: _nameController.text.trim(),
-      type: _selectedType,
-      breed: _breedController.text.trim().isEmpty ? null : _breedController.text.trim(),
-      birthDate: _birthDate,
-      gender: _selectedGender,
-      weight: _weightController.text.isNotEmpty
-          ? double.tryParse(_weightController.text)
-          : null,
-      notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
-      createdAt: DateTime.now(),
-    );
+      final success = await petProvider.addPet(pet);
 
-    final success = await petProvider.addPet(pet);
+      if (!mounted) return;
 
-    setState(() {
-      _isLoading = false;
-    });
-
-    if (success && mounted) {
-      context.pop();
+      if (success) {
+        context.pop();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(petProvider.error ?? 'Error al guardar la mascota. Inténtalo de nuevo.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error inesperado: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -35,21 +35,6 @@ class SocialSignInButtons extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // Facebook
-            _SocialButton(
-              onPressed: auth.isLoading
-                  ? null
-                  : () async {
-                      final success = await auth.signInWithFacebook();
-                      if (success && context.mounted) {
-                        context.go('/home');
-                      }
-                    },
-              icon: const _FacebookIcon(),
-              label: 'Continuar con Facebook',
-            ),
-            const SizedBox(height: 12),
-
             // Microsoft
             _SocialButton(
               onPressed: auth.isLoading
@@ -171,31 +156,6 @@ class _GoogleLogoPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class _FacebookIcon extends StatelessWidget {
-  const _FacebookIcon();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 20,
-      height: 20,
-      decoration: const BoxDecoration(
-        color: Color(0xFF1877F2),
-        shape: BoxShape.circle,
-      ),
-      child: const Center(
-        child: Text(
-          'f',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class _MicrosoftIcon extends StatelessWidget {
   @override

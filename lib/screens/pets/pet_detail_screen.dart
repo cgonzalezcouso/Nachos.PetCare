@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -33,18 +34,59 @@ class PetDetailScreen extends StatelessWidget {
         }
 
         return Scaffold(
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: 1, // Mascotas activo
+            onDestinationSelected: (index) {
+              switch (index) {
+                case 0:
+                  context.go('/home');
+                  break;
+                case 1:
+                  context.go('/home'); // vuelve al home en la pestaña mascotas
+                  break;
+                case 2:
+                  context.go('/home');
+                  break;
+              }
+            },
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.home_outlined),
+                selectedIcon: Icon(Icons.home),
+                label: 'Inicio',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.pets),
+                selectedIcon: Icon(Icons.pets),
+                label: 'Mascotas',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.more_horiz),
+                selectedIcon: Icon(Icons.more_horiz),
+                label: 'Más',
+              ),
+            ],
+          ),
           body: CustomScrollView(
             slivers: [
               SliverAppBar(
                 expandedHeight: 200,
                 pinned: true,
+                // Botón de volver siempre visible
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    if (context.canPop()) {
+                      context.pop();
+                    } else {
+                      context.go('/home');
+                    }
+                  },
+                ),
                 flexibleSpace: FlexibleSpaceBar(
                   title: Text(pet.name),
                   background: pet.photoPath != null && pet.photoPath!.isNotEmpty
-                      ? Image.network(
-                          pet.photoPath!,
-                          fit: BoxFit.cover,
-                        )
+                      ? _PetPhoto(photoPath: pet.photoPath!)
                       : Container(
                           color: Theme.of(context).colorScheme.primaryContainer,
                           child: Icon(
@@ -79,7 +121,9 @@ class PetDetailScreen extends StatelessWidget {
                       ),
                     ],
                     onSelected: (value) async {
-                      if (value == 'delete') {
+                      if (value == 'edit') {
+                        context.go('/pets/${pet.id}/edit');
+                      } else if (value == 'delete') {
                         final confirm = await showDialog<bool>(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -100,7 +144,7 @@ class PetDetailScreen extends StatelessWidget {
                         if (confirm == true) {
                           await petProvider.deletePet(petId);
                           if (context.mounted) {
-                            context.pop();
+                            context.go('/home');
                           }
                         }
                       }
@@ -188,7 +232,9 @@ class PetDetailScreen extends StatelessWidget {
                           child: _ActionCard(
                             icon: Icons.vaccines,
                             label: 'Vacunas',
-                            onTap: () {},
+                            onTap: () => context.go(
+                              '/pets/${pet.id}/vaccines?name=${Uri.encodeComponent(pet.name)}',
+                            ),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -196,7 +242,9 @@ class PetDetailScreen extends StatelessWidget {
                           child: _ActionCard(
                             icon: Icons.medical_services,
                             label: 'Historial',
-                            onTap: () {},
+                            onTap: () => context.go(
+                              '/pets/${pet.id}/history?name=${Uri.encodeComponent(pet.name)}',
+                            ),
                           ),
                         ),
                       ],
@@ -211,6 +259,28 @@ class PetDetailScreen extends StatelessWidget {
     );
   }
 }
+
+// Widget auxiliar para mostrar la foto (local o red)
+class _PetPhoto extends StatelessWidget {
+  final String photoPath;
+  const _PetPhoto({required this.photoPath});
+
+  @override
+  Widget build(BuildContext context) {
+    if (photoPath.startsWith('http')) {
+      return Image.network(photoPath, fit: BoxFit.cover);
+    }
+    return Image.file(
+      File(photoPath),
+      fit: BoxFit.cover,
+      errorBuilder: (_, __, ___) => Container(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        child: Icon(Icons.pets, size: 80, color: Theme.of(context).colorScheme.onPrimaryContainer),
+      ),
+    );
+  }
+}
+
 
 class _InfoRow extends StatelessWidget {
   final String label;
