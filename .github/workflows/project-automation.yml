@@ -1,0 +1,98 @@
+name: 🗂️ Automatización del Tablero (Kanban)
+
+on:
+  issues:
+    types: [opened, closed, reopened, assigned]
+  pull_request:
+    types: [opened, closed, reopened, ready_for_review]
+
+jobs:
+  # ─── Issue abierto → Backlog ─────────────────────────────────────────
+  issue_opened:
+    name: Issue abierto → Backlog
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && github.event.action == 'opened'
+    steps:
+      - name: Add issue to project (Backlog)
+        uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: https://github.com/users/cgonzalezcouso/projects/10
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+
+  # ─── Issue asignado → Sprint Activo ───���──────────────────────────────
+  issue_assigned:
+    name: Issue asignado → Sprint Activo
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && github.event.action == 'assigned'
+    steps:
+      - name: Move issue to Sprint Activo
+        uses: leonsteinhaeuser/project-beta-automations@v2.2.1
+        with:
+          gh_token: ${{ secrets.PROJECT_TOKEN }}
+          user: cgonzalezcouso
+          project_id: 10
+          resource_node_id: ${{ github.event.issue.node_id }}
+          status_value: "Sprint Activo"
+
+  # ─── PR abierto → In Progress ────────────────────────────────────────
+  pr_opened:
+    name: PR abierto → In Progress
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    steps:
+      - name: Move linked issue to In Progress
+        uses: leonsteinhaeuser/project-beta-automations@v2.2.1
+        with:
+          gh_token: ${{ secrets.PROJECT_TOKEN }}
+          user: cgonzalezcouso
+          project_id: 10
+          resource_node_id: ${{ github.event.pull_request.node_id }}
+          status_value: "In Progress"
+
+  # ─── PR listo para review → In Review ────────────────────────────────
+  pr_review:
+    name: PR listo para review → In Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'ready_for_review'
+    steps:
+      - name: Move PR to In Review
+        uses: leonsteinhaeuser/project-beta-automations@v2.2.1
+        with:
+          gh_token: ${{ secrets.PROJECT_TOKEN }}
+          user: cgonzalezcouso
+          project_id: 10
+          resource_node_id: ${{ github.event.pull_request.node_id }}
+          status_value: "In Review"
+
+  # ─── PR merged → Done ────────────────────────────────────────────────
+  pr_merged:
+    name: PR mergeado → Done
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed' &&
+      github.event.pull_request.merged == true
+    steps:
+      - name: Move PR to Done
+        uses: leonsteinhaeuser/project-beta-automations@v2.2.1
+        with:
+          gh_token: ${{ secrets.PROJECT_TOKEN }}
+          user: cgonzalezcouso
+          project_id: 10
+          resource_node_id: ${{ github.event.pull_request.node_id }}
+          status_value: "Done"
+
+  # ─── Issue cerrado → Done ────────────────────────────────────────────
+  issue_closed:
+    name: Issue cerrado → Done
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issues' && github.event.action == 'closed'
+    steps:
+      - name: Move issue to Done
+        uses: leonsteinhaeuser/project-beta-automations@v2.2.1
+        with:
+          gh_token: ${{ secrets.PROJECT_TOKEN }}
+          user: cgonzalezcouso
+          project_id: 10
+          resource_node_id: ${{ github.event.issue.node_id }}
+          status_value: "Done"
