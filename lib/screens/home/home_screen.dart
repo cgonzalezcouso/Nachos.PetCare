@@ -43,11 +43,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: IndexedStack(
         index: _currentIndex,
-        children: const [
-          _HomeTab(),
-          _PetsTab(),
-          _RemindersTab(),
-          _MoreTab(),
+        children: [
+          _HomeTab(onSwitchTab: (i) => setState(() => _currentIndex = i)),
+          const _PetsTab(),
+          const _RemindersTab(),
+          const _MoreTab(),
         ],
       ),
       floatingActionButton: _currentIndex == 1
@@ -91,12 +91,14 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _HomeTab extends StatelessWidget {
-  const _HomeTab();
+  final void Function(int) onSwitchTab;
+
+  const _HomeTab({required this.onSwitchTab});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthProvider>(
-      builder: (context, auth, _) {
+    return Consumer2<AuthProvider, PetProvider>(
+      builder: (context, auth, petProvider, _) {
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -168,7 +170,7 @@ class _HomeTab extends StatelessWidget {
                     child: _QuickActionCard(
                       icon: Icons.medical_services,
                       label: 'Veterinario',
-                      onTap: () {},
+                      onTap: () => context.push('/directory'),
                     ),
                   ),
                 ],
@@ -180,7 +182,17 @@ class _HomeTab extends StatelessWidget {
                     child: _QuickActionCard(
                       icon: Icons.vaccines,
                       label: 'Vacunas',
-                      onTap: () {},
+                      onTap: () {
+                        final pets = petProvider.pets;
+                        if (pets.isNotEmpty) {
+                          context.push(
+                            '/pets/\${pets.first.id}/vaccines'
+                            '?name=\${Uri.encodeComponent(pets.first.name)}',
+                          );
+                        } else {
+                          context.push('/pets');
+                        }
+                      },
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -188,7 +200,7 @@ class _HomeTab extends StatelessWidget {
                     child: _QuickActionCard(
                       icon: Icons.calendar_today,
                       label: 'Citas',
-                      onTap: () {},
+                      onTap: () => onSwitchTab(2), // pestaña Recordatorios
                     ),
                   ),
                 ],

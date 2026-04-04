@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:nachos_pet_care_flutter/config/theme.dart';
@@ -6,6 +7,9 @@ import 'package:nachos_pet_care_flutter/config/routes.dart';
 import 'package:nachos_pet_care_flutter/config/supabase_config.dart';
 import 'package:nachos_pet_care_flutter/providers/auth_provider.dart';
 import 'package:nachos_pet_care_flutter/providers/pet_provider.dart';
+import 'package:nachos_pet_care_flutter/providers/adoption_provider.dart';
+import 'package:nachos_pet_care_flutter/providers/theme_provider.dart';
+import 'package:nachos_pet_care_flutter/services/adoption_service.dart';
 import 'package:nachos_pet_care_flutter/services/service_locator.dart';
 
 void main() async {
@@ -18,7 +22,7 @@ void main() async {
       await Supabase.initialize(
         url: SupabaseConfig.supabaseUrl,
         anonKey: SupabaseConfig.supabaseAnonKey,
-        debug: true,
+        debug: kDebugMode, // Solo logs en modo debug, nunca en producción
       );
     }
     
@@ -27,8 +31,10 @@ void main() async {
     
     runApp(const NachosPetCareApp());
   } catch (e, stackTrace) {
-    debugPrint('Error al inicializar la aplicación: $e');
-    debugPrint('StackTrace: $stackTrace');
+    if (kDebugMode) {
+      debugPrint('Error al inicializar la aplicación: $e');
+      debugPrint('StackTrace: $stackTrace');
+    }
     runApp(MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.white,
@@ -45,8 +51,11 @@ void main() async {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
+                // Solo mostramos detalles del error en modo debug
                 Text(
-                  e.toString(),
+                  kDebugMode
+                      ? e.toString()
+                      : 'Hubo un problema al iniciar la aplicación. Por favor, inténtalo de nuevo.',
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 14),
                 ),
@@ -68,14 +77,20 @@ class NachosPetCareApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => PetProvider()),
+        ChangeNotifierProvider(
+          create: (_) => AdoptionProvider(service: getIt<AdoptionService>()),
+        ),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
-      child: MaterialApp.router(
-        title: 'NachosPetCare',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.system,
-        routerConfig: appRouter,
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, _) => MaterialApp.router(
+          title: 'NachosPetCare',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: themeProvider.themeMode,
+          routerConfig: appRouter,
+        ),
       ),
     );
   }

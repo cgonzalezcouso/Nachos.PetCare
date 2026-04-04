@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nachos_pet_care_flutter/models/user.dart' as app_user;
 import 'package:nachos_pet_care_flutter/services/database_service.dart';
 import 'package:nachos_pet_care_flutter/services/service_locator.dart';
 import 'package:nachos_pet_care_flutter/config/supabase_config.dart';
+import 'package:nachos_pet_care_flutter/config/app_logger.dart';
 
 enum AuthProvider { email, google, microsoft }
 
@@ -124,7 +124,7 @@ class AuthService {
     }
     
     try {
-      debugPrint('🔐 Iniciando Google Sign-In con OAuth nativo...');
+      AppLogger.auth('Iniciando Google Sign-In con OAuth nativo...');
       
       await _supabase!.auth.signInWithOAuth(
         OAuthProvider.google,
@@ -132,7 +132,7 @@ class AuthService {
         authScreenLaunchMode: LaunchMode.externalApplication,
       );
 
-      debugPrint('🔐 Esperando autenticación...');
+      AppLogger.auth('Esperando autenticación...');
       
       // Esperar a que se complete la autenticación
       await Future.delayed(const Duration(seconds: 2));
@@ -143,15 +143,14 @@ class AuthService {
         throw Exception('Error al iniciar sesión con Google');
       }
 
-      debugPrint('✅ Usuario autenticado con Supabase: ${supabaseUser.email}');
+      AppLogger.auth('Usuario autenticado con Supabase: ${supabaseUser.email}');
       
       return await _getOrCreateUser(supabaseUser);
     } on AuthException catch (e) {
-      debugPrint('❌ Error de autenticación: ${e.message}');
+      AppLogger.error('Error de autenticación Google', error: e.message);
       throw _handleAuthException(e);
     } catch (e, stackTrace) {
-      debugPrint('❌ Error inesperado en Google Sign-In: $e');
-      debugPrint('StackTrace: $stackTrace');
+      AppLogger.error('Error inesperado en Google Sign-In', error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -163,34 +162,30 @@ class AuthService {
     }
     
     try {
-      debugPrint('🔐 Iniciando Microsoft Sign-In...');
+      AppLogger.auth('Iniciando Microsoft Sign-In...');
       
       // 1. Iniciar el flujo de OAuth
       final response = await _supabase!.auth.signInWithOAuth(
         OAuthProvider.azure,
         redirectTo: SupabaseConfig.redirectUrl,
         authScreenLaunchMode: LaunchMode.externalApplication,
-        scopes: 'openid profile email offline_access', // Scopes típicos para Microsoft
+        scopes: 'openid profile email offline_access',
       );
 
       if (!response) {
         throw Exception('Error al iniciar sesión con Microsoft');
       }
 
-      // 2. Esperar a que el usuario complete el login y Supabase notifique el evento
-      debugPrint('🔐 Esperando autenticación de Microsoft...');
+      AppLogger.auth('Esperando autenticación de Microsoft...');
       
       final completer = Completer<app_user.User>();
       StreamSubscription? subscription;
 
       subscription = _supabase!.auth.onAuthStateChange.listen((data) async {
-        // A veces el evento signedIn llega múltiples veces
         if (data.event == AuthChangeEvent.signedIn && data.session != null) {
-          debugPrint('✅ Evento de Login recibido (Microsoft)!');
+          AppLogger.auth('Evento de Login recibido (Microsoft)!');
           subscription?.cancel();
           try {
-            // Verificar que el proveedor sea azure (opcional, pero buena práctica si se mezcla)
-            // No es estrictamente necesario ya que acabamos de pedir azure.
             final user = await _getOrCreateUser(data.session!.user);
             if (!completer.isCompleted) completer.complete(user);
           } catch (e) {
@@ -210,17 +205,21 @@ class AuthService {
       return completer.future;
 
     } on AuthException catch (e) {
-      debugPrint('❌ Error de autenticación Microsoft: ${e.message}');
+      AppLogger.error('Error de autenticación Microsoft', error: e.message);
       throw _handleAuthException(e);
     } catch (e) {
-      debugPrint('❌ Error inesperado Microsoft: $e');
+      AppLogger.error('Error inesperado Microsoft', error: e);
       rethrow;
     }
   }
 
   // Cerrar sesión
   Future<void> logout() async {
-    await _googleSignIn.signOut();
+    // Google Sign-In no está disponible en todas las plataformas (ej. Windows).
+    // Capturamos cualquier error para que no bloquee el cierre de sesión de Supabase.
+    try {
+      await _googleSignIn.signOut();
+    } catch (_) {}
     if (_supabase != null) {
       await _supabase!.auth.signOut();
     }
@@ -234,20 +233,33 @@ class AuthService {
       return existingUser;
     }
 
-    // Crear nuevo usuario
+    // Crear nuevo usuario a partir de los metadatos de Supabase
     final metadata = supabaseUser.userMetadata ?? {};
-    final fullName = metadata['full_name'] as String? ?? 
-                     metadata['name'] as String? ?? '';
-    final nameParts = fullName.split(' ');
-    final name = nameParts.isNotEmpty ? nameParts.first : '';
-    final surname = nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
+
+    // Registro por email: los campos 'name' y 'surname' se guardan por separado
+    // OAuth (Google/Microsoft): viene como 'full_name' o 'name' en cadena única
+    String name = metadata['name'] as String? ?? '';
+    String surname = metadata['surname'] as String? ?? '';
+
+    if (name.isEmpty) {
+      // Fallback OAuth: parsear full_name
+      final fullName = metadata['full_name'] as String? ?? '';
+      final parts = fullName.trim().split(' ');
+      name = parts.isNotEmpty ? parts.first : '';
+      surname = parts.length > 1 ? parts.sublist(1).join(' ') : '';
+    }
+
+    // Último fallback: usar el prefijo del email
+    if (name.isEmpty) {
+      name = (supabaseUser.email ?? '').split('@').first;
+    }
 
     final user = app_user.User(
       id: supabaseUser.id,
       email: supabaseUser.email ?? '',
       name: name,
       surname: surname,
-      profilePhotoPath: metadata['avatar_url'] as String? ?? 
+      profilePhotoPath: metadata['avatar_url'] as String? ??
                         metadata['picture'] as String?,
       createdAt: DateTime.now(),
     );
@@ -256,12 +268,20 @@ class AuthService {
     return user;
   }
 
-  // Obtener usuario actual desde base de datos local
+  // Obtener usuario actual. Primero busca en BD local; si no existe
+  // (sesión persistida pero BD local vacía, p.ej. en Windows escritorio)
+  // lo construye a partir de los metadatos de Supabase y lo persiste.
   Future<app_user.User?> getCurrentUser() async {
-    final uid = currentUserId;
-    if (uid == null) return null;
+    final supabaseUser = currentSupabaseUser;
+    if (supabaseUser == null) return null;
 
-    return await _dbService.getUser(uid);
+    // 1. Intentar desde BD local
+    final localUser = await _dbService.getUser(supabaseUser.id);
+    if (localUser != null) return localUser;
+
+    // 2. No existe en BD local → construir desde metadatos de Supabase y guardar
+    AppLogger.auth('Usuario no encontrado en BD local, creando desde Supabase...');
+    return await _getOrCreateUser(supabaseUser);
   }
 
   // Actualizar perfil
@@ -269,7 +289,7 @@ class AuthService {
     await _dbService.updateUser(user);
   }
 
-  // Manejar excepciones de Supabase Auth
+  // Manejar excepciones de Supabase Auth con validación de contraseña mejorada
   Exception _handleAuthException(AuthException e) {
     final message = e.message.toLowerCase();
     
@@ -280,12 +300,15 @@ class AuthService {
       return Exception('El correo ya está registrado');
     }
     if (message.contains('weak password') || message.contains('password')) {
-      return Exception('La contraseña debe tener al menos 6 caracteres');
+      return Exception(
+        'La contraseña debe tener al menos 8 caracteres, '
+        'incluyendo mayúsculas, minúsculas y números',
+      );
     }
     if (message.contains('invalid email')) {
       return Exception('Correo electrónico no válido');
     }
     
-    return Exception(e.message);
+    return Exception('Error de autenticación. Inténtalo de nuevo.');
   }
 }

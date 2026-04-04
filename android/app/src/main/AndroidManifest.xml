@@ -6,7 +6,6 @@
     
     <application
         android:label="NachosPetCare"
-        android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -34,13 +33,6 @@
                 <data android:scheme="io.supabase.nachospetcare" android:host="login-callback" />
             </intent-filter>
 
-            <!-- Fallback para errores de redirección (http) -->
-            <intent-filter android:autoVerify="false">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="io.supabase.nachospetcare" />
-            </intent-filter>
         </activity>
 
 
@@ -49,6 +41,31 @@
             android:value="2" />
     </application>
     <queries>
+        <!-- url_launcher: llamadas de teléfono -->
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
+            <data android:scheme="tel" />
+        </intent>
+        <!-- url_launcher: correo electrónico -->
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+        </intent>
+        <!-- url_launcher: páginas web (http y https) -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+        <!-- url_launcher: Google Maps / navegación -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="geo" />
+        </intent>
+        <!-- Selector de texto (mantener el existente) -->
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>

@@ -2,9 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:nachos_pet_care_flutter/models/pet.dart';
 import 'package:nachos_pet_care_flutter/providers/pet_provider.dart';
+import 'package:nachos_pet_care_flutter/utils/image_picker_helper.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+/// Resultado interno del bottom sheet de foto.
+enum _PhotoAction { camera, gallery, delete }
 
 class EditPetScreen extends StatefulWidget {
   final String petId;
@@ -21,11 +25,13 @@ class _EditPetScreenState extends State<EditPetScreen> {
   final _breedController = TextEditingController();
   final _weightController = TextEditingController();
   final _notesController = TextEditingController();
+  final _microchipController = TextEditingController();
 
   PetType _selectedType = PetType.dog;
   PetGender _selectedGender = PetGender.unknown;
   DateTime? _birthDate;
   bool _isLoading = false;
+  bool _isNeutered = false;
   Pet? _originalPet;
 
   // Foto
@@ -35,7 +41,22 @@ class _EditPetScreenState extends State<EditPetScreen> {
   @override
   void initState() {
     super.initState();
-    _loadPet();
+    // Usamos addPostFrameCallback para poder acceder al context de forma segura
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _ensurePetsLoaded();
+    });
+  }
+
+  /// Carga los pets si el provider todavía no los tiene, luego rellena el formulario.
+  Future<void> _ensurePetsLoaded() async {
+    final petProvider = context.read<PetProvider>();
+    if (petProvider.pets.isEmpty) {
+      final userId = Supabase.instance.client.auth.currentUser?.id;
+      if (userId != null) {
+        await petProvider.loadPets(userId);
+      }
+    }
+    if (mounted) _loadPet();
   }
 
   void _loadPet() {
@@ -58,11 +79,13 @@ class _EditPetScreenState extends State<EditPetScreen> {
     _breedController.text = pet.breed ?? '';
     _weightController.text = pet.weight != null ? pet.weight.toString() : '';
     _notesController.text = pet.notes ?? '';
+    _microchipController.text = pet.microchipNumber ?? '';
     setState(() {
       _selectedType = pet.type;
       _selectedGender = pet.gender;
       _birthDate = pet.birthDate;
       _currentPhotoPath = pet.photoPath;
+      _isNeutered = pet.isNeutered;
     });
   }
 
@@ -72,41 +95,56 @@ class _EditPetScreenState extends State<EditPetScreen> {
     _breedController.dispose();
     _weightController.dispose();
     _notesController.dispose();
+    _microchipController.dispose();
     super.dispose();
   }
 
   Future<void> _pickImage() async {
-    final source = await showModalBottomSheet<ImageSource>(
+    final bool hasPhoto = _currentPhotoPath != null || _pickedImageFile != null;
+    final bool desktop = ImagePickerHelper.isDesktop;
+
+    final action = await showModalBottomSheet<_PhotoAction>(
       context: context,
       builder: (ctx) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: const Text('Cámara'),
-              onTap: () => Navigator.pop(ctx, ImageSource.camera),
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: const Text('Galería'),
-              onTap: () => Navigator.pop(ctx, ImageSource.gallery),
-            ),
-            if (_currentPhotoPath != null || _pickedImageFile != null)
+            // En escritorio sólo hay explorador de archivos
+            if (!desktop) ...
+              [
+                ListTile(
+                  leading: const Icon(Icons.camera_alt),
+                  title: const Text('Cámara'),
+                  onTap: () => Navigator.pop(ctx, _PhotoAction.camera),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.photo_library),
+                  title: const Text('Galería'),
+                  onTap: () => Navigator.pop(ctx, _PhotoAction.gallery),
+                ),
+              ]
+            else
+              ListTile(
+                leading: const Icon(Icons.folder_open),
+                title: const Text('Seleccionar archivo de imagen'),
+                onTap: () => Navigator.pop(ctx, _PhotoAction.gallery),
+              ),
+            if (hasPhoto)
               ListTile(
                 leading: const Icon(Icons.delete, color: Colors.red),
-                title: const Text('Eliminar foto', style: TextStyle(color: Colors.red)),
-                onTap: () => Navigator.pop(ctx, null),
+                title: const Text('Eliminar foto',
+                    style: TextStyle(color: Colors.red)),
+                onTap: () => Navigator.pop(ctx, _PhotoAction.delete),
               ),
           ],
         ),
       ),
     );
 
-    // null = eliminar foto (returned via tap on ListTile)
     if (!mounted) return;
+    if (action == null) return;
 
-    if (source == null && (_currentPhotoPath != null || _pickedImageFile != null)) {
+    if (action == _PhotoAction.delete) {
       setState(() {
         _pickedImageFile = null;
         _currentPhotoPath = null;
@@ -114,26 +152,24 @@ class _EditPetScreenState extends State<EditPetScreen> {
       return;
     }
 
-    if (source == null) return;
-
     try {
-      final picker = ImagePicker();
-      final picked = await picker.pickImage(
-        source: source,
-        maxWidth: 800,
-        maxHeight: 800,
-        imageQuality: 85,
-      );
-      if (picked != null && mounted) {
+      final path = action == _PhotoAction.camera
+          ? await ImagePickerHelper.pickFromCamera()
+          : await ImagePickerHelper.pickFromGallery();
+
+      if (path != null && mounted) {
         setState(() {
-          _pickedImageFile = File(picked.path);
-          _currentPhotoPath = picked.path; // guardar ruta local
+          _pickedImageFile = File(path);
+          _currentPhotoPath = path;
         });
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No se pudo acceder a la cámara/galería: $e'), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text('No se pudo acceder a la imagen: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
@@ -171,6 +207,10 @@ class _EditPetScreenState extends State<EditPetScreen> {
             : null,
         notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
         photoPath: _currentPhotoPath,
+        microchipNumber: _microchipController.text.trim().isEmpty
+            ? null
+            : _microchipController.text.trim(),
+        isNeutered: _isNeutered,
       );
 
       final success = await petProvider.updatePet(updatedPet);
@@ -209,10 +249,14 @@ class _EditPetScreenState extends State<EditPetScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Todavía cargando (no hemos intentado buscar el pet aún, o el provider está en marcha)
     if (_originalPet == null) {
+      final petProvider = context.watch<PetProvider>();
       return Scaffold(
         appBar: AppBar(title: const Text('Editar mascota')),
-        body: const Center(child: Text('Mascota no encontrada')),
+        body: petProvider.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : const Center(child: Text('Mascota no encontrada')),
       );
     }
 
@@ -223,6 +267,25 @@ class _EditPetScreenState extends State<EditPetScreen> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/pets/${widget.petId}'),
         ),
+        actions: [
+          // Botón guardar siempre visible en la AppBar
+          _isLoading
+              ? const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Center(
+                    child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
+                )
+              : IconButton(
+                  icon: const Icon(Icons.save),
+                  tooltip: 'Guardar cambios',
+                  onPressed: _savePet,
+                ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -370,7 +433,7 @@ class _EditPetScreenState extends State<EditPetScreen> {
               ),
               const SizedBox(height: 16),
 
-              // ── Peso ─────────────────────────────────────────────
+              // ── Peso ────────────────────────────────────────────────
               TextFormField(
                 controller: _weightController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -381,7 +444,52 @@ class _EditPetScreenState extends State<EditPetScreen> {
               ),
               const SizedBox(height: 16),
 
-              // ── Notas ────────────────────────────────────────────
+              // ── Microchip ──────────────────────────────────────────
+              TextFormField(
+                controller: _microchipController,
+                keyboardType: TextInputType.number,
+                maxLength: 15,
+                decoration: const InputDecoration(
+                  labelText: 'Número de microchip (opcional)',
+                  prefixIcon: Icon(Icons.memory),
+                  helperText: 'Número de 15 dígitos del chip de identificación',
+                  counterText: '',
+                ),
+                validator: (value) {
+                  if (value != null && value.isNotEmpty) {
+                    final digits = value.replaceAll(RegExp(r'\D'), '');
+                    if (digits.length != 15) {
+                      return 'El microchip debe tener exactamente 15 dígitos';
+                    }
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // ── Esterilizado/a ───────────────────────────────────────
+              Card(
+                margin: EdgeInsets.zero,
+                child: SwitchListTile(
+                  value: _isNeutered,
+                  onChanged: (val) => setState(() => _isNeutered = val),
+                  title: const Text('Esterilizado/a'),
+                  subtitle: Text(
+                    _isNeutered
+                        ? 'Sí, está esterilizado/a'
+                        : 'No está esterilizado/a',
+                  ),
+                  secondary: Icon(
+                    Icons.medical_services_outlined,
+                    color: _isNeutered
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.outlineVariant,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // ── Notas ───────────────────────────────────────────────
               TextFormField(
                 controller: _notesController,
                 maxLines: 3,
@@ -393,7 +501,7 @@ class _EditPetScreenState extends State<EditPetScreen> {
               ),
               const SizedBox(height: 24),
 
-              // ── Botón guardar ─────────────────────────────────────
+              // ── Botón guardar (también disponible en la AppBar) ───
               ElevatedButton.icon(
                 onPressed: _isLoading ? null : _savePet,
                 icon: _isLoading
@@ -405,6 +513,7 @@ class _EditPetScreenState extends State<EditPetScreen> {
                     : const Icon(Icons.save),
                 label: const Text('Guardar cambios'),
               ),
+              const SizedBox(height: 24),
             ],
           ),
         ),

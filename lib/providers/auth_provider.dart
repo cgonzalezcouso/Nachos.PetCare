@@ -1,10 +1,14 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'package:nachos_pet_care_flutter/models/user.dart';
 import 'package:nachos_pet_care_flutter/services/auth_service.dart';
 import 'package:nachos_pet_care_flutter/services/service_locator.dart';
 
+
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService = getIt<AuthService>();
+  StreamSubscription? _authSub;
 
   User? _user;
   bool _isLoading = false;
@@ -20,10 +24,33 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> _init() async {
+    // Cargar usuario si ya hay sesión activa (p.ej. sesión persistida en disco)
     if (_authService.isLoggedIn) {
       _user = await _authService.getCurrentUser();
       notifyListeners();
     }
+
+    // Escuchar cambios de sesión de Supabase en tiempo real
+    _authSub = _authService.authStateChanges.listen((authState) async {
+      switch (authState.event) {
+        case AuthChangeEvent.signedIn:
+          _user = await _authService.getCurrentUser();
+          notifyListeners();
+          break;
+        case AuthChangeEvent.signedOut:
+          _user = null;
+          notifyListeners();
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _authSub?.cancel();
+    super.dispose();
   }
 
   Future<bool> login(String email, String password) async {

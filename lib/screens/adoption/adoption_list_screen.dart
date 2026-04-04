@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:nachos_pet_care_flutter/models/adoption_pet.dart';
 import 'package:nachos_pet_care_flutter/models/pet.dart';
+import 'package:nachos_pet_care_flutter/providers/adoption_provider.dart';
 
 class AdoptionListScreen extends StatefulWidget {
   const AdoptionListScreen({super.key});
@@ -11,220 +13,159 @@ class AdoptionListScreen extends StatefulWidget {
 }
 
 class _AdoptionListScreenState extends State<AdoptionListScreen> {
-  List<AdoptionPet> _adoptionPets = [];
-  bool _isLoading = true;
-  PetType? _selectedType;
-
   @override
   void initState() {
     super.initState();
-    _loadAdoptionPets();
-  }
-
-  Future<void> _loadAdoptionPets() async {
-    // TODO: Cargar desde la base de datos
-    // Por ahora, datos de ejemplo
-    setState(() {
-      _adoptionPets = _getDemoData();
-      _isLoading = false;
+    // Cargar datos al entrar (solo si la lista está vacía)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<AdoptionProvider>();
+      if (provider.pets.isEmpty) {
+        provider.loadAdoptionPets();
+      }
     });
-  }
-
-  List<AdoptionPet> _getDemoData() {
-    return [
-      AdoptionPet(
-        id: '1',
-        name: 'Luna',
-        type: PetType.dog,
-        breed: 'Mestizo',
-        ageInMonths: 18,
-        gender: PetGender.female,
-        description: 'Luna es una perrita muy cariñosa que busca un hogar lleno de amor. Se lleva bien con niños y otros perros.',
-        location: 'Madrid',
-        contactPhone: '+34 600 123 456',
-        contactEmail: 'adopciones@refugio.com',
-        shelterName: 'Refugio Esperanza',
-        isUrgent: true,
-        photoPath: 'https://images.unsplash.com/photo-1552053831-71594a27632d?w=600&auto=format&fit=crop',
-        createdAt: DateTime.now(),
-      ),
-      AdoptionPet(
-        id: '2',
-        name: 'Max',
-        type: PetType.cat,
-        breed: 'Siamés',
-        ageInMonths: 24,
-        gender: PetGender.male,
-        description: 'Max es un gato tranquilo y juguetón, perfecto para familias. Le encanta el sol y los mimos.',
-        location: 'Barcelona',
-        contactPhone: '+34 600 789 012',
-        contactEmail: 'info@gatunos.org',
-        shelterName: 'Asociación Gatunos',
-        isUrgent: false,
-        photoPath: 'https://images.unsplash.com/photo-1513245543132-31f507417b26?w=600&auto=format&fit=crop',
-        createdAt: DateTime.now(),
-      ),
-      AdoptionPet(
-        id: '3',
-        name: 'Nube',
-        type: PetType.rabbit,
-        breed: 'Angora',
-        ageInMonths: 8,
-        gender: PetGender.female,
-        description: 'Nube es una coneja esponjosa y muy curiosa. Está esterilizada y acostumbrada a vivir en interior.',
-        location: 'Valencia',
-        contactPhone: '+34 611 222 333',
-        contactEmail: 'conejos@animalia.org',
-        shelterName: 'Animalia Valencia',
-        isUrgent: false,
-        photoPath: 'https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=600&auto=format&fit=crop',
-        createdAt: DateTime.now(),
-      ),
-      AdoptionPet(
-        id: '4',
-        name: 'Bruno',
-        type: PetType.dog,
-        breed: 'Labrador',
-        ageInMonths: 36,
-        gender: PetGender.male,
-        description: 'Bruno es un perro enorme con un corazón aún más grande. Ideal para casas con jardín.',
-        location: 'Sevilla',
-        contactPhone: '+34 622 444 555',
-        contactEmail: 'bruno@refugioSur.es',
-        shelterName: 'Refugio del Sur',
-        isUrgent: true,
-        photoPath: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&auto=format&fit=crop',
-        createdAt: DateTime.now(),
-      ),
-      AdoptionPet(
-        id: '5',
-        name: 'Kira',
-        type: PetType.cat,
-        breed: 'Común europeo',
-        ageInMonths: 12,
-        gender: PetGender.female,
-        description: 'Kira llegó al refugio siendo muy pequeña. Es independiente pero muy cariñosa cuando te conoce.',
-        location: 'Bilbao',
-        contactPhone: '+34 633 555 666',
-        contactEmail: 'kira@gatos-norte.org',
-        shelterName: 'Gatos del Norte',
-        isUrgent: false,
-        photoPath: 'https://images.unsplash.com/photo-1519052537078-e6302a4968d4?w=600&auto=format&fit=crop',
-        createdAt: DateTime.now(),
-      ),
-      AdoptionPet(
-        id: '6',
-        name: 'Pico',
-        type: PetType.bird,
-        breed: 'Periquito',
-        ageInMonths: 6,
-        gender: PetGender.male,
-        description: 'Pico es un periquito alegre y muy parlanchín. Le encanta escuchar música y aprender palabras nuevas.',
-        location: 'Zaragoza',
-        contactPhone: '+34 644 666 777',
-        contactEmail: 'aves@naturalia.es',
-        shelterName: 'Naturalia Zaragoza',
-        isUrgent: false,
-        photoPath: 'https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=600&auto=format&fit=crop',
-        createdAt: DateTime.now(),
-      ),
-    ];
-  }
-
-
-  List<AdoptionPet> get _filteredPets {
-    if (_selectedType == null) return _adoptionPets;
-    return _adoptionPets.where((pet) => pet.type == _selectedType).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Animales en Adopción'),
-        actions: [
-          PopupMenuButton<PetType?>(
-            icon: const Icon(Icons.filter_list),
-            onSelected: (type) {
-              setState(() {
-                _selectedType = type;
-              });
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: null,
-                child: Text('Todos'),
+    return Consumer<AdoptionProvider>(
+      builder: (context, provider, _) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Animales en Adopción'),
+            actions: [
+              // Botón de refresh
+              IconButton(
+                icon: const Icon(Icons.refresh),
+                tooltip: 'Actualizar',
+                onPressed: provider.isLoading ? null : provider.loadAdoptionPets,
               ),
-              ...PetType.values.map((type) {
-                final pet = AdoptionPet(
-                  id: '',
-                  name: '',
-                  type: type,
-                  gender: PetGender.unknown,
-                  description: '',
-                  location: '',
-                  contactPhone: '',
-                  contactEmail: '',
-                  shelterName: '',
-                  createdAt: DateTime.now(),
-                );
-                return PopupMenuItem(
-                  value: type,
-                  child: Text(pet.type.name),
-                );
-              }),
+              // Filtro por tipo
+              PopupMenuButton<PetType?>(
+                icon: const Icon(Icons.filter_list),
+                tooltip: 'Filtrar por tipo',
+                onSelected: provider.filterByType,
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: null,
+                    child: Text('Todos'),
+                  ),
+                  ...PetType.values.map((type) => PopupMenuItem(
+                        value: type,
+                        child: Text(_getTypeDisplayName(type)),
+                      )),
+                ],
+              ),
             ],
           ),
-        ],
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _filteredPets.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.pets,
-                        size: 64,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'No hay animales en adopción',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 8),
-                      const Text('Revisa más tarde'),
-                    ],
-                  ),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _filteredPets.length,
-                  itemBuilder: (context, index) {
-                    final pet = _filteredPets[index];
-                    return _AdoptionPetCard(
-                      pet: pet,
-                      onTap: () => context.push('/adoption/${pet.id}'),
-                    );
-                  },
-                ),
+          body: _buildBody(context, provider),
+        );
+      },
     );
   }
+
+  Widget _buildBody(BuildContext context, AdoptionProvider provider) {
+    if (provider.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (provider.error != null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.cloud_off, size: 64, color: Theme.of(context).colorScheme.error),
+              const SizedBox(height: 16),
+              Text(
+                'Error al cargar',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                provider.error!,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              const SizedBox(height: 16),
+              FilledButton.icon(
+                onPressed: provider.loadAdoptionPets,
+                icon: const Icon(Icons.refresh),
+                label: const Text('Reintentar'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final pets = provider.filteredPets;
+
+    if (pets.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.pets,
+              size: 64,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'No hay animales en adopción',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 8),
+            const Text('Revisa más tarde'),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: pets.length,
+      itemBuilder: (context, index) {
+        final pet = pets[index];
+        return _AdoptionPetCard(
+          pet: pet,
+          onTap: () => context.push('/adoption/${pet.id}'),
+        );
+      },
+    );
+  }
+
+  String _getTypeDisplayName(PetType type) {
+    switch (type) {
+      case PetType.dog:        return 'Perro';
+      case PetType.cat:        return 'Gato';
+      case PetType.rabbit:     return 'Conejo';
+      case PetType.rodent:     return 'Roedor';
+      case PetType.ferret:     return 'Hurón';
+      case PetType.bird:       return 'Ave';
+      case PetType.fish:       return 'Pez';
+      case PetType.reptile:    return 'Reptil';
+      case PetType.amphibian:  return 'Anfibio';
+      case PetType.invertebrate: return 'Invertebrado';
+      case PetType.farmAnimal: return 'Animal de corral';
+      case PetType.other:      return 'Otro';
+    }
+  }
 }
+
+// ─── Tarjeta de animal en adopción ───────────────────────────────────────────
 
 class _AdoptionPetCard extends StatelessWidget {
   final AdoptionPet pet;
   final VoidCallback onTap;
 
-  const _AdoptionPetCard({
-    required this.pet,
-    required this.onTap,
-  });
+  const _AdoptionPetCard({required this.pet, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       child: InkWell(
@@ -233,43 +174,8 @@ class _AdoptionPetCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Imagen
-            if (pet.photoPath != null && pet.photoPath!.isNotEmpty)
-              ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(12)),
-                child: Image.network(
-                  pet.photoPath!,
-                  height: 200,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    height: 200,
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    child: Icon(
-                      Icons.pets,
-                      size: 80,
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
-                  ),
-                ),
-              )
-            else
-              Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(12)),
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.pets,
-                    size: 80,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-                ),
-              ),
+            // ── Imagen ──────────────────────────────────
+            _PetImage(photoUrl: pet.photoUrl),
 
             Padding(
               padding: const EdgeInsets.all(16),
@@ -277,12 +183,9 @@ class _AdoptionPetCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Urgente badge
-                  if (pet.isUrgent)
+                  if (pet.isUrgent) ...[
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(4),
@@ -296,45 +199,37 @@ class _AdoptionPetCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                  if (pet.isUrgent) const SizedBox(height: 8),
+                    const SizedBox(height: 8),
+                  ],
 
                   // Nombre
-                  Text(
-                    pet.name,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
+                  Text(pet.name, style: theme.textTheme.headlineSmall),
                   const SizedBox(height: 4),
 
                   // Tipo y raza
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.pets,
-                        size: 16,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${_getTypeDisplayName(pet.type)}${pet.breed != null ? ' • ${pet.breed}' : ''}',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
+                  _InfoRow(
+                    icon: Icons.pets,
+                    text: '${_getTypeDisplayName(pet.type)}'
+                        '${pet.breed != null ? ' • ${pet.breed}' : ''}',
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 2),
 
                   // Edad y género
-                  Row(
+                  _InfoRow(
+                    icon: Icons.cake,
+                    text: '${pet.ageDisplay} • ${_getGenderDisplayName(pet.gender)}'
+                        ' • ${pet.sizeDisplay}',
+                  ),
+                  const SizedBox(height: 6),
+
+                  // Chips: vacunado, esterilizado
+                  Wrap(
+                    spacing: 6,
                     children: [
-                      Icon(
-                        Icons.cake,
-                        size: 16,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${pet.ageDisplay} • ${_getGenderDisplayName(pet.gender)}',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                      if (pet.vaccinated)
+                        _Chip(label: 'Vacunado', color: Colors.green),
+                      if (pet.sterilized)
+                        _Chip(label: 'Esterilizado', color: Colors.indigo),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -344,28 +239,16 @@ class _AdoptionPetCard extends StatelessWidget {
                     pet.description,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: theme.textTheme.bodySmall,
                   ),
                   const SizedBox(height: 8),
 
                   // Ubicación y refugio
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        size: 16,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          '${pet.location} • ${pet.shelterName}',
-                          style: Theme.of(context).textTheme.bodySmall,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+                  _InfoRow(
+                    icon: Icons.location_on,
+                    text: '${pet.location} • ${pet.shelterName}',
+                    color: theme.colorScheme.secondary,
+                    maxLines: 1,
                   ),
                 ],
               ),
@@ -378,41 +261,140 @@ class _AdoptionPetCard extends StatelessWidget {
 
   String _getTypeDisplayName(PetType type) {
     switch (type) {
-      case PetType.dog:
-        return 'Perro';
-      case PetType.cat:
-        return 'Gato';
-      case PetType.rabbit:
-        return 'Conejo';
-      case PetType.rodent:
-        return 'Roedor';
-      case PetType.ferret:
-        return 'Hurón';
-      case PetType.bird:
-        return 'Ave';
-      case PetType.fish:
-        return 'Pez';
-      case PetType.reptile:
-        return 'Reptil';
-      case PetType.amphibian:
-        return 'Anfibio';
-      case PetType.invertebrate:
-        return 'Invertebrado';
-      case PetType.farmAnimal:
-        return 'Animal de corral';
-      case PetType.other:
-        return 'Otro';
+      case PetType.dog:        return 'Perro';
+      case PetType.cat:        return 'Gato';
+      case PetType.rabbit:     return 'Conejo';
+      case PetType.rodent:     return 'Roedor';
+      case PetType.ferret:     return 'Hurón';
+      case PetType.bird:       return 'Ave';
+      case PetType.fish:       return 'Pez';
+      case PetType.reptile:    return 'Reptil';
+      case PetType.amphibian:  return 'Anfibio';
+      case PetType.invertebrate: return 'Invertebrado';
+      case PetType.farmAnimal: return 'Animal de corral';
+      case PetType.other:      return 'Otro';
     }
   }
 
   String _getGenderDisplayName(PetGender gender) {
     switch (gender) {
-      case PetGender.male:
-        return 'Macho';
-      case PetGender.female:
-        return 'Hembra';
-      case PetGender.unknown:
-        return 'Desconocido';
+      case PetGender.male:    return 'Macho';
+      case PetGender.female:  return 'Hembra';
+      case PetGender.unknown: return 'Desconocido';
     }
+  }
+}
+
+// ─── Widgets auxiliares ───────────────────────────────────────────────────────
+
+class _PetImage extends StatelessWidget {
+  final String? photoUrl;
+  const _PetImage({this.photoUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    if (photoUrl != null && photoUrl!.isNotEmpty) {
+      return ClipRRect(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+        child: Image.network(
+          photoUrl!,
+          height: 200,
+          width: double.infinity,
+          fit: BoxFit.cover,
+          headers: const {
+            'User-Agent':
+                'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 '
+                '(KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+          },
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Container(
+              height: 200,
+              color: Colors.black12,
+              child: const Center(child: CircularProgressIndicator()),
+            );
+          },
+          errorBuilder: (_, __, ___) => _placeholder(context),
+        ),
+      );
+    }
+    return _placeholder(context);
+  }
+
+  Widget _placeholder(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+      ),
+      child: Center(
+        child: Icon(
+          Icons.pets,
+          size: 80,
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
+        ),
+      ),
+    );
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final Color? color;
+  final int? maxLines;
+
+  const _InfoRow({
+    required this.icon,
+    required this.text,
+    this.color,
+    this.maxLines,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final c = color ?? Theme.of(context).colorScheme.primary;
+    return Row(
+      children: [
+        Icon(icon, size: 16, color: c),
+        const SizedBox(width: 4),
+        Expanded(
+          child: Text(
+            text,
+            style: Theme.of(context).textTheme.bodyMedium,
+            maxLines: maxLines,
+            overflow: maxLines != null ? TextOverflow.ellipsis : null,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Chip extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  const _Chip({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 11,
+          color: color,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
   }
 }

@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:nachos_pet_care_flutter/models/pet.dart';
 import 'package:nachos_pet_care_flutter/providers/auth_provider.dart';
 import 'package:nachos_pet_care_flutter/providers/pet_provider.dart';
+import 'package:nachos_pet_care_flutter/utils/image_picker_helper.dart';
 import 'package:uuid/uuid.dart';
 
 class AddPetScreen extends StatefulWidget {
@@ -19,11 +21,14 @@ class _AddPetScreenState extends State<AddPetScreen> {
   final _breedController = TextEditingController();
   final _weightController = TextEditingController();
   final _notesController = TextEditingController();
+  final _microchipController = TextEditingController();
 
   PetType _selectedType = PetType.dog;
   PetGender _selectedGender = PetGender.unknown;
   DateTime? _birthDate;
   bool _isLoading = false;
+  bool _isNeutered = false;
+  File? _pickedImageFile;
 
   @override
   void dispose() {
@@ -31,7 +36,71 @@ class _AddPetScreenState extends State<AddPetScreen> {
     _breedController.dispose();
     _weightController.dispose();
     _notesController.dispose();
+    _microchipController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final bool desktop = ImagePickerHelper.isDesktop;
+    final action = await showModalBottomSheet<String>(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (!desktop) ...[
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Cámara'),
+                onTap: () => Navigator.pop(ctx, 'camera'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Galería'),
+                onTap: () => Navigator.pop(ctx, 'gallery'),
+              ),
+            ] else
+              ListTile(
+                leading: const Icon(Icons.folder_open),
+                title: const Text('Seleccionar archivo de imagen'),
+                onTap: () => Navigator.pop(ctx, 'gallery'),
+              ),
+            if (_pickedImageFile != null)
+              ListTile(
+                leading: const Icon(Icons.delete, color: Colors.red),
+                title: const Text('Eliminar foto',
+                    style: TextStyle(color: Colors.red)),
+                onTap: () => Navigator.pop(ctx, 'delete'),
+              ),
+          ],
+        ),
+      ),
+    );
+
+    if (!mounted || action == null) return;
+
+    if (action == 'delete') {
+      setState(() => _pickedImageFile = null);
+      return;
+    }
+
+    try {
+      final path = action == 'camera'
+          ? await ImagePickerHelper.pickFromCamera()
+          : await ImagePickerHelper.pickFromGallery();
+      if (path != null && mounted) {
+        setState(() => _pickedImageFile = File(path));
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('No se pudo acceder a la imagen: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _selectBirthDate() async {
@@ -82,6 +151,11 @@ class _AddPetScreenState extends State<AddPetScreen> {
             ? double.tryParse(_weightController.text)
             : null,
         notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+        photoPath: _pickedImageFile?.path,
+        microchipNumber: _microchipController.text.trim().isEmpty
+            ? null
+            : _microchipController.text.trim(),
+        isNeutered: _isNeutered,
         createdAt: DateTime.now(),
       );
 
@@ -130,6 +204,54 @@ class _AddPetScreenState extends State<AddPetScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // ── Foto ────────────────────────────────────────────────
+              GestureDetector(
+                onTap: _pickImage,
+                child: Center(
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 56,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.primaryContainer,
+                        backgroundImage: _pickedImageFile != null
+                            ? FileImage(_pickedImageFile!)
+                            : null,
+                        child: _pickedImageFile == null
+                            ? Icon(
+                                Icons.pets,
+                                size: 48,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer,
+                              )
+                            : null,
+                      ),
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: CircleAvatar(
+                          radius: 18,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          child: const Icon(Icons.camera_alt,
+                              size: 18, color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Center(
+                child: Text(
+                  'Toca para añadir foto',
+                  style:
+                      TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                ),
+              ),
+              const SizedBox(height: 24),
+
               // Name
               TextFormField(
                 controller: _nameController,
@@ -230,6 +352,51 @@ class _AddPetScreenState extends State<AddPetScreen> {
                 decoration: const InputDecoration(
                   labelText: 'Peso (kg)',
                   prefixIcon: Icon(Icons.monitor_weight),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Microchip
+              TextFormField(
+                controller: _microchipController,
+                keyboardType: TextInputType.number,
+                maxLength: 15,
+                decoration: const InputDecoration(
+                  labelText: 'Número de microchip (opcional)',
+                  prefixIcon: Icon(Icons.memory),
+                  helperText: 'Número de 15 dígitos del chip de identificación',
+                  counterText: '',
+                ),
+                validator: (value) {
+                  if (value != null && value.isNotEmpty) {
+                    final digits = value.replaceAll(RegExp(r'\D'), '');
+                    if (digits.length != 15) {
+                      return 'El microchip debe tener exactamente 15 dígitos';
+                    }
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Esterilizado/a
+              Card(
+                margin: EdgeInsets.zero,
+                child: SwitchListTile(
+                  value: _isNeutered,
+                  onChanged: (val) => setState(() => _isNeutered = val),
+                  title: const Text('Esterilizado/a'),
+                  subtitle: Text(
+                    _isNeutered
+                        ? 'Sí, está esterilizado/a'
+                        : 'No está esterilizado/a',
+                  ),
+                  secondary: Icon(
+                    Icons.medical_services_outlined,
+                    color: _isNeutered
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.outlineVariant,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),

@@ -86,7 +86,13 @@ class PetDetailScreen extends StatelessWidget {
                 flexibleSpace: FlexibleSpaceBar(
                   title: Text(pet.name),
                   background: pet.photoPath != null && pet.photoPath!.isNotEmpty
-                      ? _PetPhoto(photoPath: pet.photoPath!)
+                      ? GestureDetector(
+                          onTap: () => _openFullScreen(context, pet.photoPath!),
+                          child: Hero(
+                            tag: 'pet_photo_${pet.id}',
+                            child: _PetPhoto(photoPath: pet.photoPath!),
+                          ),
+                        )
                       : Container(
                           color: Theme.of(context).colorScheme.primaryContainer,
                           child: Icon(
@@ -194,6 +200,16 @@ class PetDetailScreen extends StatelessWidget {
                                 label: 'Peso',
                                 value: '${pet.weight} kg',
                               ),
+                            if (pet.microchipNumber != null &&
+                                pet.microchipNumber!.isNotEmpty)
+                              _InfoRow(
+                                label: 'Microchip',
+                                value: pet.microchipNumber!,
+                              ),
+                            _InfoRow(
+                              label: 'Esterilizado/a',
+                              value: pet.isNeutered ? 'Sí' : 'No',
+                            ),
                           ],
                         ),
                       ),
@@ -256,6 +272,73 @@ class PetDetailScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  void _openFullScreen(BuildContext context, String photoPath) {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierColor: Colors.black87,
+        pageBuilder: (_, __, ___) => _FullScreenImageViewer(photoPath: photoPath),
+      ),
+    );
+  }
+}
+
+// ─── Visor de imagen a pantalla completa ─────────────────────────────────────
+
+class _FullScreenImageViewer extends StatelessWidget {
+  final String photoPath;
+  const _FullScreenImageViewer({required this.photoPath});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black87,
+      body: Stack(
+        children: [
+          Center(
+            child: InteractiveViewer(
+              minScale: 0.5,
+              maxScale: 4.0,
+              child: photoPath.startsWith('http')
+                  ? Image.network(
+                      photoPath,
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.broken_image,
+                        color: Colors.white54,
+                        size: 80,
+                      ),
+                    )
+                  : Image.file(
+                      File(photoPath),
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, __, ___) => const Icon(
+                        Icons.broken_image,
+                        color: Colors.white54,
+                        size: 80,
+                      ),
+                    ),
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 8,
+            right: 12,
+            child: SafeArea(
+              child: IconButton(
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.black54,
+                  foregroundColor: Colors.white,
+                ),
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

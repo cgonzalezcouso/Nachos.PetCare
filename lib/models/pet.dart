@@ -20,12 +20,14 @@ class Pet {
   final String ownerId;
   final String name;
   final PetType type;
-  final String? breed;  // Puede usarse para subtipo también (ej: "Hámster", "Periquito", "Agua dulce")
+  final String? breed;
   final DateTime? birthDate;
   final PetGender gender;
   final double? weight;
   final String? photoPath;
   final String? notes;
+  final String? microchipNumber;
+  final bool isNeutered;
   final DateTime createdAt;
 
   Pet({
@@ -39,6 +41,8 @@ class Pet {
     this.weight,
     this.photoPath,
     this.notes,
+    this.microchipNumber,
+    this.isNeutered = false,
     required this.createdAt,
   });
 
@@ -74,6 +78,8 @@ class Pet {
       weight: (json['weight'] as num?)?.toDouble(),
       photoPath: getStringOrNull(json['photoPath']),
       notes: getStringOrNull(json['notes']),
+      microchipNumber: getStringOrNull(json['microchipNumber']),
+      isNeutered: (json['isNeutered'] as int? ?? 0) == 1,
       createdAt: DateTime.fromMillisecondsSinceEpoch(json['createdAt'] as int),
     );
   }
@@ -90,6 +96,8 @@ class Pet {
       'weight': weight,
       'photoPath': (photoPath == null || photoPath!.isEmpty) ? null : photoPath,
       'notes': notes ?? '',
+      'microchipNumber': microchipNumber ?? '',
+      'isNeutered': isNeutered ? 1 : 0,
       'createdAt': createdAt.millisecondsSinceEpoch,
     };
   }
@@ -145,6 +153,8 @@ class Pet {
     double? weight,
     String? photoPath,
     String? notes,
+    String? microchipNumber,
+    bool? isNeutered,
     DateTime? createdAt,
   }) {
     return Pet(
@@ -158,6 +168,8 @@ class Pet {
       weight: weight ?? this.weight,
       photoPath: photoPath ?? this.photoPath,
       notes: notes ?? this.notes,
+      microchipNumber: microchipNumber ?? this.microchipNumber,
+      isNeutered: isNeutered ?? this.isNeutered,
       createdAt: createdAt ?? this.createdAt,
     );
   }

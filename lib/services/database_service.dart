@@ -7,67 +7,60 @@ import 'package:nachos_pet_care_flutter/models/user.dart';
 import 'package:nachos_pet_care_flutter/models/pet.dart';
 import 'package:nachos_pet_care_flutter/models/vaccine_reminder.dart';
 import 'package:nachos_pet_care_flutter/models/veterinary_report.dart';
+import 'package:nachos_pet_care_flutter/config/app_logger.dart';
 
 
 class DatabaseService {
   static Database? _database;
 
   Future<Database> get database async {
+    if (kIsWeb) throw UnsupportedError('SQLite no está disponible en web');
     if (_database != null) return _database!;
     _database = await _initDatabase();
     return _database!;
   }
 
   Future<void> initialize() async {
+    if (kIsWeb) {
+      AppLogger.info('Web: DatabaseService.initialize() omitido');
+      return;
+    }
     try {
-      debugPrint('🔧 Inicializando base de datos SQLite...');
-      
-
-      
+      AppLogger.db('Inicializando base de datos SQLite...');
       _database = await _initDatabase();
-      debugPrint('✅ Base de datos inicializada correctamente');
+      AppLogger.db('Base de datos inicializada correctamente');
     } catch (e, stackTrace) {
-      debugPrint('❌ Error al inicializar base de datos: $e');
-      debugPrint('StackTrace: $stackTrace');
+      AppLogger.error('Error al inicializar base de datos', error: e, stackTrace: stackTrace);
       rethrow;
     }
   }
 
   Future<Database> _initDatabase() async {
     try {
-      final dbPath = await getDatabasesPath();
-      debugPrint('📁 Ruta de base de datos: $dbPath');
-      final path = join(dbPath, 'nachos_pet_care.db');
-      debugPrint('📄 Archivo de base de datos: $path');
-
-      // En escritorio, usamos explícitamente la fábrica FFI
       if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
         sqfliteFfiInit();
-        final databaseFactory = databaseFactoryFfi;
-        return await databaseFactory.openDatabase(
-          path,
-          options: OpenDatabaseOptions(
-            version: 1,
-            onCreate: _onCreate,
-          ),
-        );
+        databaseFactory = databaseFactoryFfi;
       }
-      
+
+      final dbPath = await getDatabasesPath();
+      AppLogger.db('Ruta de base de datos: $dbPath');
+      final path = join(dbPath, 'nachos_pet_care.db');
+
       return await openDatabase(
         path,
-        version: 1,
+        version: 3,
         onCreate: _onCreate,
+        onUpgrade: _onUpgrade,
       );
     } catch (e) {
-      debugPrint('❌ Error en _initDatabase: $e');
+      AppLogger.error('Error en _initDatabase', error: e);
       rethrow;
     }
   }
 
   Future<void> _onCreate(Database db, int version) async {
     try {
-      debugPrint('🔨 Creando tabla users...');
-      // Tabla de usuarios
+      AppLogger.db('Creando tabla users...');
       await db.execute('''
         CREATE TABLE users (
           id TEXT PRIMARY KEY,
@@ -83,8 +76,7 @@ class DatabaseService {
         )
       ''');
 
-      debugPrint('🔨 Creando tabla pets...');
-      // Tabla de mascotas
+      AppLogger.db('Creando tabla pets...');
       await db.execute('''
         CREATE TABLE pets (
           id TEXT PRIMARY KEY,
@@ -93,17 +85,18 @@ class DatabaseService {
           type TEXT NOT NULL,
           breed TEXT,
           birthDate INTEGER,
-        gender TEXT NOT NULL,
-        weight REAL,
-        photoPath TEXT,
-        notes TEXT,
-        createdAt INTEGER NOT NULL,
-        FOREIGN KEY (ownerId) REFERENCES users (id)
-      )
-    ''');
+          gender TEXT NOT NULL,
+          weight REAL,
+          photoPath TEXT,
+          notes TEXT,
+          microchipNumber TEXT,
+          isNeutered INTEGER NOT NULL DEFAULT 0,
+          createdAt INTEGER NOT NULL,
+          FOREIGN KEY (ownerId) REFERENCES users (id)
+        )
+      ''');
 
-      debugPrint('🔨 Creando tabla vaccine_reminders...');
-      // Tabla de recordatorios de vacunas
+      AppLogger.db('Creando tabla vaccine_reminders...');
       await db.execute('''
         CREATE TABLE vaccine_reminders (
           id TEXT PRIMARY KEY,
@@ -117,8 +110,7 @@ class DatabaseService {
         )
       ''');
 
-      debugPrint('🔨 Creando tabla veterinary_reports...');
-      // Tabla de informes veterinarios
+      AppLogger.db('Creando tabla veterinary_reports...');
       await db.execute('''
         CREATE TABLE veterinary_reports (
           id TEXT PRIMARY KEY,
@@ -133,11 +125,24 @@ class DatabaseService {
         )
       ''');
       
-      debugPrint('✅ Todas las tablas creadas exitosamente');
+      AppLogger.db('Todas las tablas creadas exitosamente');
     } catch (e, stackTrace) {
-      debugPrint('❌ Error al crear tablas: $e');
-      debugPrint('StackTrace: $stackTrace');
+      AppLogger.error('Error al crear tablas', error: e, stackTrace: stackTrace);
       rethrow;
+    }
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    AppLogger.db('Migrando BD de v$oldVersion a v$newVersion...');
+    if (oldVersion < 2) {
+      await db.execute('ALTER TABLE pets ADD COLUMN microchipNumber TEXT');
+      AppLogger.db('Columna microchipNumber añadida a pets');
+    }
+    if (oldVersion < 3) {
+      await db.execute(
+        'ALTER TABLE pets ADD COLUMN isNeutered INTEGER NOT NULL DEFAULT 0',
+      );
+      AppLogger.db('Columna isNeutered añadida a pets');
     }
   }
 
