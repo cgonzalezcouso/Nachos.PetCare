@@ -599,7 +599,7 @@ cd ..
 
 ## 👤 Autor
 
-**Cristian González Couso**
+**Cristian Gonzalez Couso**
 
 - 📧 Email: [cristian.gonzalez.couso@students.thepower.education]
 - 💼 LinkedIn: [https://www.linkedin.com/in/cristian-gonzalez-couso/]
