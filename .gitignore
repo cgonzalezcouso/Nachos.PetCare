@@ -2,7 +2,7 @@
 # SEGURIDAD — Archivos con credenciales (NUNCA subir a Git)
 # =============================================================
 lib/config/secrets.dart
-android/app/google-services.json
+echo "android/app/google-services.json" >> .gitignore
 ios/Runner/GoogleService-Info.plist
 
 # Miscellaneous
