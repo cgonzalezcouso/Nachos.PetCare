@@ -601,8 +601,8 @@ cd ..
 
 **Cristian González Couso**
 
-- 📧 Email: [tu-email@ejemplo.com]
-- 💼 LinkedIn: [Tu perfil LinkedIn]
+- 📧 Email: [cristian.gonzalez.couso@students.thepower.education]
+- 💼 LinkedIn: [https://www.linkedin.com/in/cristian-gonzalez-couso/]
 - 🐙 GitHub: [@cgonzalezcouso](https://github.com/cgonzalezcouso)
 
 ---
