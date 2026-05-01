@@ -1,91 +1,123 @@
-# Nacho’s PetCare 🐾 (Nachos.PetCare)
+# Nacho's PetCare 🐾
 
-Aplicación Android desarrollada con **Flutter (Dart)** para registrar mascotas y su información sanitaria, gestionar recordatorios con notificaciones y centralizar recursos (adopción responsable, directorio profesional, sitios pet-friendly).
+Aplicación móvil multiplataforma desarrollada con **Flutter (Dart)** para registrar mascotas y gestionar su información sanitaria, recordatorios con notificaciones y centralizar recursos de adopción responsable.
 
-- Repositorio: https://github.com/cgonzalezcouso/Nachos.PetCare
-- Autenticación: **Firebase Auth + Google Sign-In**
-- Persistencia local: **SQLite (sqflite)**
+- 📱 **Plataformas**: Android, iOS, Windows
+- 🔐 **Autenticación**: Firebase Auth + Google Sign-In
+- 💾 **Persistencia**: SQLite (sqflite) + Supabase
+- 📊 **Estado**: Provider + GetIt (Dependency Injection)
+- 📍 **Navegaci��n**: GoRouter
 
 ---
 
 ## Índice
+
 - [Resumen](#resumen)
 - [Funcionalidades](#funcionalidades)
 - [Tecnología](#tecnología)
 - [Estructura del repositorio](#estructura-del-repositorio)
 - [Requisitos](#requisitos)
 - [Instalación y ejecución](#instalación-y-ejecución)
+  - [Instalación General](#instalación-general)
+  - [Android](#android)
+  - [Windows](#windows)
+- [Despliegue](#despliegue)
+  - [Build Android (APK)](#build-android-apk)
+  - [Build Android (App Bundle)](#build-android-app-bundle)
+  - [Build Windows](#build-windows)
 - [Configuración Firebase (Google Sign-In)](#configuración-firebase-google-sign-in)
-- [Base de datos (borrador)](#base-de-datos-borrador)
-- [Planificación (GitHub Projects)](#planificación-github-projects)
-- [Documentación](#documentación)
+- [Variables de entorno](#variables-de-entorno)
 - [Permisos y privacidad](#permisos-y-privacidad)
+- [Seguridad](#seguridad)
 - [Licencia](#licencia)
 
 ---
 
 ## Resumen
-**Nacho’s PetCare** permite a los usuarios:
-- Iniciar sesión con Google (**Firebase Auth**).
-- Añadir y gestionar **mascotas** con datos básicos (especie, nombre, foto, chip…).
-- Guardar información sanitaria: **vacunas**, **enfermedades/condiciones**, **historial veterinario** e **informes**.
-- Crear **recordatorios** (citas, vacunas, desparasitación) con **notificaciones**.
-- Gestionar un **aviso de mascota perdida**.
-- Consultar recursos: **adopción responsable**, directorio de profesionales y sitios **pet-friendly**.
 
-**Especies soportadas** (catálogo):
-Perro, Gato, Conejo, Roedor (hámster, cobaya, rata, ratón, jerbo, chinchilla), Hurón, Ave (periquito, canario, ninfa, agapornis, loro), Pez (agua dulce / marino), Reptil (tortuga, gecko, dragón barbudo, serpiente), Anfibio (axolote, rana, tritón), Invertebrado (tarántula, mantis, insecto palo, caracol), Animal de corral (gallina, pato, cabra/oveja, cerdo), Otro/Exótico (texto libre + aviso legal).
+**Nacho's PetCare** es una aplicación completa de gestión de mascotas que permite a los usuarios:
+
+- ✅ Iniciar sesión seguro con Google (**Firebase Auth**)
+- ✅ Registrar y gestionar múltiples mascotas con datos completos
+- ✅ Guardar información sanitaria: vacunas, enfermedades, historial veterinario
+- ✅ Crear recordatorios inteligentes con notificaciones locales
+- ✅ Gestionar avisos de mascotas perdidas
+- ✅ Acceder a recursos de adopción responsable
+- ✅ Consultar directorios de profesionales (veterinarios, adiestradores, etc.)
+- ✅ Descubrir sitios pet-friendly
+
+**Especies soportadas:**
+Perros, Gatos, Conejos, Roedores (hámster, cobaya, rata, ratón, jerbo, chinchilla), Hurones, Aves (periquitos, canarios, ninfas, agapornis, loros), Peces (agua dulce/marina), Reptiles (tortugas, geckos, dragones)
 
 ---
 
 ## Funcionalidades
-### Núcleo
-- ✅ Login/Logout con **Firebase Auth + Google Sign-In**
-- ✅ CRUD de mascotas
-- ✅ Persistencia local con **SQLite**
-- ✅ Fotos desde cámara/galería
-- ✅ Notificaciones locales para recordatorios
 
-### Salud y documentación
-- Vacunas: registro y próxima dosis
-- Enfermedades/condiciones: diagnóstico + notas
-- Historial veterinario: visitas y controles
-- Informes veterinarios: adjuntar/gestionar documentos (local)
+### 🔐 Autenticación y Seguridad
+- Login/Logout con Firebase Auth + Google Sign-In
+- Gestión segura de sesiones
+- Recuperación de contraseña
 
-### Extra
-- Mascota perdida: estado + contacto + ubicación (si aplica)
-- Adopción responsable: listados/artículos
-- Directorio: veterinarios, adiestradores, etólogos, peluqueros, nutricionistas…
+### 🐾 Gestión de Mascotas
+- CRUD completo de mascotas
+- Fotos desde cámara/galería
+- Datos básicos: nombre, especie, raza, fecha de nacimiento, chip
+- Información de contacto de propietarios
+
+### 💊 Salud y Documentación
+- Registro de vacunas (con próximas dosis)
+- Historial de enfermedades/condiciones
+- Historial veterinario (visitas y controles)
+- Gestión de informes veterinarios
+- Adjuntar/descargar documentos
+
+### 🔔 Recordatorios y Notificaciones
+- Crear recordatorios para citas, vacunas, desparasitación
+- Notificaciones locales automáticas
+- Historial de notificaciones
+
+### 🆘 Funcionalidades Adicionales
+- Gestión de mascotas perdidas
+- Estado, contacto y ubicación
+- Adopción responsable: artículos y guías
+- Directorio profesional (veterinarios, adiestradores, etólogos, peluqueros, nutricionistas)
 - Sitios pet-friendly
 
 ---
 
 ## Tecnología
-- **Flutter (Dart)**
-- Android (Kotlin/AndroidX)
-- **Firebase** (Auth + configuración Android)
-- **SQLite** (`sqflite`)
-- Preferencias (`shared_preferences`)
-- Permisos (p. ej. `permission_handler`)
-- Multimedia (p. ej. `image_picker`)
-- Utilidades (`path_provider`, `url_launcher`)
-- Notificaciones (p. ej. `flutter_local_notifications`)
 
-> Paquetes exactos en `pubspec.yaml`.
+### Frontend
+- **Flutter (Dart)** - Framework multiplataforma
+- **Material Design** - Interfaz de usuario
+- **Provider** - Gestión de estado
+- **GetIt** - Inyección de dependencias
+- **GoRouter** - Navegación
 
----
+### Backend y Datos
+- **Firebase** - Autenticación y configuración
+- **Supabase** - Base de datos en la nube
+- **SQLite** (sqflite) - Base de datos local
+- **shared_preferences** - Almacenamiento de preferencias
 
-## Estructura del repositorio
-```text
-.vscode/
-android/
-assets/
-docs/
-ios/
-lib/
-linux/
-macos/
-test/
-web/
-windows/
-pubspec.yaml
+### Librerías Principales
+```yaml
+# UI
+- google_fonts: Fuentes personalizadas
+- flutter_svg: Gráficos vectoriales
+- cached_network_image: Caché de imágenes
+
+# Autenticación
+- google_sign_in: Google Sign-In
+- supabase_flutter: Supabase
+
+# Multimedia
+- image_picker: Selección de imágenes
+- permission_handler: Permisos del sistema
+- file_picker: Selección de archivos
+
+# Utilidades
+- intl: Internacionalización
+- url_launcher: Abrir URLs
+- http & dio: Peticiones HTTP
+- uuid: Generación de IDs únicos
