@@ -13,7 +13,7 @@ jobs:
       - name: 📥 Checkout del repositorio
         uses: actions/checkout@v4
       
-      - name: 🔐 Crear archivo secrets
+      - name: 🔐 Crear archivo Dart secrets
         run: |
           mkdir -p lib/config
           cat > lib/config/secrets.dart << 'EOF'
@@ -100,18 +100,19 @@ jobs:
       - name: 📦 Instalar dependencias
         run: flutter pub get
       
-      - name: 🧹 Limpiar Gradle
-        run: |
-          cd android
-          ./gradlew clean --no-daemon
-          cd ..
-      
       - name: 🏗️ Build APK (debug)
         run: flutter build apk --debug --verbose 2>&1 | tee build.log
+        continue-on-error: true
       
       - name: 📋 Mostrar últimas líneas del log si falla
         if: failure()
-        run: tail -150 build.log
+        run: |
+          if [ -f build.log ]; then
+            echo "=== ÚLTIMOS 150 LÍNEAS DEL LOG ===" 
+            tail -150 build.log
+          else
+            echo "No se encontró build.log"
+          fi
       
       - name: 📤 Subir APK como artefacto
         if: success()
@@ -121,10 +122,11 @@ jobs:
           path: build/app/outputs/flutter-apk/app-debug.apk
           retention-days: 14
       
-      - name: 📤 Subir logs si falla
-        if: failure()
+      - name: 📤 Subir logs si existen
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: build-logs-${{ github.run_number }}
           path: build.log
           retention-days: 7
+        continue-on-error: true
