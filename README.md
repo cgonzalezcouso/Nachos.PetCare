@@ -170,6 +170,76 @@ Nacho's PetCare resuelve este problema ofreciendo:
 
 ---
 
+## 📅 Cronología de Desarrollo
+
+### Planificación del Proyecto (TFG DAM 2025/26)
+
+```mermaid
+gantt
+    title Desarrollo de Nacho's PetCare
+    dateFormat  YYYY-MM-DD
+    axisFormat  %b %Y
+
+    section Investigación
+    Análisis del problema y requisitos      :done, a1, 2025-09-01, 14d
+    Investigación tecnológica               :done, a2, after a1, 10d
+    Diseño de arquitectura                  :done, a3, after a2, 7d
+
+    section Diseño
+    Diseño UI/UX inicial                    :done, b1, 2025-10-01, 14d
+    Modelado de base de datos               :done, b2, after b1, 7d
+    Prototipo navegable                     :done, b3, after b2, 7d
+
+    section Desarrollo Backend
+    Configuración Supabase                  :active, c1, 2025-11-01, 10d
+    Sistema de autenticación                :c2, after c1, 10d
+    Persistencia SQLite                     :c3, after c2, 10d
+    Sincronización cloud                    :c4, after c3, 14d
+
+    section Desarrollo Frontend
+    Gestión de usuarios                     :d1, 2025-12-01, 10d
+    Gestión de mascotas                     :d2, after d1, 14d
+    Historial médico                        :d3, after d2, 14d
+    Recordatorios y notificaciones          :d4, after d3, 10d
+    Multimedia y galería                    :d5, after d4, 10d
+
+    section Testing y Optimización
+    Testing funcional                       :e1, 2026-02-15, 10d
+    Corrección de errores                   :e2, after e1, 10d
+    Optimización multiplataforma            :e3, after e2, 7d
+
+    section Documentación y Entrega
+    Redacción memoria TFG                   :f1, 2026-03-10, 20d
+    Preparación presentación                :f2, after f1, 7d
+    Entrega final                           :milestone, f3, 2026-04-15, 1d
+```
+
+### 📌 Estado Actual del Proyecto
+
+| Módulo | Estado |
+|---|---|
+| Arquitectura base | ✅ Completado |
+| Autenticación | ✅ Completado |
+| Gestión de mascotas | ✅ Completado |
+| Historial médico | 🚧 En desarrollo |
+| Notificaciones | 🚧 En desarrollo |
+| Sincronización cloud | 🚧 En desarrollo |
+| Testing multiplataforma | ⏳ Pendiente |
+| Publicación y despliegue | ⏳ Pendiente |
+
+### 🎯 Objetivo de la planificación
+
+La planificación del proyecto sigue una metodología incremental orientada al desarrollo multiplataforma con Flutter, priorizando primero la arquitectura base y posteriormente las funcionalidades críticas relacionadas con la gestión sanitaria y documental de mascotas.
+
+El objetivo principal es garantizar:
+- Escalabilidad del sistema
+- Persistencia local y sincronización cloud
+- Compatibilidad multiplataforma
+- Experiencia de usuario intuitiva
+- Funcionamiento offline-first
+
+---
+
 ## 🚀 Instalación y Configuración
 
 ### 1. Clonar el Repositorio
