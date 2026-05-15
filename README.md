@@ -17,15 +17,14 @@ Una solución digital completa que centraliza toda la información de cuidado de
 
 <p align="center">
   <img src="assets/screenshots/Screenshot_20260403_000843.jpg" width="250"/>
-  <img src="assets/screenshots/Screenshot_20260403_000850.jpg" width="250"/>
-</p>
+ </p>
 
 ---
 
 ### 🏠 Dashboard Principal
 
 <p align="center">
-  <img src="assets/screenshots/Screenshot_20260403_003923.jpg" width="250"/>
+  <img src="assets/screenshots/Screenshot_20260403_000850.jpg" width="250"/>
 </p>
 
 ---
@@ -35,7 +34,7 @@ Una solución digital completa que centraliza toda la información de cuidado de
 #### 📋 Listado de Mascotas
 
 <p align="center">
-  <img src="assets/screenshots/Screenshot_20260403_003928.jpg" width="250"/>
+  <img src="assets/screenshots/Screenshot_20260403_003923.jpg" width="250"/>
 </p>
 
 #### 🐶 Perfil de Mascotas
@@ -56,7 +55,7 @@ Una solución digital completa que centraliza toda la información de cuidado de
 ### 🔔 Recordatorios
 
 <p align="center">
-  <img src="assets/screenshots/Screenshot_20260403_003931.jpg" width="250"/>
+  <img src="assets/screenshots/Screenshot_20260403_003928.jpg" width="250"/>
 </p>
 
 ---
