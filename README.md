@@ -71,19 +71,19 @@ Una solución digital completa que centraliza toda la información de cuidado de
 #### 🏡 Animales en Adopción
 
 <p align="center">
-  <img src="assets/screenshots/Screenshot_20260403_003945.jpg" width="250"/>
+  <img src="assets/screenshots/Screenshot_20260403_003940.jpg" width="250"/>
 </p>
 
 #### 📚 Artículos Informativos
 
 <p align="center">
-  <img src="assets/screenshots/Screenshot_20260403_003950.jpg" width="250"/>
+  <img src="assets/screenshots/Screenshot_20260403_003945.jpg" width="250"/>
 </p>
 
 #### 🏥 Directorio Profesional
 
 <p align="center">
-  <img src="assets/screenshots/Screenshot_20260403_004046.jpg" width="250"/>
+  <img src="assets/screenshots/Screenshot_20260403_003950.jpg" width="250"/>
 </p>
 
 ---
