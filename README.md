@@ -65,7 +65,7 @@ Una solución digital completa que centraliza toda la información de cuidado de
 #### 🐾 Comunidad
 
 <p align="center">
-  <img src="assets/screenshots/Screenshot_20260403_003940.jpg" width="250"/>
+  <img src="assets/screenshots/Screenshot_20260403_003931.jpg" width="250"/>
 </p>
 
 #### 🏡 Animales en Adopción
