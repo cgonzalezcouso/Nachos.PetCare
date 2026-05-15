@@ -11,6 +11,93 @@
 
 Una solución digital completa que centraliza toda la información de cuidado de tus mascotas en un único lugar, con sincronización en la nube y funcionamiento offline garantizado.
 
+## 📸 Capturas de Pantalla
+
+### 🚀 Splash Screen y Pantalla de Inicio
+
+<p align="center">
+  <img src="assets/screenshots/Screenshot_20260403_000843.jpg" width="250"/>
+  <img src="assets/screenshots/Screenshot_20260403_000850.jpg" width="250"/>
+</p>
+
+---
+
+### 🏠 Dashboard Principal
+
+<p align="center">
+  <img src="assets/screenshots/Screenshot_20260403_003923.jpg" width="250"/>
+</p>
+
+---
+
+### 🐾 Gestión de Mascotas
+
+#### 📋 Listado de Mascotas
+
+<p align="center">
+  <img src="assets/screenshots/Screenshot_20260403_003928.jpg" width="250"/>
+</p>
+
+#### 🐶 Perfil de Mascotas
+
+<p align="center">
+  <img src="assets/screenshots/Screenshot_20260403_004844.jpg" width="250"/>
+  <img src="assets/screenshots/Screenshot_20260403_004858.jpg" width="250"/>
+  <img src="assets/screenshots/Screenshot_20260403_004902.jpg" width="250"/>
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/Screenshot_20260403_005219.jpg" width="250"/>
+  <img src="assets/screenshots/Screenshot_20260403_005239.jpg" width="250"/>
+</p>
+
+---
+
+### 🔔 Recordatorios
+
+<p align="center">
+  <img src="assets/screenshots/Screenshot_20260403_003931.jpg" width="250"/>
+</p>
+
+---
+
+### 🌍 Comunidad y Directorio
+
+#### 🐾 Comunidad
+
+<p align="center">
+  <img src="assets/screenshots/Screenshot_20260403_003940.jpg" width="250"/>
+</p>
+
+#### 🏡 Animales en Adopción
+
+<p align="center">
+  <img src="assets/screenshots/Screenshot_20260403_003945.jpg" width="250"/>
+</p>
+
+#### 📚 Artículos Informativos
+
+<p align="center">
+  <img src="assets/screenshots/Screenshot_20260403_003950.jpg" width="250"/>
+</p>
+
+#### 🏥 Directorio Profesional
+
+<p align="center">
+  <img src="assets/screenshots/Screenshot_20260403_004046.jpg" width="250"/>
+</p>
+
+---
+
+### 👤 Perfil y Configuración
+
+<p align="center">
+  <img src="assets/screenshots/Screenshot_20260403_004038.jpg" width="250"/>
+  <img src="assets/screenshots/Screenshot_20260403_004046.jpg" width="250"/>
+</p>
+
+---
+
 ---
 
 ## 🎯 Descripción del Proyecto
