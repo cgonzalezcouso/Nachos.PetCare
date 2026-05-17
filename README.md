@@ -274,6 +274,24 @@ Nacho's PetCare resuelve este problema ofreciendo:
 | Push remotas avanzadas | Notificaciones remotas con Supabase Edge Functions + FCM y recordatorios automáticos generados por el servidor. |
 | Panel de administración de notificaciones | Herramienta de gestión para controlar envíos y campañas de avisos. |
 
+### 🆕 Novedades de la versión 3.0
+
+| Funcionalidad | Descripción |
+|---|---|
+| Panel web B2B para clínicas veterinarias | Panel desarrollado con Flutter Web para gestión de pacientes animales, historias clínicas y usuarios internos. |
+| Licencias SaaS por clínica | Modelo de suscripción por clínica a 49 €/mes con control de usuarios y permisos. |
+| Invitación de veterinarios | Los propietarios pueden invitar a su veterinario para ver el historial médico de su mascota. |
+| API REST pública | API para integraciones con clínicas, laboratorios, aseguradoras y otros servicios externos. |
+| Wearables para mascotas | Integración con collares GPS y sensores de actividad mediante Bluetooth BLE + HTTP REST, con soporte para Tractive API y Fi Collar API. |
+| Monitorización continua | Seguimiento de pasos/actividad diaria, patrón de sueño y frecuencia cardíaca cuando el wearable lo permite. |
+| Historial sincronizado | Los datos de wearables se sincronizan y visualizan dentro del historial de cada mascota. |
+| IA Asistente veterinario | Asistente basado en LLM accesible por API para analizar síntomas en texto libre. |
+| Diagnósticos diferenciales | Sugerencias orientativas de diagnósticos diferenciales sin sustituir la valoración clínica. |
+| Recomendaciones preventivas | Recomendaciones personalizadas de cuidado preventivo según perfil e historial de la mascota. |
+| Marketplace integrado | Marketplace de productos para mascotas con integración con Amazon y tiendas especializadas mediante afiliación. |
+| Recomendaciones personalizadas | Sugerencias por especie, raza, edad, peso, patologías, salud e historial de wearables. |
+| Monetización por afiliación | Ingresos por comisiones entre 8% y 12% por compras realizadas desde la app. |
+
 ### 📦 Planes Disponibles
 
 | Plan | Mascotas | Eventos históricos | Exportación PDF | Almacenamiento | Precio |
