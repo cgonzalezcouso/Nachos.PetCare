@@ -331,6 +331,14 @@ Nacho's PetCare resuelve este problema ofreciendo:
 
 ## 🚀 Instalación y Configuración
 
+## Instalación específica — Android
+
+### Requisitos previos Android
+
+- Android Studio instalado con Android SDK y emuladores configurados.
+- Java JDK 17+ instalado y configurado en PATH.
+- Flutter SDK instalado y disponible en PATH.
+
 ### 1. Clonar el Repositorio
 
 ```bash
@@ -343,6 +351,46 @@ cd nachos_pet_care_flutter
 ```bash
 flutter pub get
 ```
+
+### Construir y ejecutar en dispositivo o emulador
+
+- Prepara un emulador o conecta un dispositivo físico con depuración USB.
+- `flutter pub get`
+- `flutter run -d <device-id>`
+- También puedes ejecutar la app desde Android Studio con Run > Run 'app'.
+
+### Generar APK / Bundle para publicar
+
+- `flutter build apk --debug`
+- `flutter build apk --release`
+- `flutter build appbundle --release`
+- Firma el bundle o APK siguiendo la guía oficial de Flutter mediante `key.properties` y `signingConfigs` en `build.gradle`.
+
+## Instalación específica — Windows
+
+### Requisitos previos Windows
+
+- Visual Studio 2022 con la carga de trabajo Desktop development with C++ instalada.
+- Flutter SDK en PATH con soporte para Windows habilitado.
+- Espacio en disco mínimo 10 GB.
+
+### Configuración específica
+
+- Habilita Windows desktop en Flutter con `flutter config --enable-windows-desktop`.
+- Verifica el entorno con `flutter doctor`.
+- Asegúrate de que la carpeta `windows/` contiene los archivos del proyecto generados por Flutter.
+
+### Construir y ejecutar en Windows localmente
+
+- `flutter pub get`
+- `flutter run -d windows`
+- Para depurar, abre el proyecto `windows/` en Visual Studio y ejecútalo desde allí.
+
+### Generar artefacto para distribución
+
+- `flutter build windows --release`
+- Empaqueta el contenido de `build/windows/runner/Release` con un instalador como MSIX, Inno Setup o NSIS.
+- Firma el binario si vas a distribuirlo de forma oficial o quieres evitar advertencias de SmartScreen.
 
 ### 3. Configurar Firebase, Supabase, Microsoft Authentication y RevenueCat
 
