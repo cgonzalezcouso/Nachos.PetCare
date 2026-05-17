@@ -9,7 +9,7 @@
 
 > **Aplicación multiplataforma para la gestión integral de mascotas**
 
-Una solución digital completa que centraliza toda la información de cuidado de tus mascotas en un único lugar, con sincronización en la nube y funcionamiento offline garantizado.
+Una solución digital completa que centraliza toda la información de cuidado de tus mascotas en un único lugar, con sincronización en la nube, funcionamiento offline y nuevas funciones sociales, multidioma y de monetización en la versión 2.0.
 
 ## 📸 Capturas de Pantalla
 
@@ -111,21 +111,22 @@ En España hay más de **29 millones de mascotas registradas** y el sector mueve
 - 📄 Recetas y diagnósticos acumulados sin orden
 
 **Consecuencias concretas:**
-- ❌ 28% de propietarios retrasan las vacunas
-- ❌ Más del 30% no sigue correctamente los refuerzos recomendados
+- ❌ Retrasos en vacunas y revisiones
+- ❌ Seguimiento irregular de tratamientos y refuerzos
 - ❌ Pérdida de historial médico al cambiar de veterinario
-- ❌ Imposibilidad de aportar información clínica en urgencias
+- ❌ Dificultad para compartir información clínica relevante
 
 ### Propuesta de Valor
 
 Nacho's PetCare resuelve este problema ofreciendo:
 
-✅ **Centralización completa** - Toda la información en un único lugar
-✅ **Multiplataforma nativa** - Android, iOS y escritorio (Windows, Linux, macOS)
-✅ **Funcionamiento offline** - Funciona sin conexión a internet
-✅ **Sincronización en la nube** - Tus datos siempre actualizados
-✅ **Interfaz intuitiva** - Fácil de usar para cualquier persona
-✅ **Gratuito** - Versión base completamente gratuita
+✅ **Centralización completa** - Toda la información en un único lugar  
+✅ **Multiplataforma nativa** - Android, iOS y escritorio (Windows, Linux, macOS)  
+✅ **Funcionamiento offline** - Funciona sin conexión a internet  
+✅ **Sincronización en la nube** - Tus datos siempre actualizados  
+✅ **Funciones sociales** - Perfiles públicos, seguimiento y comentarios  
+✅ **Experiencia internacional** - App disponible en varios idiomas  
+✅ **Modelo freemium escalable** - Versión gratuita y suscripción Premium  
 
 ---
 
@@ -140,7 +141,9 @@ Nacho's PetCare resuelve este problema ofreciendo:
 [![Supabase](https://img.shields.io/badge/Supabase-Cloud_Sync-3FCF8E?logo=supabase&logoColor=white)](https://supabase.com)
 
 ### Backend & APIs
-[![Supabase API](https://img.shields.io/badge/RAWG_API-Cloud_API-3FCF8E?logo=supabase&logoColor=white)](https://supabase.com)
+[![Supabase](https://img.shields.io/badge/Supabase-Edge_Functions-3FCF8E?logo=supabase&logoColor=white)](https://supabase.com)
+[![Firebase](https://img.shields.io/badge/Firebase-FCM-orange?logo=firebase&logoColor=white)](https://firebase.google.com)
+[![RevenueCat](https://img.shields.io/badge/RevenueCat-Subscriptions-purple)](https://www.revenuecat.com)
 
 ### Plataformas Soportadas
 [![Android](https://img.shields.io/badge/Android-12+-3DDC84?logo=android&logoColor=white)](https://www.android.com)
@@ -156,6 +159,8 @@ Nacho's PetCare resuelve este problema ofreciendo:
 - **Autenticación:** Firebase Authentication / Google Sign-In / Microsoft Authentication
 - **Mensajería push:** Firebase Cloud Messaging (FCM)
 - **Funciones backend:** Supabase Edge Functions
+- **Suscripciones:** RevenueCat
+- **Internacionalización:** ARB + localización personalizada
 - **Documentos PDF:** Generación de informes y exportación documental
 - **Widgets móviles:** App Widgets (Android) / WidgetKit (iOS)
 
@@ -163,7 +168,7 @@ Nacho's PetCare resuelve este problema ofreciendo:
 
 ## ✨ Características Principales
 
-### v1.1 - Funcionalidades Incluidas
+### v2.0 - Funcionalidades Incluidas
 
 #### 👤 Gestión de Usuario
 - ✅ Autenticación con email y contraseña
@@ -172,13 +177,16 @@ Nacho's PetCare resuelve este problema ofreciendo:
 - ✅ Autenticación con Microsoft
 - ✅ Gestión de perfil de usuario
 - ✅ Recuperación de contraseña
+- ✅ Selector de idioma independiente del locale del dispositivo
 
 #### 🐕 Gestión de Mascotas
-- ✅ Registro de múltiples mascotas por cuenta
+- ✅ Registro y administración de mascotas
 - ✅ Perfiles detallados por mascota (nombre, raza, edad, peso, etc.)
 - ✅ Foto de perfil de cada mascota
 - ✅ Galería de fotos independiente por mascota con registro de fechas
 - ✅ Historial médico completo
+- ✅ Perfil público de mascota compartible mediante URL única
+- ✅ Galería pública opcional por mascota
 
 #### 🏥 Historial Médico-Veterinario
 - ✅ Registro de vacunas y fechas de aplicación
@@ -193,10 +201,12 @@ Nacho's PetCare resuelve este problema ofreciendo:
 #### 📅 Recordatorios y Notificaciones
 - ✅ Recordatorios automáticos configurables
 - ✅ Notificaciones push locales
-- ✅ Notificaciones push remotas mediante Supabase Edge Functions + FCM (Android)
+- ✅ Notificaciones push remotas mediante Supabase Edge Functions + FCM
 - ✅ Avisos de próximas citas
 - ✅ Alertas de medicamentos
 - ✅ Notificaciones enviadas desde otro dispositivo
+- ✅ Recordatorios automáticos generados por el servidor
+- ✅ Panel de administración de notificaciones
 
 #### 📸 Gestión de Multimedia
 - ✅ Subida de fotos desde cámara
@@ -204,6 +214,29 @@ Nacho's PetCare resuelve este problema ofreciendo:
 - ✅ Álbum fotográfico por mascota separado del perfil
 - ✅ Registro cronológico de fotografías
 - ✅ Almacenamiento en la nube
+- ✅ Comentarios en fotos
+
+#### 🌍 Funcionalidades Sociales
+- ✅ Perfiles públicos compartibles
+- ✅ Seguimiento de mascotas de amigos
+- ✅ Interacciones básicas mediante comentarios
+- ✅ Galería pública opcional
+
+#### 🌐 Internacionalización
+- ✅ Soporte completo para español
+- ✅ Soporte completo para inglés
+- ✅ Soporte completo para portugués
+- ✅ Soporte completo para francés
+- ✅ Archivos ARB completos para todas las traducciones
+
+#### 💳 Monetización Freemium
+- ✅ Plan gratuito con hasta 2 mascotas
+- ✅ Límite de 50 eventos históricos por mascota en plan gratuito
+- ✅ Plan Premium por 3,99 €/mes
+- ✅ Mascotas ilimitadas en Premium
+- ✅ Exportación PDF incluida en Premium
+- ✅ Sin límites de almacenamiento en Premium
+- ✅ Gestión de suscripciones mediante RevenueCat
 
 #### 📊 Panel de Control
 - ✅ Vista resumen por mascota
@@ -226,23 +259,34 @@ Nacho's PetCare resuelve este problema ofreciendo:
 - ✅ Backup automático en Supabase
 - ✅ Exportación de datos
 
-### 🆕 Novedades de la versión 1.1
+### 🆕 Novedades de la versión 2.0
 
 | Funcionalidad | Descripción |
 |---|---|
-| Exportación médica a PDF | Generación de informes veterinarios completos por mascota, listos para compartir o almacenar. |
-| Notificaciones push remotas | Envío de avisos desde otro dispositivo mediante Supabase Edge Functions y FCM en Android. |
-| Widget de pantalla de inicio | Muestra el próximo evento sanitario de la mascota prioritaria en Android e iOS. |
-| Galería fotográfica por mascota | Separa la foto de perfil del álbum completo con registro de fechas. |
-| Registro de peso con gráfica | Permite seguir la evolución temporal del peso del animal con una gráfica de línea. |
-| Inicio de sesión con Microsoft | Nueva opción de autenticación además de email/contraseña y Google. |
+| Modelo freemium | Plan gratuito con 2 mascotas y 50 eventos históricos por mascota; plan Premium por 3,99 €/mes con uso ilimitado. |
+| Suscripciones con RevenueCat | Gestión centralizada del ciclo de vida de la suscripción, compras y validación de acceso Premium. |
+| Perfil público de mascota | Cada mascota puede compartirse con una URL única para mejorar su visibilidad. |
+| Galería pública opcional | Permite mostrar fotos públicamente según la configuración elegida por el usuario. |
+| Seguir mascotas | Posibilidad de seguir mascotas de amigos dentro de la red social básica. |
+| Comentarios en fotos | Interacción social mediante comentarios en imágenes publicadas. |
+| Multiidioma completo | Soporte en español, inglés, portugués y francés mediante archivos ARB. |
+| Idioma independiente del dispositivo | El usuario puede elegir manualmente el idioma desde ajustes sin depender del locale del sistema. |
+| Push remotas avanzadas | Notificaciones remotas con Supabase Edge Functions + FCM y recordatorios automáticos generados por el servidor. |
+| Panel de administración de notificaciones | Herramienta de gestión para controlar envíos y campañas de avisos. |
 
-### Fuera del Alcance v1.1
-- ❌ Integración con clínicas veterinarias externas
+### 📦 Planes Disponibles
+
+| Plan | Mascotas | Eventos históricos | Exportación PDF | Almacenamiento | Precio |
+|---|---|---|---|---|---|
+| Gratuito | Hasta 2 | 50 por mascota | No | Limitado | 0 €/mes |
+| Premium | Ilimitadas | Ilimitados | Sí | Sin límites | 3,99 €/mes |
+
+### Fuera del Alcance v2.0
+- ❌ Integración directa con clínicas veterinarias externas
 - ❌ Comercio electrónico de productos
-- ❌ Mensajería en tiempo real entre usuarios
+- ❌ Mensajería privada en tiempo real entre usuarios
 - ❌ Seguimiento GPS de mascotas
-- ❌ Integración con wearables/collares inteligentes
+- ❌ Integración con wearables o collares inteligentes
 
 ---
 
@@ -271,96 +315,17 @@ Nacho's PetCare resuelve este problema ofreciendo:
 - **Dart SDK:** 3.x o superior
 - **CMake:** 3.10 o superior
 - **pkg-config:** 0.29 o superior
-- **GTK 3.0:** Desarrollo libraries
+- **GTK 3.0:** Development libraries
 
 ### Cuentas Necesarias
 
 - 🔐 **Firebase Console** - Para autenticación y notificaciones FCM
 - ☁️ **Supabase** - Para backend, sincronización y Edge Functions
+- 💳 **RevenueCat** - Para la gestión de suscripciones Premium
 - 📱 **Google Cloud Console** - Para Google Sign-In
 - 🪟 **Microsoft Azure Portal** - Para autenticación con Microsoft
 - 🔑 **Google Play Console** - Para publicar en Android
 - 🍎 **Apple Developer Account** - Para iOS y widgets
-
----
-
-## 📅 Cronología de Desarrollo
-
-### Planificación del Proyecto (TFG DAM 2025/26)
-
-```mermaid
-gantt
-    title Desarrollo de Nacho's PetCare
-    dateFormat  YYYY-MM-DD
-    axisFormat  %b %Y
-
-    section Investigación
-    Análisis del problema y requisitos      :done, a1, 2025-09-01, 14d
-    Investigación tecnológica               :done, a2, after a1, 10d
-    Diseño de arquitectura                  :done, a3, after a2, 7d
-
-    section Diseño
-    Diseño UI/UX inicial                    :done, b1, 2025-10-01, 14d
-    Modelado de base de datos               :done, b2, after b1, 7d
-    Prototipo navegable                     :done, b3, after b2, 7d
-
-    section Desarrollo Backend
-    Configuración Supabase                  :done, c1, 2025-11-01, 10d
-    Sistema de autenticación                :done, c2, after c1, 10d
-    Persistencia SQLite                     :done, c3, after c2, 10d
-    Sincronización cloud                    :done, c4, after c3, 14d
-    Edge Functions y push remotas           :done, c5, after c4, 10d
-
-    section Desarrollo Frontend
-    Gestión de usuarios                     :done, d1, 2025-12-01, 10d
-    Gestión de mascotas                     :done, d2, after d1, 14d
-    Historial médico                        :done, d3, after d2, 14d
-    Recordatorios y notificaciones          :done, d4, after d3, 10d
-    Multimedia y galería                    :done, d5, after d4, 10d
-    Exportación PDF                         :done, d6, after d5, 7d
-    Widgets móviles                         :done, d7, after d6, 7d
-    Registro de peso y gráficas             :done, d8, after d7, 7d
-    Login con Microsoft                     :done, d9, after d8, 5d
-
-    section Testing y Optimización
-    Testing funcional                       :active, e1, 2026-02-15, 10d
-    Corrección de errores                   :e2, after e1, 10d
-    Optimización multiplataforma            :e3, after e2, 7d
-
-    section Documentación y Entrega
-    Redacción memoria TFG                   :f1, 2026-03-10, 20d
-    Preparación presentación                :f2, after f1, 7d
-    Entrega final                           :milestone, f3, 2026-04-15, 1d
-```
-
-### 📌 Estado Actual del Proyecto
-
-| Módulo | Estado |
-|---|---|
-| Arquitectura base | ✅ Completado |
-| Autenticación | ✅ Completado |
-| Gestión de mascotas | ✅ Completado |
-| Historial médico | ✅ Completado |
-| Exportación PDF | ✅ Completado |
-| Notificaciones locales | ✅ Completado |
-| Notificaciones remotas | ✅ Completado |
-| Widgets móviles | ✅ Completado |
-| Galería fotográfica | ✅ Completado |
-| Registro de peso y gráficas | ✅ Completado |
-| Testing multiplataforma | 🚧 En curso |
-| Publicación y despliegue | ⏳ Pendiente |
-
-### 🎯 Objetivo de la planificación
-
-La planificación del proyecto sigue una metodología incremental orientada al desarrollo multiplataforma con Flutter, priorizando primero la arquitectura base y posteriormente las funcionalidades críticas relacionadas con la gestión sanitaria, documental y de seguimiento evolutivo de mascotas.
-
-El objetivo principal es garantizar:
-- Escalabilidad del sistema
-- Persistencia local y sincronización cloud
-- Compatibilidad multiplataforma
-- Experiencia de usuario intuitiva
-- Funcionamiento offline-first
-- Compartición eficiente de información veterinaria
 
 ---
 
@@ -379,12 +344,11 @@ cd nachos_pet_care_flutter
 flutter pub get
 ```
 
-### 3. Configurar Firebase, Supabase y Microsoft Authentication
+### 3. Configurar Firebase, Supabase, Microsoft Authentication y RevenueCat
 
 #### Crear archivo `lib/config/secrets.dart`
 
 ```dart
-// lib/config/secrets.dart
 class AppSecrets {
   static const String supabaseUrl = 'https://your-project.supabase.co';
   static const String supabaseAnonKey = 'your-anon-key';
@@ -392,6 +356,7 @@ class AppSecrets {
   static const String googleAndroidClientId = 'your-android-client-id';
   static const String microsoftClientId = 'your-microsoft-client-id';
   static const String microsoftTenantId = 'your-tenant-id';
+  static const String revenueCatPublicKey = 'your-revenuecat-public-key';
 }
 
 final appSecrets = AppSecrets();
@@ -399,125 +364,26 @@ final appSecrets = AppSecrets();
 
 **⚠️ IMPORTANTE:** Este archivo NO debe ser commiteado. Está incluido en `.gitignore`.
 
-### 4. Descargar google-services.json
+### 4. Descargar `google-services.json`
 
 1. Ve a [Firebase Console](https://console.firebase.google.com)
 2. Selecciona tu proyecto
 3. Descarga el archivo `google-services.json`
 4. Colócalo en `android/app/google-services.json`
 
-### 5. Configurar Edge Functions y FCM
+### 5. Configurar Edge Functions, FCM y RevenueCat
 
 1. Crea las funciones necesarias en [Supabase](https://supabase.com)
 2. Configura las credenciales de Firebase Cloud Messaging
 3. Despliega las Edge Functions para el envío remoto de notificaciones
-4. Verifica los tokens de dispositivo en Android
+4. Configura productos, entitlements y offerings en RevenueCat
+5. Verifica los tokens de dispositivo y la lógica de suscripción
 
----
+### 6. Configurar internacionalización
 
-## 📱 Instalación en Android
-
-### Opción 1: Compilar APK en Desarrollo
-
-```bash
-# Build APK debug
-flutter build apk --debug
-
-# Build APK release
-flutter build apk --release
-
-# Build App Bundle (Google Play)
-flutter build appbundle --release
-```
-
-El APK se generará en: `build/app/outputs/flutter-apk/`
-
-### Opción 2: Instalar en Dispositivo Conectado
-
-```bash
-# Listar dispositivos disponibles
-flutter devices
-
-# Instalar y ejecutar
-flutter run
-
-# Instalar build específico
-flutter install --release
-```
-
-### Opción 3: Descargar APK Precompilado
-
-Ve a la sección [Releases](https://github.com/cgonzalezcouso/Nachos.PetCare/releases) del repositorio y descarga la última versión compilada.
-
-### Instalación Manual en Dispositivo
-
-1. Descarga el archivo `app-release.apk`
-2. Transfiere a tu dispositivo Android
-3. Abre el archivo y presiona "Instalar"
-4. Acepta los permisos solicitados
-
-**⚠️ Nota:** Asegúrate de permitir instalación desde fuentes desconocidas en tu dispositivo.
-
----
-
-## 💻 Instalación en Windows (Escritorio)
-
-### Requisitos Previos
-
-```bash
-# Verificar que el soporte a Windows esté habilitado
-flutter config --enable-windows-desktop
-
-# Verificar dispositivos
-flutter devices
-```
-
-### Compilación
-
-```bash
-# Build Windows Release
-flutter build windows --release
-
-# El ejecutable se encontrará en:
-# build/windows/runner/Release/nacho_pet_care.exe
-```
-
-### Instalación
-
-#### Método 1: Ejecutar Directamente
-
-```bash
-# Navegar a la carpeta
-cd build/windows/runner/Release
-
-# Ejecutar la aplicación
-./nacho_pet_care.exe
-```
-
-#### Método 2: Crear Acceso Directo
-
-1. Copia el archivo `nacho_pet_care.exe`
-2. Crea un acceso directo en tu Escritorio
-3. Haz doble clic para ejecutar
-
-#### Método 3: Instalador MSI (Opcional)
-
-Para crear un instalador profesional:
-
-```bash
-# Instalar herramientas necesarias
-choco install create-appx-package
-
-# Crear MSIX (instalador moderno)
-flutter build windows --release
-```
-
-### Integración con el Menú de Inicio
-
-El ejecutable se puede anclar al menú de Inicio de Windows mediante:
-
-1. Click derecho sobre `nacho_pet_care.exe`
-2. Selecciona "Anclar a Menú de Inicio"
+1. Añade los archivos ARB en el directorio de localización
+2. Verifica traducciones en español, inglés, portugués y francés
+3. Activa el selector de idioma desde la pantalla de ajustes
 
 ---
 
@@ -531,11 +397,13 @@ nachos_pet_care_flutter/
 │   ├── config/
 │   │   ├── secrets.dart          # Configuración de credenciales (no commitar)
 │   │   └── supabase_config.dart  # Configuración de Supabase
+│   ├── l10n/                     # Archivos ARB y localización
 │   ├── models/                   # Modelos de datos
 │   ├── screens/                  # Pantallas de la aplicación
-│   ├── services/                 # Servicios (API, BD, autenticación)
+│   ├── services/                 # Servicios (API, BD, auth, suscripciones)
 │   ├── widgets/                  # Widgets reutilizables
 │   └── main.dart                 # Punto de entrada
+├── supabase/                     # Edge Functions y lógica backend
 ├── android/                      # Configuración específica de Android
 ├── ios/                          # Configuración específica de iOS
 ├── windows/                      # Configuración específica de Windows
@@ -548,42 +416,25 @@ nachos_pet_care_flutter/
 ### Ejecutar en Modo Desarrollo
 
 ```bash
-# En dispositivo/emulador Android
 flutter run
-
-# Con hot reload y logs detallados
 flutter run -v
-
-# En Windows (escritorio)
 flutter run -d windows
-
-# En navegador (si está habilitado)
 flutter run -d chrome
 ```
 
 ### Análisis de Código
 
 ```bash
-# Análisis estático
 flutter analyze
-
-# Formatear código
 dart format .
-
-# Verificar problemas
 flutter analyze --suggestions
 ```
 
 ### Tests
 
 ```bash
-# Ejecutar todos los tests
 flutter test
-
-# Test con cobertura
 flutter test --coverage
-
-# Test específico
 flutter test test/unit/example_test.dart
 ```
 
@@ -602,6 +453,7 @@ MICROSOFT_CLIENT_ID=your-microsoft-client-id
 MICROSOFT_TENANT_ID=your-tenant-id
 FIREBASE_PROJECT_ID=your-project-id
 FCM_SERVER_KEY=your-fcm-server-key
+REVENUECAT_PUBLIC_KEY=your-revenuecat-public-key
 ```
 
 ### GitHub Secrets (para CI/CD)
@@ -620,28 +472,8 @@ MICROSOFT_CLIENT_ID
 MICROSOFT_TENANT_ID
 GOOGLE_SERVICES_JSON
 FCM_SERVER_KEY
+REVENUECAT_PUBLIC_KEY
 ```
-
----
-
-## 🤖 CI/CD con GitHub Actions
-
-El proyecto incluye automatiación completa con **GitHub Actions**:
-
-- ✅ Análisis estático automático
-- ✅ Ejecución de tests
-- ✅ Compilación de APK
-- ✅ Subida de artefactos
-
-Workflow disponible en: `.github/workflows/flutter-ci.yml`
-
-### Ver Estado de Workflows
-
-Ve a la pestaña **Actions** de tu repositorio GitHub para ver:
-
-- Builds exitosos
-- Logs detallados
-- APKs generados
 
 ---
 
@@ -659,7 +491,9 @@ User {
   fotoPerfil: String?,
   proveedorAuth: String,
   fechaRegistro: DateTime,
-  ultimoAcceso: DateTime
+  ultimoAcceso: DateTime,
+  localePreferido: String,
+  isPremium: bool
 }
 ```
 
@@ -670,14 +504,17 @@ Pet {
   userId: String,
   nombre: String,
   raza: String,
-  tipo: String (perro, gato, etc),
+  tipo: String,
   fechaNacimiento: DateTime,
   peso: double,
   color: String,
   foto: String?,
   microchip: String?,
   fechaRegistro: DateTime,
-  esPrioritaria: bool
+  esPrioritaria: bool,
+  perfilPublico: bool,
+  galeriaPublica: bool,
+  publicSlug: String
 }
 ```
 
@@ -686,7 +523,7 @@ Pet {
 HealthEvent {
   id: String,
   petId: String,
-  tipo: String (vacuna, desparasitación, etc),
+  tipo: String,
   fecha: DateTime,
   proximaFecha: DateTime?,
   descripcion: String,
@@ -696,25 +533,24 @@ HealthEvent {
 }
 ```
 
-#### Registro de Peso
+#### Comentario en Foto
 ```dart
-WeightRecord {
+PhotoComment {
   id: String,
-  petId: String,
-  peso: double,
-  fecha: DateTime,
-  notas: String?
+  photoId: String,
+  userId: String,
+  content: String,
+  createdAt: DateTime
 }
 ```
 
-#### Fotografía
+#### Seguimiento Social
 ```dart
-PetPhoto {
+PetFollow {
   id: String,
-  petId: String,
-  url: String,
-  fechaCaptura: DateTime,
-  descripcion: String?
+  followerUserId: String,
+  followedPetId: String,
+  createdAt: DateTime
 }
 ```
 
@@ -731,12 +567,15 @@ PetPhoto {
    - `health_events`
    - `weight_records`
    - `photos`
+   - `photo_comments`
+   - `pet_follows`
    - `device_tokens`
+   - `subscriptions`
 
 3. Configurar Row Level Security (RLS)
 4. Obtener URL y anon key
 5. Configurar `lib/config/secrets.dart`
-6. Desplegar Edge Functions para notificaciones push remotas
+6. Desplegar Edge Functions para notificaciones push remotas y recordatorios automáticos
 
 ### Funcionamiento Offline
 
@@ -746,81 +585,19 @@ PetPhoto {
 
 ---
 
-## 🐛 Solución de Problemas
+## 📈 Rendimiento y Escalabilidad
 
-### Error: "flutter: command not found"
+### Capacidades por plan
 
-```bash
-# En Windows, ejecuta Flutter SDK setup
-flutter doctor
+- **Gratuito:** hasta 2 mascotas y 50 eventos históricos por mascota
+- **Premium:** mascotas, almacenamiento y eventos históricos ilimitados
 
-# Añade Flutter al PATH (Windows):
-setx PATH "%PATH%;C:\flutter\bin"
-```
+### Beneficios de arquitectura v2.0
 
-### Error: "Android SDK not found"
-
-```bash
-# Descargar Android SDK
-flutter config --android-sdk-path "C:\Android\sdk"
-
-# En macOS
-flutter config --android-sdk-path ~/Library/Android/sdk
-```
-
-### Error: "Gradle task assembleDebug failed"
-
-```bash
-# Limpiar caché de Gradle
-cd android
-./gradlew clean
-cd ..
-
-flutter clean
-flutter pub get
-flutter build apk --debug
-```
-
-### Los datos no se sincronizan o no llegan las push remotas
-
-```bash
-# Verificar conexión a internet
-# Comprobar credenciales de Supabase en secrets.dart
-# Revisar permisos RLS en Supabase
-# Confirmar token FCM registrado en la base de datos
-# Verificar despliegue y logs de las Edge Functions
-
-# Forzar re-sincronización
-# Ir a Ajustes → Sincronizar datos
-```
-
-### Error en login con Microsoft
-
-```bash
-# Verificar client ID y tenant ID
-# Confirmar redirect URI configurada en Azure
-# Revisar permisos de la aplicación registrada
-```
-
----
-
-## 📈 Rendimiento y Optimizaciones
-
-### Tamaño de APK
-
-- **APK Debug:** ~150 MB
-- **APK Release:** ~40-50 MB
-
-### Consumo de Memoria
-
-- **Mínimo:** ~50 MB
-- **Típico:** ~120-150 MB
-- **Máximo:** ~300 MB
-
-### Requisitos de Red
-
-- **Conexión:** Mínimo 1 Mbps recomendado
-- **Datos:** ~5-10 MB por mes en uso normal
+- Backend preparado para automatización de recordatorios
+- Base social extensible para futuras funciones comunitarias
+- Sistema de suscripción desacoplado mediante RevenueCat
+- Localización ampliable a nuevos idiomas
 
 ---
 
@@ -830,6 +607,7 @@ flutter build apk --debug
 - 📖 [Documentación de Dart](https://dart.dev/guides)
 - 📖 [Documentación de Supabase](https://supabase.com/docs)
 - 📖 [Documentación de Firebase](https://firebase.google.com/docs)
+- 📖 [Documentación de RevenueCat](https://www.revenuecat.com/docs)
 - 📖 [Documentación de Microsoft Identity Platform](https://learn.microsoft.com/entra/identity-platform/)
 
 ---
@@ -855,14 +633,6 @@ Tutora del Trabajo de Fin de Grado en el CFGS de Desarrollo de Aplicaciones Mult
 ## 📜 Licencia
 
 Este proyecto está bajo la licencia **MIT**. Ver archivo [LICENSE](LICENSE) para más detalles.
-
-```text
-Copyright (c) 2025 Cristian González Couso
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction...
-```
 
 ---
 
@@ -902,5 +672,5 @@ Las contribuciones son bienvenidas. Por favor:
 
 ---
 
-*Última actualización: Mayo 2026*
-*Versión: 1.1.0*
+*Última actualización: Mayo 2026*  
+*Versión: 2.0.0*
