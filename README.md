@@ -299,13 +299,6 @@ Nacho's PetCare resuelve este problema ofreciendo:
 | Gratuito | Hasta 2 | 50 por mascota | No | Limitado | 0 €/mes |
 | Premium | Ilimitadas | Ilimitados | Sí | Sin límites | 3,99 €/mes |
 
-### Fuera del Alcance v2.0
-- ❌ Integración directa con clínicas veterinarias externas
-- ❌ Comercio electrónico de productos
-- ❌ Mensajería privada en tiempo real entre usuarios
-- ❌ Seguimiento GPS de mascotas
-- ❌ Integración con wearables o collares inteligentes
-
 ---
 
 ## 📋 Requisitos Previos
