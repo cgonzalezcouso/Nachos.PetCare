@@ -448,18 +448,17 @@ STRIPE_CANCEL_URL=https://your-app.com/cancel
 - Webhooks para sincronizar estados de pago y suscripción
 - Validación de pagos mediante Supabase Edge Functions
 - Control de acceso premium sincronizado con Supabase
-```
 
 **⚠️ IMPORTANTE:** Este archivo NO debe ser commiteado. Está incluido en `.gitignore`.
 
-### 4. Descargar `google-services.json`
+## 4. Descargar `google-services.json`
 
 1. Ve a [Firebase Console](https://console.firebase.google.com)
 2. Selecciona tu proyecto
 3. Descarga el archivo `google-services.json`
 4. Colócalo en `android/app/google-services.json`
 
-### 5. Configurar Edge Functions, FCM y Stripe
+## 5. Configurar Edge Functions, FCM y Stripe
 
 - Crea las funciones necesarias en Supabase
 - Configura las credenciales de Firebase Cloud Messaging (FCM)
@@ -468,7 +467,7 @@ STRIPE_CANCEL_URL=https://your-app.com/cancel
 - Implementa la validación de suscripciones y sincronización con Supabase
 - Verifica los tokens de dispositivo y la lógica de acceso premium
 
-### 6. Configurar internacionalización
+## 6. Configurar internacionalización
 
 1. Añade los archivos ARB en el directorio de localización
 2. Verifica traducciones en español, inglés, portugués y francés
@@ -478,7 +477,7 @@ STRIPE_CANCEL_URL=https://your-app.com/cancel
 
 ## 🔧 Desarrollo Local
 
-### Estructura del Proyecto
+## Estructura del Proyecto
 
 ```text
 nachos_pet_care_flutter/
@@ -762,4 +761,4 @@ Las contribuciones son bienvenidas. Por favor:
 ---
 
 *Última actualización: Mayo 2026*  
-*Versión: 2.0.0*
+*Versión: 3.0.0*
