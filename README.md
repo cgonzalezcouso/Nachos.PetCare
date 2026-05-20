@@ -236,7 +236,7 @@ Nacho's PetCare resuelve este problema ofreciendo:
 - ✅ Mascotas ilimitadas en Premium
 - ✅ Exportación PDF incluida en Premium
 - ✅ Sin límites de almacenamiento en Premium
-- ✅ Gestión de suscripciones mediante RevenueCat
+- ✅ Gestión de suscripciones mediante Stripe
 
 #### 📊 Panel de Control
 - ✅ Vista resumen por mascota
