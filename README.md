@@ -9,7 +9,7 @@
 
 > **Aplicación multiplataforma para la gestión integral de mascotas**
 
-Una solución digital completa que centraliza toda la información de cuidado de tus mascotas en un único lugar, con sincronización en la nube, funcionamiento offline y nuevas funciones sociales, multidioma y de monetización en la versión 2.0.
+Una solución digital completa que centraliza toda la información de cuidado de tus mascotas en un único lugar, con sincronización en la nube, funcionamiento offline y nuevas funciones sociales, multidioma, de monetización, panel web B2B clínicas, wearables para mascotas, IA Asistente veterinario y Marketplace  en la versión 3.0.
 
 ## 📸 Capturas de Pantalla
 
