@@ -403,22 +403,51 @@ flutter pub get
 - Empaqueta el contenido de `build/windows/runner/Release` con un instalador como MSIX, Inno Setup o NSIS.
 - Firma el binario si vas a distribuirlo de forma oficial o quieres evitar advertencias de SmartScreen.
 
-### 3. Configurar Firebase, Supabase, Microsoft Authentication y RevenueCat
+### 3. Configurar Firebase, Supabase, Microsoft Authentication y Stripe
 
 #### Crear archivo `lib/config/secrets.dart`
 
 ```dart
 class AppSecrets {
+  // Supabase
   static const String supabaseUrl = 'https://your-project.supabase.co';
   static const String supabaseAnonKey = 'your-anon-key';
+
+  // Google Authentication
   static const String googleWebClientId = 'your-web-client-id';
   static const String googleAndroidClientId = 'your-android-client-id';
+
+  // Microsoft Authentication
   static const String microsoftClientId = 'your-microsoft-client-id';
   static const String microsoftTenantId = 'your-tenant-id';
-  static const String revenueCatPublicKey = 'your-revenuecat-public-key';
+
+  // Stripe
+  static const String stripePublishableKey = 'your-stripe-publishable-key';
+  static const String stripeMerchantIdentifier = 'your-merchant-identifier';
 }
 
 final appSecrets = AppSecrets();
+```
+
+#### Variables de entorno para Supabase Edge Functions
+
+Configura las siguientes variables en Supabase para habilitar Stripe:
+
+```env
+STRIPE_SECRET_KEY=your-stripe-secret-key
+STRIPE_WEBHOOK_SECRET=your-webhook-secret
+STRIPE_SUCCESS_URL=https://your-app.com/success
+STRIPE_CANCEL_URL=https://your-app.com/cancel
+```
+
+#### Funcionalidades implementadas con Stripe
+
+- Gestión de suscripciones y pagos mediante Stripe
+- Checkout Sessions para el flujo de pago
+- Stripe Customer Portal para administrar suscripciones
+- Webhooks para sincronizar estados de pago y suscripción
+- Validación de pagos mediante Supabase Edge Functions
+- Control de acceso premium sincronizado con Supabase
 ```
 
 **⚠️ IMPORTANTE:** Este archivo NO debe ser commiteado. Está incluido en `.gitignore`.
@@ -430,13 +459,14 @@ final appSecrets = AppSecrets();
 3. Descarga el archivo `google-services.json`
 4. Colócalo en `android/app/google-services.json`
 
-### 5. Configurar Edge Functions, FCM y RevenueCat
+### 5. Configurar Edge Functions, FCM y Stripe
 
-1. Crea las funciones necesarias en [Supabase](https://supabase.com)
-2. Configura las credenciales de Firebase Cloud Messaging
-3. Despliega las Edge Functions para el envío remoto de notificaciones
-4. Configura productos, entitlements y offerings en RevenueCat
-5. Verifica los tokens de dispositivo y la lógica de suscripción
+- Crea las funciones necesarias en Supabase
+- Configura las credenciales de Firebase Cloud Messaging (FCM)
+- Despliega las Edge Functions para el envío remoto de notificaciones
+- Configura productos, precios y webhooks en Stripe
+- Implementa la validación de suscripciones y sincronización con Supabase
+- Verifica los tokens de dispositivo y la lógica de acceso premium
 
 ### 6. Configurar internacionalización
 
