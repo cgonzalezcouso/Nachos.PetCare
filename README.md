@@ -156,10 +156,10 @@ Nacho's PetCare resuelve este problema ofreciendo:
 - **IDE:** Android Studio / VS Code / IntelliJ IDEA
 - **Control de versiones:** Git / GitHub
 - **CI/CD:** GitHub Actions
-- **Autenticación:** Firebase Authentication / Google Sign-In / Microsoft Authentication
+- **Autenticación:** Firebase Authentication / Google Sign-In / Microsoft Authentication / Facebook Login
 - **Mensajería push:** Firebase Cloud Messaging (FCM)
 - **Funciones backend:** Supabase Edge Functions
-- **Suscripciones:** RevenueCat
+- **Suscripciones:** Stripe
 - **Internacionalización:** ARB + localización personalizada
 - **Documentos PDF:** Generación de informes y exportación documental
 - **Widgets móviles:** App Widgets (Android) / WidgetKit (iOS)
