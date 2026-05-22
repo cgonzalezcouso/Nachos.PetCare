@@ -10,7 +10,7 @@ jobs:
       - name: 📥 Checkout del repositorio
         uses: actions/checkout@v4
       
-      - name: 🔐 Crear archivo Dart secrets
+      - name: 🔐 Crear archivo Dart secrets y Stripe config
         run: |
           mkdir -p lib/config
           cat > lib/config/secrets.dart << 'EOF'
@@ -21,6 +21,14 @@ jobs:
             static const String googleAndroidClientId = '${{ secrets.GOOGLE_ANDROID_CLIENT_ID }}';
           }
           final appSecrets = AppSecrets();
+          EOF
+          
+          cat > lib/config/stripe_config.dart << 'EOF'
+          class StripeConfig {
+            static const String publishableKey = '${{ secrets.STRIPE_PUBLISHABLE_KEY || 'pk_test_51TYuWjJYQbvEqb32WKBeVr7A6JfsCBwabgk1ukA21Xt4R9BnEgaJ7HQIaoJqQ3O550Nws48g6YyjxBrgP1W4XS4a00fMYlH6sc' }}';
+            static const String subscriptionPaymentLink = '${{ secrets.STRIPE_SUBSCRIPTION_PAYMENT_LINK || 'https://buy.stripe.com/test_8x25kE3v57sS3KW1xq7Zu00' }}';
+            static const String billingPortalLink = '${{ secrets.STRIPE_BILLING_PORTAL_LINK || 'https://billing.stripe.com/p/login/test_8x25kE3v57sS3KW1xq7Zu00' }}';
+          }
           EOF
       
       - name: 🐦 Configurar Flutter
