@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:nachos_pet_care_flutter/models/vet_invitation.dart';
 import 'package:nachos_pet_care_flutter/services/vet_clinic_service.dart';
 import 'package:nachos_pet_care_flutter/services/service_locator.dart';
-import 'package:nachos_pet_care_flutter/l10n/app_strings.dart';
 
 class VetDashboardScreen extends StatefulWidget {
   const VetDashboardScreen({super.key});
