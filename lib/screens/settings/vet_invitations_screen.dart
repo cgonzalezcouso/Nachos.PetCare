@@ -3,7 +3,6 @@ import 'package:nachos_pet_care_flutter/models/vet_invitation.dart';
 import 'package:nachos_pet_care_flutter/models/pet.dart';
 import 'package:nachos_pet_care_flutter/services/vet_clinic_service.dart';
 import 'package:nachos_pet_care_flutter/services/database_service.dart';
-import 'package:nachos_pet_care_flutter/services/auth_service.dart';
 import 'package:nachos_pet_care_flutter/services/service_locator.dart';
 import 'package:nachos_pet_care_flutter/l10n/app_strings.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -20,7 +19,6 @@ class _VetInvitationsScreenState extends State<VetInvitationsScreen> {
   final DatabaseService _dbService = getIt<DatabaseService>();
   
   List<Pet> _userPets = [];
-  bool _loadingPets = true;
 
   @override
   void initState() {
@@ -34,7 +32,6 @@ class _VetInvitationsScreenState extends State<VetInvitationsScreen> {
       final pets = await _dbService.getPetsByOwner(currentUserId);
       setState(() {
         _userPets = pets;
-        _loadingPets = false;
       });
     } catch (_) {
       // Fallback a mascotas de demostración en modo sin conexión para asegurar pruebas
@@ -44,7 +41,6 @@ class _VetInvitationsScreenState extends State<VetInvitationsScreen> {
           Pet(id: 'pet_kira', ownerId: 'current_user_id', name: 'Kira', type: PetType.cat, breed: 'Siamés', gender: PetGender.female, createdAt: DateTime.now()),
           Pet(id: 'pet_copito', ownerId: 'current_user_id', name: 'Copito', type: PetType.dog, breed: 'Bichón Maltés', gender: PetGender.male, createdAt: DateTime.now()),
         ];
-        _loadingPets = false;
       });
     }
   }
