@@ -48,6 +48,21 @@ class SocialSignInButtons extends StatelessWidget {
               icon: _MicrosoftIcon(),
               label: 'Continuar con Microsoft',
             ),
+            const SizedBox(height: 12),
+
+            // Facebook
+            _SocialButton(
+              onPressed: auth.isLoading
+                  ? null
+                  : () async {
+                      final success = await auth.signInWithFacebook();
+                      if (success && context.mounted) {
+                        context.go('/home');
+                      }
+                    },
+              icon: _FacebookIcon(),
+              label: 'Continuar con Facebook',
+            ),
           ],
         );
       },
@@ -192,6 +207,84 @@ class _MicrosoftLogoPainter extends CustomPainter {
     // Yellow (Bottom-Right)
     paint.color = const Color(0xFFFFB900);
     canvas.drawRect(Rect.fromLTWH(sizeBox + gap, sizeBox + gap, sizeBox, sizeBox), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _FacebookIcon extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 20,
+      height: 20,
+      child: CustomPaint(
+        painter: _FacebookLogoPainter(),
+      ),
+    );
+  }
+}
+
+class _FacebookLogoPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..style = PaintingStyle.fill;
+
+    // Background circle: official Facebook Blue (#1877F2)
+    paint.color = const Color(0xFF1877F2);
+    canvas.drawCircle(
+      Offset(size.width / 2, size.height / 2),
+      size.width / 2,
+      paint,
+    );
+
+    // Foreground "f" letter path (scaled according to size)
+    final scaleX = size.width / 20.0;
+    final scaleY = size.height / 20.0;
+
+    paint.color = Colors.white;
+    final path = Path()
+      ..moveTo(12.5 * scaleX, 20.0 * scaleY)
+      ..lineTo(12.5 * scaleX, 12.5 * scaleY)
+      ..lineTo(15.0 * scaleX, 12.5 * scaleY)
+      ..lineTo(15.5 * scaleX, 9.5 * scaleY)
+      ..lineTo(12.5 * scaleX, 9.5 * scaleY)
+      ..lineTo(12.5 * scaleX, 7.8 * scaleY)
+      ..cubicTo(
+        12.5 * scaleX,
+        6.9 * scaleY,
+        12.7 * scaleX,
+        6.1 * scaleY,
+        14.0 * scaleX,
+        6.1 * scaleY,
+      )
+      ..lineTo(15.5 * scaleX, 6.1 * scaleY)
+      ..lineTo(15.5 * scaleX, 3.2 * scaleY)
+      ..cubicTo(
+        15.2 * scaleX,
+        3.1 * scaleY,
+        14.3 * scaleX,
+        3.0 * scaleY,
+        13.2 * scaleX,
+        3.0 * scaleY,
+      )
+      ..cubicTo(
+        10.9 * scaleX,
+        3.0 * scaleY,
+        9.4 * scaleX,
+        4.4 * scaleY,
+        9.4 * scaleX,
+        7.0 * scaleY,
+      )
+      ..lineTo(9.4 * scaleX, 9.5 * scaleY)
+      ..lineTo(7.0 * scaleX, 9.5 * scaleY)
+      ..lineTo(7.0 * scaleX, 12.5 * scaleY)
+      ..lineTo(9.4 * scaleX, 12.5 * scaleY)
+      ..lineTo(9.4 * scaleX, 20.0 * scaleY)
+      ..close();
+
+    canvas.drawPath(path, paint);
   }
 
   @override

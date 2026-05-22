@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nachos_pet_care_flutter/models/user.dart' as app_user;
@@ -7,7 +8,7 @@ import 'package:nachos_pet_care_flutter/services/service_locator.dart';
 import 'package:nachos_pet_care_flutter/config/supabase_config.dart';
 import 'package:nachos_pet_care_flutter/config/app_logger.dart';
 
-enum AuthProvider { email, google, microsoft }
+enum AuthProvider { email, google, microsoft, facebook }
 
 class AuthService {
   SupabaseClient? get _supabase {
@@ -126,31 +127,48 @@ class AuthService {
     try {
       AppLogger.auth('Iniciando Google Sign-In con OAuth nativo...');
       
+      final completer = Completer<app_user.User>();
+      StreamSubscription? subscription;
+
+      subscription = _supabase!.auth.onAuthStateChange.listen((data) async {
+        if (data.event == AuthChangeEvent.signedIn && data.session != null) {
+          AppLogger.auth('Evento de Login recibido (Google)!');
+          subscription?.cancel();
+          try {
+            final user = await _getOrCreateUser(data.session!.user);
+            if (!completer.isCompleted) completer.complete(user);
+          } catch (e) {
+            if (!completer.isCompleted) completer.completeError(e);
+          }
+        }
+      });
+
+      // En Web especificamos la URL de origen de la aplicación web (p.ej. http://localhost:XXXX/),
+      // pero en Android y Windows usamos la URL de redirección personalizada (custom scheme).
+      final String redirectTo = kIsWeb ? "${Uri.base.origin}/" : SupabaseConfig.redirectUrl;
+
       await _supabase!.auth.signInWithOAuth(
         OAuthProvider.google,
-        redirectTo: SupabaseConfig.redirectUrl,
+        redirectTo: redirectTo,
         authScreenLaunchMode: LaunchMode.externalApplication,
       );
 
       AppLogger.auth('Esperando autenticación...');
       
-      // Esperar a que se complete la autenticación
-      await Future.delayed(const Duration(seconds: 2));
-      
-      final supabaseUser = _supabase!.auth.currentUser;
-      
-      if (supabaseUser == null) {
-        throw Exception('Error al iniciar sesión con Google');
-      }
+      // Timeout de seguridad (60 segundos)
+      Future.delayed(const Duration(seconds: 60), () {
+        if (!completer.isCompleted) {
+          subscription?.cancel();
+          completer.completeError(Exception('Tiempo de espera agotado. Inténtalo de nuevo.'));
+        }
+      });
 
-      AppLogger.auth('Usuario autenticado con Supabase: ${supabaseUser.email}');
-      
-      return await _getOrCreateUser(supabaseUser);
+      return completer.future;
     } on AuthException catch (e) {
-      AppLogger.error('Error de autenticación Google', error: e.message);
+      AppLogger.error('AUTH ERROR (Supabase Google)', error: e.message, stackTrace: StackTrace.current);
       throw _handleAuthException(e);
     } catch (e, stackTrace) {
-      AppLogger.error('Error inesperado en Google Sign-In', error: e, stackTrace: stackTrace);
+      AppLogger.error('UNEXPECTED GOOGLE ERROR', error: e.toString(), stackTrace: stackTrace);
       rethrow;
     }
   }
@@ -164,10 +182,14 @@ class AuthService {
     try {
       AppLogger.auth('Iniciando Microsoft Sign-In...');
       
+      // En Web especificamos la URL de origen de la aplicación web (p.ej. http://localhost:XXXX/),
+      // pero en Android y Windows usamos la URL de redirección personalizada (custom scheme).
+      final String redirectTo = kIsWeb ? "${Uri.base.origin}/" : SupabaseConfig.redirectUrl;
+
       // 1. Iniciar el flujo de OAuth
       final response = await _supabase!.auth.signInWithOAuth(
         OAuthProvider.azure,
-        redirectTo: SupabaseConfig.redirectUrl,
+        redirectTo: redirectTo,
         authScreenLaunchMode: LaunchMode.externalApplication,
         scopes: 'openid profile email offline_access',
       );
@@ -213,6 +235,67 @@ class AuthService {
     }
   }
 
+  // Login con Facebook
+  Future<app_user.User> signInWithFacebook() async {
+    if (_supabase == null) {
+      throw Exception('Supabase no está configurado');
+    }
+    
+    try {
+      AppLogger.auth('Iniciando Facebook Sign-In...');
+      
+      // En Web especificamos la URL de origen de la aplicación web (p.ej. http://localhost:XXXX/),
+      // pero en Android y Windows usamos la URL de redirección personalizada (custom scheme).
+      final String redirectTo = kIsWeb ? "${Uri.base.origin}/" : SupabaseConfig.redirectUrl;
+
+      // 1. Iniciar el flujo de OAuth
+      final response = await _supabase!.auth.signInWithOAuth(
+        OAuthProvider.facebook,
+        redirectTo: redirectTo,
+        authScreenLaunchMode: LaunchMode.externalApplication,
+      );
+
+      if (!response) {
+        throw Exception('Error al iniciar sesión con Facebook');
+      }
+
+      AppLogger.auth('Esperando autenticación de Facebook...');
+      
+      final completer = Completer<app_user.User>();
+      StreamSubscription? subscription;
+
+      subscription = _supabase!.auth.onAuthStateChange.listen((data) async {
+        if (data.event == AuthChangeEvent.signedIn && data.session != null) {
+          AppLogger.auth('Evento de Login recibido (Facebook)!');
+          subscription?.cancel();
+          try {
+            final user = await _getOrCreateUser(data.session!.user);
+            if (!completer.isCompleted) completer.complete(user);
+          } catch (e) {
+            if (!completer.isCompleted) completer.completeError(e);
+          }
+        }
+      });
+
+      // 3. Timeout de seguridad
+      Future.delayed(const Duration(seconds: 60), () {
+        if (!completer.isCompleted) {
+          subscription?.cancel();
+          completer.completeError(Exception('Tiempo de espera agotado. Inténtalo de nuevo.'));
+        }
+      });
+
+      return completer.future;
+
+    } on AuthException catch (e) {
+      AppLogger.error('Error de autenticación Facebook', error: e.message);
+      throw _handleAuthException(e);
+    } catch (e) {
+      AppLogger.error('Error inesperado Facebook', error: e);
+      rethrow;
+    }
+  }
+
   // Cerrar sesión
   Future<void> logout() async {
     // Google Sign-In no está disponible en todas las plataformas (ej. Windows).
@@ -229,17 +312,16 @@ class AuthService {
   Future<app_user.User> _getOrCreateUser(User supabaseUser) async {
     // Buscar usuario existente
     final existingUser = await _dbService.getUser(supabaseUser.id);
-    if (existingUser != null) {
-      return existingUser;
-    }
 
-    // Crear nuevo usuario a partir de los metadatos de Supabase
+    // Crear/Obtener campos a partir de los metadatos de Supabase
     final metadata = supabaseUser.userMetadata ?? {};
 
-    // Registro por email: los campos 'name' y 'surname' se guardan por separado
-    // OAuth (Google/Microsoft): viene como 'full_name' o 'name' en cadena única
-    String name = metadata['name'] as String? ?? '';
-    String surname = metadata['surname'] as String? ?? '';
+    // Obtener campos de metadatos con fallbacks
+    String name = metadata['name'] as String? ?? 
+                  metadata['full_name'] as String? ?? 
+                  metadata['given_name'] as String? ?? '';
+    String surname = metadata['surname'] as String? ?? 
+                     metadata['family_name'] as String? ?? '';
 
     if (name.isEmpty) {
       // Fallback OAuth: parsear full_name
@@ -254,13 +336,33 @@ class AuthService {
       name = (supabaseUser.email ?? '').split('@').first;
     }
 
+    final avatarUrl = metadata['avatar_url'] as String? ??
+                      metadata['picture'] as String?;
+
+    if (existingUser != null) {
+      // Si el nombre local está vacío, es 'Usuario', o difiere del de los metadatos de Google,
+      // actualizamos los datos locales para reflejar la información más reciente de OAuth.
+      if (existingUser.name.isEmpty || 
+          existingUser.name == 'Usuario' || 
+          (name.isNotEmpty && existingUser.name != name) ||
+          (avatarUrl != null && existingUser.profilePhotoPath != avatarUrl)) {
+        final updatedUser = existingUser.copyWith(
+          name: name.isNotEmpty ? name : existingUser.name,
+          surname: surname.isNotEmpty ? surname : existingUser.surname,
+          profilePhotoPath: avatarUrl ?? existingUser.profilePhotoPath,
+        );
+        await _dbService.updateUser(updatedUser);
+        return updatedUser;
+      }
+      return existingUser;
+    }
+
     final user = app_user.User(
       id: supabaseUser.id,
       email: supabaseUser.email ?? '',
       name: name,
       surname: surname,
-      profilePhotoPath: metadata['avatar_url'] as String? ??
-                        metadata['picture'] as String?,
+      profilePhotoPath: avatarUrl,
       createdAt: DateTime.now(),
     );
 

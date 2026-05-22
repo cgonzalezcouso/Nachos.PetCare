@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nachos_pet_care_flutter/providers/theme_provider.dart';
+import 'package:nachos_pet_care_flutter/providers/locale_provider.dart';
+import 'package:nachos_pet_care_flutter/providers/subscription_provider.dart';
+import 'package:nachos_pet_care_flutter/l10n/app_strings.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -11,24 +15,91 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _notificationsEnabled = true;
+  static const String _appVersion = '3.0.0';
+
+  void _showLanguageSelector(BuildContext context, LocaleProvider localeProvider) {
+    final strings = AppStrings.of(context);
+    final languages = [
+      {'code': 'es', 'name': 'Español'},
+      {'code': 'en', 'name': 'English'},
+      {'code': 'ca', 'name': 'Català'},
+      {'code': 'fr', 'name': 'Français'},
+      {'code': 'de', 'name': 'Deutsch'},
+      {'code': 'pt', 'name': 'Português'},
+    ];
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: Text(strings.language),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: languages.map((lang) {
+              final isSelected = localeProvider.locale.languageCode == lang['code'];
+              return ListTile(
+                title: Text(lang['name']!),
+                trailing: isSelected ? const Icon(Icons.check, color: Colors.green) : null,
+                onTap: () {
+                  localeProvider.setLocale(Locale(lang['code']!));
+                  Navigator.pop(ctx);
+                },
+              );
+            }).toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(strings.cancel),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final themeProvider = context.watch<ThemeProvider>();
+    final localeProvider = context.watch<LocaleProvider>();
+    final strings = AppStrings.of(context);
+
+    final currentLanguageCode = localeProvider.locale.languageCode;
+    String languageName = 'Español';
+    switch (currentLanguageCode) {
+      case 'es':
+        languageName = 'Español';
+        break;
+      case 'en':
+        languageName = 'English';
+        break;
+      case 'ca':
+        languageName = 'Català';
+        break;
+      case 'fr':
+        languageName = 'Français';
+        break;
+      case 'de':
+        languageName = 'Deutsch';
+        break;
+      case 'pt':
+        languageName = 'Português';
+        break;
+    }
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: const Text('Configuración'),
+        title: Text(strings.settings),
         centerTitle: false,
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8),
         children: [
           // ── APARIENCIA ─────────────────────────────────────────────────────
-          _SectionHeader(title: 'Apariencia'),
+          _SectionHeader(title: strings.appearance),
 
           // Banner visual del modo activo
           Padding(
@@ -38,11 +109,88 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           const Divider(height: 32),
 
+          // ── PLAN DE SUSCRIPCIÓN ─────────────────────────────────────────────
+          _SectionHeader(title: 'Suscripción'),
+          Consumer<SubscriptionProvider>(
+            builder: (context, subProvider, _) {
+              final isPremium = subProvider.isPremium;
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(
+                    color: isPremium ? Colors.amber.withValues(alpha: 0.4) : colorScheme.outlineVariant,
+                    width: isPremium ? 2 : 1,
+                  ),
+                ),
+                color: isPremium ? Colors.amber.withValues(alpha: 0.05) : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            isPremium ? Icons.workspace_premium_rounded : Icons.pets_rounded,
+                            color: isPremium ? Colors.amber[800] : colorScheme.primary,
+                            size: 28,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  isPremium ? 'Plan Premium Activo' : 'Plan Gratuito',
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: isPremium ? Colors.amber[900] : colorScheme.onSurface,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  isPremium
+                                      ? 'Mascotas e historial ilimitados, exportación PDF desbloqueada.'
+                                      : 'Límite de 2 mascotas y 50 eventos históricos por mascota.',
+                                  style: theme.textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      ElevatedButton(
+                        onPressed: () => context.push('/premium-paywall'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: isPremium ? Colors.transparent : Colors.amber[600],
+                          foregroundColor: isPremium ? Colors.amber[800] : const Color(0xFF0F111A),
+                          elevation: isPremium ? 0 : 2,
+                          side: isPremium ? BorderSide(color: Colors.amber[800]!) : null,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          minimumSize: const Size.fromHeight(40),
+                        ),
+                        child: Text(
+                          isPremium ? 'Ver detalles del plan' : 'Mejorar a Premium',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+
+          const Divider(height: 32),
+
           // ── NOTIFICACIONES ─────────────────────────────────────────────────
-          _SectionHeader(title: 'Notificaciones'),
+          _SectionHeader(title: strings.notifications),
           SwitchListTile(
-            title: const Text('Notificaciones push'),
-            subtitle: const Text('Recibir alertas y recordatorios'),
+            title: Text(strings.pushNotifications),
+            subtitle: Text(strings.notificationsSub),
             secondary: Icon(
               _notificationsEnabled
                   ? Icons.notifications_active_outlined
@@ -56,35 +204,68 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const Divider(height: 32),
 
           // ── CUENTA ─────────────────────────────────────────────────────────
-          _SectionHeader(title: 'Cuenta'),
+          _SectionHeader(title: strings.account),
           ListTile(
             leading: Icon(Icons.lock_outline, color: colorScheme.primary),
-            title: const Text('Privacidad y Seguridad'),
+            title: Text(strings.privacySecurity),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () {},
+            onTap: () => context.push('/settings/privacy-security'),
           ),
           ListTile(
             leading: Icon(Icons.language, color: colorScheme.primary),
-            title: const Text('Idioma'),
-            subtitle: const Text('Español'),
+            title: Text(strings.language),
+            subtitle: Text(languageName),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () {},
+            onTap: () => _showLanguageSelector(context, localeProvider),
+          ),
+
+          const Divider(height: 32),
+
+          // ── CLÍNICAS B2B & VETERINARIOS ─────────────────────────────────────
+          _SectionHeader(title: 'Ecosistema Clínico B2B'),
+          ListTile(
+            leading: Icon(Icons.share_location_outlined, color: colorScheme.primary),
+            title: Text(strings.vetInvitations),
+            subtitle: Text(strings.vetInvitationsSub),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push('/settings/vet-invitations'),
+          ),
+          ListTile(
+            leading: Icon(Icons.local_hospital_outlined, color: colorScheme.primary),
+            title: Text(strings.b2bClinicPortal),
+            subtitle: Text(strings.b2bClinicPortalSub),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push('/vet/dashboard'),
+          ),
+          ListTile(
+            leading: Icon(Icons.watch_rounded, color: colorScheme.primary),
+            title: Text(strings.wearablesTitle),
+            subtitle: Text(strings.wearablesSub),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push('/settings/wearables'),
+          ),
+          ListTile(
+            leading: Icon(Icons.smart_toy_outlined, color: colorScheme.primary),
+            title: Text(strings.aiAssistantTitle),
+            subtitle: Text(strings.aiAssistantSub),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.push('/settings/ai-assistant'),
           ),
 
           const Divider(height: 32),
 
           // ── INFORMACIÓN ────────────────────────────────────────────────────
-          _SectionHeader(title: 'Información'),
+          _SectionHeader(title: strings.info),
           ListTile(
             leading:
                 Icon(Icons.info_outline, color: colorScheme.primary),
-            title: const Text('Sobre NachosPetCare'),
-            subtitle: const Text('Versión 1.0.0'),
+            title: Text(strings.about),
+            subtitle: Text('Versión $_appVersion'),
             onTap: () {
               showAboutDialog(
                 context: context,
                 applicationName: 'NachosPetCare',
-                applicationVersion: '1.0.0',
+                applicationVersion: _appVersion,
                 applicationLegalese: '© 2026 NachosPetCare',
                 children: [
                   const Text('Tu compañero para el cuidado de mascotas.'),
@@ -95,7 +276,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading:
                 Icon(Icons.description_outlined, color: colorScheme.primary),
-            title: const Text('Términos y Condiciones'),
+            title: Text(strings.terms),
             trailing: const Icon(Icons.open_in_new, size: 18),
             onTap: () {},
           ),
@@ -106,6 +287,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 }
+
 
 // ─── Selector de tema ─────────────────────────────────────────────────────────
 
@@ -118,6 +300,7 @@ class _ThemeSelectorCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final isDark = themeProvider.themeMode == ThemeMode.dark;
     final isSystem = themeProvider.themeMode == ThemeMode.system;
+    final strings = AppStrings.of(context);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -165,7 +348,7 @@ class _ThemeSelectorCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Tema de la aplicación',
+                    strings.appTheme,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: isDark ? Colors.white : colorScheme.onSurface,
@@ -173,10 +356,10 @@ class _ThemeSelectorCard extends StatelessWidget {
                   ),
                   Text(
                     isDark
-                        ? 'Modo oscuro activo'
+                        ? strings.darkModeActive
                         : isSystem
-                            ? 'Sigue al sistema'
-                            : 'Modo claro activo',
+                            ? strings.followSystem
+                            : strings.lightModeActive,
                     style: TextStyle(
                       fontSize: 12,
                       color: isDark
@@ -195,7 +378,7 @@ class _ThemeSelectorCard extends StatelessWidget {
           Row(
             children: [
               _ThemeButton(
-                label: 'Claro',
+                label: strings.themeLight,
                 icon: Icons.light_mode,
                 selected: themeProvider.themeMode == ThemeMode.light,
                 isDarkCard: isDark,
@@ -203,7 +386,7 @@ class _ThemeSelectorCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               _ThemeButton(
-                label: 'Oscuro',
+                label: strings.themeDark,
                 icon: Icons.dark_mode,
                 selected: themeProvider.themeMode == ThemeMode.dark,
                 isDarkCard: isDark,
@@ -211,7 +394,7 @@ class _ThemeSelectorCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               _ThemeButton(
-                label: 'Sistema',
+                label: strings.themeSystem,
                 icon: Icons.brightness_auto,
                 selected: themeProvider.themeMode == ThemeMode.system,
                 isDarkCard: isDark,
@@ -224,6 +407,7 @@ class _ThemeSelectorCard extends StatelessWidget {
     );
   }
 }
+
 
 class _ThemeButton extends StatelessWidget {
   final String label;

@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:nachos_pet_care_flutter/providers/pet_provider.dart';
+import 'package:nachos_pet_care_flutter/providers/subscription_provider.dart';
 import 'package:nachos_pet_care_flutter/models/pet.dart';
 import 'package:intl/intl.dart';
+import 'package:nachos_pet_care_flutter/l10n/app_strings.dart';
+import 'package:nachos_pet_care_flutter/services/pdf_service.dart';
+
 
 class PetDetailScreen extends StatelessWidget {
   final String petId;
@@ -116,6 +120,16 @@ class PetDetailScreen extends StatelessWidget {
                         ),
                       ),
                       const PopupMenuItem(
+                        value: 'export_pdf',
+                        child: Row(
+                          children: [
+                            Icon(Icons.picture_as_pdf),
+                            SizedBox(width: 8),
+                            Text('Exportar historial (PDF)'),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuItem(
                         value: 'delete',
                         child: Row(
                           children: [
@@ -129,6 +143,13 @@ class PetDetailScreen extends StatelessWidget {
                     onSelected: (value) async {
                       if (value == 'edit') {
                         context.go('/pets/${pet.id}/edit');
+                      } else if (value == 'export_pdf') {
+                        final subProvider = context.read<SubscriptionProvider>();
+                        if (!subProvider.isPremium) {
+                          if (context.mounted) context.push('/premium-paywall');
+                        } else {
+                          await PdfService.exportMedicalHistoryPdf(context, pet);
+                        }
                       } else if (value == 'delete') {
                         final confirm = await showDialog<bool>(
                           context: context,
@@ -242,29 +263,46 @@ class PetDetailScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 12),
-                    Row(
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 8,
+                      childAspectRatio: 1.4,
                       children: [
-                        Expanded(
-                          child: _ActionCard(
-                            icon: Icons.vaccines,
-                            label: 'Vacunas',
-                            onTap: () => context.go(
-                              '/pets/${pet.id}/vaccines?name=${Uri.encodeComponent(pet.name)}',
-                            ),
+                        _ActionCard(
+                          icon: Icons.vaccines,
+                          label: 'Vacunas',
+                          onTap: () => context.go(
+                            '/pets/${pet.id}/vaccines?name=${Uri.encodeComponent(pet.name)}',
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: _ActionCard(
-                            icon: Icons.medical_services,
-                            label: 'Historial',
-                            onTap: () => context.go(
-                              '/pets/${pet.id}/history?name=${Uri.encodeComponent(pet.name)}',
-                            ),
+                        _ActionCard(
+                          icon: Icons.medical_services,
+                          label: 'Historial',
+                          onTap: () => context.go(
+                            '/pets/${pet.id}/history?name=${Uri.encodeComponent(pet.name)}',
+                          ),
+                        ),
+                        _ActionCard(
+                          icon: Icons.photo_library,
+                          label: AppStrings.of(context).gallery,
+                          onTap: () => context.go(
+                            '/pets/${pet.id}/gallery?name=${Uri.encodeComponent(pet.name)}',
+                          ),
+                        ),
+                        _ActionCard(
+                          icon: Icons.scale_outlined,
+                          label: AppStrings.of(context).weightHistory,
+                          onTap: () => context.go(
+                            '/pets/${pet.id}/weight?name=${Uri.encodeComponent(pet.name)}',
                           ),
                         ),
                       ],
                     ),
+
+
                   ]),
                 ),
               ),

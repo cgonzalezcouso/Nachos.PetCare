@@ -2,6 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:nachos_pet_care_flutter/providers/pet_provider.dart';
+import 'package:nachos_pet_care_flutter/providers/subscription_provider.dart';
+
+void _navigateToAddPet(BuildContext context) {
+  final subProvider = context.read<SubscriptionProvider>();
+  final petProvider = context.read<PetProvider>();
+  if (!subProvider.canAddPet(petProvider.pets.length)) {
+    context.push('/premium-paywall');
+  } else {
+    context.push('/pets/add');
+  }
+}
 
 class PetListScreen extends StatelessWidget {
   const PetListScreen({super.key});
@@ -35,7 +46,7 @@ class PetListScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   ElevatedButton.icon(
-                    onPressed: () => context.push('/pets/add'),
+                    onPressed: () => _navigateToAddPet(context),
                     icon: const Icon(Icons.add),
                     label: const Text('Añadir mascota'),
                   ),
@@ -89,7 +100,7 @@ class PetListScreen extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/pets/add'),
+        onPressed: () => _navigateToAddPet(context),
         child: const Icon(Icons.add),
       ),
     );

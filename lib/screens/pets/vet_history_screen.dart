@@ -3,8 +3,12 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:nachos_pet_care_flutter/models/veterinary_report.dart';
+import 'package:nachos_pet_care_flutter/models/pet.dart';
 import 'package:nachos_pet_care_flutter/services/database_service.dart';
 import 'package:nachos_pet_care_flutter/services/service_locator.dart';
+import 'package:provider/provider.dart';
+import 'package:nachos_pet_care_flutter/providers/subscription_provider.dart';
+import 'package:nachos_pet_care_flutter/services/pdf_service.dart';
 
 class VetHistoryScreen extends StatefulWidget {
   final String petId;
@@ -48,6 +52,13 @@ class _VetHistoryScreenState extends State<VetHistoryScreen> {
   }
 
   Future<void> _addReport() async {
+    final subProvider = context.read<SubscriptionProvider>();
+    final canAdd = await subProvider.canAddEvent(widget.petId);
+    if (!canAdd) {
+      if (mounted) context.push('/premium-paywall');
+      return;
+    }
+
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -82,6 +93,28 @@ class _VetHistoryScreenState extends State<VetHistoryScreen> {
     }
   }
 
+  Future<void> _exportPdf() async {
+    final subProvider = context.read<SubscriptionProvider>();
+    if (!subProvider.isPremium) {
+      if (mounted) context.push('/premium-paywall');
+      return;
+    }
+    try {
+      final Pet? pet = await _db.getPet(widget.petId);
+      if (pet != null && mounted) {
+        await PdfService.exportMedicalHistoryPdf(context, pet);
+      } else {
+        throw Exception('Mascota no encontrada');
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al exportar: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,6 +130,13 @@ class _VetHistoryScreenState extends State<VetHistoryScreen> {
             }
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.picture_as_pdf),
+            onPressed: _exportPdf,
+            tooltip: 'Exportar PDF',
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _addReport,
@@ -141,7 +181,7 @@ class _VetHistoryScreenState extends State<VetHistoryScreen> {
                               : 'Visita veterinaria',
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        subtitle: Text(DateFormat('dd/MM/yyyy').format(r.visitDate)),
+                        subtitle: Text(DateFormat('dd/MM/yyyy · HH:mm').format(r.visitDate)),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -268,20 +308,62 @@ class _ReportFormState extends State<_ReportForm> {
           children: [
             Text('Nueva visita veterinaria', style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 16),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.calendar_today),
-              title: const Text('Fecha de la visita *'),
-              subtitle: Text(DateFormat('dd/MM/yyyy').format(_visitDate)),
-              onTap: () async {
-                final d = await showDatePicker(
-                  context: context,
-                  initialDate: _visitDate,
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime.now(),
-                );
-                if (d != null) setState(() => _visitDate = d);
-              },
+            Row(
+              children: [
+                Expanded(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.calendar_today),
+                    title: const Text('Fecha *'),
+                    subtitle: Text(DateFormat('dd/MM/yyyy').format(_visitDate)),
+                    onTap: () async {
+                      final d = await showDatePicker(
+                        context: context,
+                        initialDate: _visitDate,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime.now().add(const Duration(days: 3650)),
+                      );
+                      if (d != null) {
+                        setState(() {
+                          _visitDate = DateTime(
+                            d.year,
+                            d.month,
+                            d.day,
+                            _visitDate.hour,
+                            _visitDate.minute,
+                          );
+                        });
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.access_time),
+                    title: const Text('Hora *'),
+                    subtitle: Text(DateFormat('HH:mm').format(_visitDate)),
+                    onTap: () async {
+                      final t = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.fromDateTime(_visitDate),
+                      );
+                      if (t != null) {
+                        setState(() {
+                          _visitDate = DateTime(
+                            _visitDate.year,
+                            _visitDate.month,
+                            _visitDate.day,
+                            t.hour,
+                            t.minute,
+                          );
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 12),
             TextFormField(

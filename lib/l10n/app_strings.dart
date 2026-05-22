@@ -1,96 +1,246 @@
 import 'package:flutter/material.dart';
-
+import 'package:nachos_pet_care_flutter/l10n/app_localizations.dart';
 
 class AppStrings {
-  final Locale locale;
-  AppStrings(this.locale);
+  final BuildContext context;
+  AppStrings(this.context);
 
   static AppStrings of(BuildContext context) {
-    return Localizations.of<AppStrings>(context, AppStrings) ??
-        AppStrings(const Locale('es'));
+    return AppStrings(context);
   }
 
-  T _t<T>(Map<String, T> map) =>
-      map[locale.languageCode] ?? map['es']!;
+  AppLocalizations get _localizations {
+    final loc = AppLocalizations.of(context);
+    if (loc != null) return loc;
+    
+    // Fallback de seguridad en caso de que falten los delegates en el widget tree
+    throw FlashLocalizationException();
+  }
 
   // ── Navegación ─────────────────────────────────────────────────────────────
-  String get navHome => _t({'es': 'Inicio', 'en': 'Home', 'ca': 'Inici', 'fr': 'Accueil', 'de': 'Start', 'pt': 'Início'});
-  String get navPets => _t({'es': 'Mascotas', 'en': 'Pets', 'ca': 'Mascotes', 'fr': 'Animaux', 'de': 'Haustiere', 'pt': 'Animais'});
-  String get navReminders => _t({'es': 'Recordatorios', 'en': 'Reminders', 'ca': 'Recordatoris', 'fr': 'Rappels', 'de': 'Erinnerungen', 'pt': 'Lembretes'});
-  String get navMore => _t({'es': 'Más', 'en': 'More', 'ca': 'Més', 'fr': 'Plus', 'de': 'Mehr', 'pt': 'Mais'});
+  String get navHome => _localizations.navHome;
+  String get navPets => _localizations.navPets;
+  String get navReminders => _localizations.navReminders;
+  String get navMore => _localizations.navMore;
 
   // ── Home ───────────────────────────────────────────────────────────────────
-  String get welcome => _t({'es': '¡Hola', 'en': 'Hello', 'ca': 'Hola', 'fr': 'Bonjour', 'de': 'Hallo', 'pt': 'Olá'});
-  String get welcomeSub => _t({'es': 'Bienvenido a NachosPetCare', 'en': 'Welcome to NachosPetCare', 'ca': 'Benvingut a NachosPetCare', 'fr': 'Bienvenue sur NachosPetCare', 'de': 'Willkommen bei NachosPetCare', 'pt': 'Bem-vindo ao NachosPetCare'});
-  String get quickActions => _t({'es': 'Acciones rápidas', 'en': 'Quick actions', 'ca': 'Accions ràpides', 'fr': 'Actions rapides', 'de': 'Schnellaktionen', 'pt': 'Ações rápidas'});
-  String get myPets => _t({'es': 'Mis mascotas', 'en': 'My pets', 'ca': 'Les meves mascotes', 'fr': 'Mes animaux', 'de': 'Meine Tiere', 'pt': 'Meus animais'});
-  String get veterinarian => _t({'es': 'Veterinario', 'en': 'Vet', 'ca': 'Veterinari', 'fr': 'Vétérinaire', 'de': 'Tierarzt', 'pt': 'Veterinário'});
-  String get vaccines => _t({'es': 'Vacunas', 'en': 'Vaccines', 'ca': 'Vacunes', 'fr': 'Vaccins', 'de': 'Impfungen', 'pt': 'Vacinas'});
-  String get appointments => _t({'es': 'Citas', 'en': 'Appointments', 'ca': 'Cites', 'fr': 'Rendez-vous', 'de': 'Termine', 'pt': 'Consultas'});
+  String get welcome => _localizations.welcome;
+  String get welcomeSub => _localizations.welcomeSub;
+  String get quickActions => _localizations.quickActions;
+  String get myPets => _localizations.myPets;
+  String get veterinarian => _localizations.veterinarian;
+  String get vaccines => _localizations.vaccines;
+  String get appointments => _localizations.appointments;
 
   // ── Mascotas ───────────────────────────────────────────────────────────────
-  String get noPetsRegistered => _t({'es': 'No tienes mascotas registradas', 'en': 'No pets registered', 'ca': 'No tens mascotes registrades', 'fr': 'Aucun animal enregistré', 'de': 'Keine Haustiere registriert', 'pt': 'Nenhum animal registrado'});
-  String get addPet => _t({'es': 'Añadir mascota', 'en': 'Add pet', 'ca': 'Afegir mascota', 'fr': 'Ajouter un animal', 'de': 'Tier hinzufügen', 'pt': 'Adicionar animal'});
+  String get noPetsRegistered => _localizations.noPetsRegistered;
+  String get addPet => _localizations.addPet;
 
   // ── Comunidad (Más) ────────────────────────────────────────────────────────
-  String get community => _t({'es': 'Comunidad', 'en': 'Community', 'ca': 'Comunitat', 'fr': 'Communauté', 'de': 'Community', 'pt': 'Comunidade'});
-  String get adoptionAnimals => _t({'es': 'Animales en Adopción', 'en': 'Pets for Adoption', 'ca': 'Animals en Adopció', 'fr': 'Animaux à Adopter', 'de': 'Tiere zur Adoption', 'pt': 'Animais para Adoção'});
-  String get adoptionSub => _t({'es': 'Encuentra tu nuevo compañero', 'en': 'Find your new companion', 'ca': 'Troba el teu nou company', 'fr': 'Trouvez votre nouveau compagnon', 'de': 'Finde deinen neuen Begleiter', 'pt': 'Encontre seu novo companheiro'});
-  String get articles => _t({'es': 'Artículos sobre Adopción', 'en': 'Adoption Articles', 'ca': 'Articles sobre Adopció', 'fr': 'Articles sur l\'Adoption', 'de': 'Adoptionsartikel', 'pt': 'Artigos sobre Adoção'});
-  String get articlesSub => _t({'es': 'Aprende sobre adopción responsable', 'en': 'Learn about responsible adoption', 'ca': 'Aprèn sobre adopció responsable', 'fr': 'Apprenez l\'adoption responsable', 'de': 'Lernen Sie über verantwortliche Adoption', 'pt': 'Aprenda sobre adoção responsável'});
-  String get directory => _t({'es': 'Directorio de Profesionales', 'en': 'Professionals Directory', 'ca': 'Directori de Professionals', 'fr': 'Annuaire des Professionnels', 'de': 'Fachleute-Verzeichnis', 'pt': 'Diretório de Profissionais'});
-  String get directorySub => _t({'es': 'Veterinarios, adiestradores, peluqueros y más', 'en': 'Vets, trainers, groomers and more', 'ca': 'Veterinaris, entrenadors, perruquers i més', 'fr': 'Vétérinaires, dresseurs, toiletteurs et plus', 'de': 'Tierärzte, Trainer, Groom er und mehr', 'pt': 'Veterinários, adestrados, tosadores e mais'});
+  String get community => _localizations.community;
+  String get adoptionAnimals => _localizations.adoptionAnimals;
+  String get adoptionSub => _localizations.adoptionSub;
+  String get articles => _localizations.articles;
+  String get articlesSub => _localizations.articlesSub;
+  String get directory => _localizations.directory;
+  String get directorySub => _localizations.directorySub;
 
   // ── Configuración ──────────────────────────────────────────────────────────
-  String get settings => _t({'es': 'Configuración', 'en': 'Settings', 'ca': 'Configuració', 'fr': 'Paramètres', 'de': 'Einstellungen', 'pt': 'Configurações'});
-  String get appearance => _t({'es': 'Apariencia', 'en': 'Appearance', 'ca': 'Aparença', 'fr': 'Apparence', 'de': 'Erscheinungsbild', 'pt': 'Aparência'});
-  String get appTheme => _t({'es': 'Tema de la aplicación', 'en': 'App theme', 'ca': 'Tema de l\'aplicació', 'fr': 'Thème de l\'application', 'de': 'App-Design', 'pt': 'Tema do aplicativo'});
-  String get darkModeActive => _t({'es': 'Modo oscuro activo', 'en': 'Dark mode active', 'ca': 'Mode fosc actiu', 'fr': 'Mode sombre actif', 'de': 'Dunkelmodus aktiv', 'pt': 'Modo escuro ativo'});
-  String get lightModeActive => _t({'es': 'Modo claro activo', 'en': 'Light mode active', 'ca': 'Mode clar actiu', 'fr': 'Mode clair actif', 'de': 'Hellmodus aktiv', 'pt': 'Modo claro ativo'});
-  String get followSystem => _t({'es': 'Sigue al sistema', 'en': 'Follow system', 'ca': 'Segueix el sistema', 'fr': 'Suivre le système', 'de': 'System folgen', 'pt': 'Seguir sistema'});
-  String get themeLight => _t({'es': 'Claro', 'en': 'Light', 'ca': 'Clar', 'fr': 'Clair', 'de': 'Hell', 'pt': 'Claro'});
-  String get themeDark => _t({'es': 'Oscuro', 'en': 'Dark', 'ca': 'Fosc', 'fr': 'Sombre', 'de': 'Dunkel', 'pt': 'Escuro'});
-  String get themeSystem => _t({'es': 'Sistema', 'en': 'System', 'ca': 'Sistema', 'fr': 'Système', 'de': 'System', 'pt': 'Sistema'});
-  String get notifications => _t({'es': 'Notificaciones', 'en': 'Notifications', 'ca': 'Notificacions', 'fr': 'Notifications', 'de': 'Benachrichtigungen', 'pt': 'Notificações'});
-  String get pushNotifications => _t({'es': 'Notificaciones push', 'en': 'Push notifications', 'ca': 'Notificacions push', 'fr': 'Notifications push', 'de': 'Push-Benachrichtigungen', 'pt': 'Notificações push'});
-  String get notificationsSub => _t({'es': 'Recibir alertas y recordatorios', 'en': 'Receive alerts and reminders', 'ca': 'Rebre alertes i recordatoris', 'fr': 'Recevoir des alertes et rappels', 'de': 'Benachrichtigungen erhalten', 'pt': 'Receber alertas e lembretes'});
-  String get account => _t({'es': 'Cuenta', 'en': 'Account', 'ca': 'Compte', 'fr': 'Compte', 'de': 'Konto', 'pt': 'Conta'});
-  String get privacySecurity => _t({'es': 'Privacidad y Seguridad', 'en': 'Privacy & Security', 'ca': 'Privacitat i Seguretat', 'fr': 'Confidentialité et Sécurité', 'de': 'Datenschutz & Sicherheit', 'pt': 'Privacidade e Segurança'});
-  String get language => _t({'es': 'Idioma', 'en': 'Language', 'ca': 'Idioma', 'fr': 'Langue', 'de': 'Sprache', 'pt': 'Idioma'});
-  String get info => _t({'es': 'Información', 'en': 'Information', 'ca': 'Informació', 'fr': 'Informations', 'de': 'Informationen', 'pt': 'Informações'});
-  String get about => _t({'es': 'Sobre NachosPetCare', 'en': 'About NachosPetCare', 'ca': 'Sobre NachosPetCare', 'fr': 'À propos de NachosPetCare', 'de': 'Über NachosPetCare', 'pt': 'Sobre NachosPetCare'});
-  String get terms => _t({'es': 'Términos y Condiciones', 'en': 'Terms & Conditions', 'ca': 'Termes i Condicions', 'fr': 'Conditions Générales', 'de': 'AGB', 'pt': 'Termos e Condições'});
+  String get settings => _localizations.settings;
+  String get appearance => _localizations.appearance;
+  String get appTheme => _localizations.appTheme;
+  String get darkModeActive => _localizations.darkModeActive;
+  String get lightModeActive => _localizations.lightModeActive;
+  String get followSystem => _localizations.followSystem;
+  String get themeLight => _localizations.themeLight;
+  String get themeDark => _localizations.themeDark;
+  String get themeSystem => _localizations.themeSystem;
+  String get notifications => _localizations.notifications;
+  String get pushNotifications => _localizations.pushNotifications;
+  String get notificationsSub => _localizations.notificationsSub;
+  String get account => _localizations.account;
+  String get privacySecurity => _localizations.privacySecurity;
+  String get language => _localizations.language;
+  String get info => _localizations.info;
+  String get about => _localizations.about;
+  String get terms => _localizations.terms;
 
   // ── Recordatorios ──────────────────────────────────────────────────────────
-  String get noReminders => _t({'es': 'No hay recordatorios pendientes', 'en': 'No pending reminders', 'ca': 'No hi ha recordatoris pendents', 'fr': 'Aucun rappel en attente', 'de': 'Keine ausstehenden Erinnerungen', 'pt': 'Nenhum lembrete pendente'});
+  String get noReminders => _localizations.noReminders;
 
   // ── General ────────────────────────────────────────────────────────────────
-  String get save => _t({'es': 'Guardar', 'en': 'Save', 'ca': 'Desar', 'fr': 'Enregistrer', 'de': 'Speichern', 'pt': 'Salvar'});
-  String get cancel => _t({'es': 'Cancelar', 'en': 'Cancel', 'ca': 'Cancel·lar', 'fr': 'Annuler', 'de': 'Abbrechen', 'pt': 'Cancelar'});
-  String get back => _t({'es': 'Volver', 'en': 'Back', 'ca': 'Tornar', 'fr': 'Retour', 'de': 'Zurück', 'pt': 'Voltar'});
+  String get save => _localizations.save;
+  String get cancel => _localizations.cancel;
+  String get back => _localizations.back;
+
+  // ── Widget Mascota Prioritaria ─────────────────────────────────────────────
+  String get priorityPet => _localizations.priorityPet;
+  String get nextHealthEvent => _localizations.nextHealthEvent;
+  String get noUpcomingEvents => _localizations.noUpcomingEvents;
+  String get daysRemaining => _localizations.daysRemaining;
+  String get oneDayRemaining => _localizations.oneDayRemaining;
+  String get today => _localizations.today;
+  String get vaccine => _localizations.vaccine;
+  String get noPetsText => _localizations.noPetsText;
+
+  // ── Galería de Fotos ────────────────────────────────────────────────────────
+  String get gallery => _localizations.gallery;
+  String get addPhoto => _localizations.addPhoto;
+  String get selectPhotoDate => _localizations.selectPhotoDate;
+  String get photoNotes => _localizations.photoNotes;
+  String get emptyGallery => _localizations.emptyGallery;
+  String get emptyGallerySubtitle => _localizations.emptyGallerySubtitle;
+  String get deletePhotoConfirm => _localizations.deletePhotoConfirm;
+  String get deletePhotoConfirmBody => _localizations.deletePhotoConfirmBody;
+  String get delete => _localizations.delete;
+  String get photoAddedSuccessfully => _localizations.photoAddedSuccessfully;
+
+  // ── Registro de Peso y Gráfica ──────────────────────────────────────────────
+  String get weightHistory => _localizations.weightHistory;
+  String get addWeight => _localizations.addWeight;
+  String get weightInKg => _localizations.weightInKg;
+  String get selectWeightDate => _localizations.selectWeightDate;
+  String get emptyWeightHistory => _localizations.emptyWeightHistory;
+  String get emptyWeightHistorySubtitle => _localizations.emptyWeightHistorySubtitle;
+  String get deleteWeightConfirm => _localizations.deleteWeightConfirm;
+  String get deleteWeightConfirmBody => _localizations.deleteWeightConfirmBody;
+  String get weightAddedSuccessfully => _localizations.weightAddedSuccessfully;
+  String get evolution => _localizations.evolution;
+
+  // ── Red Social ─────────────────────────────────────────────────────────────
+  String get socialNetwork => _localizations.socialNetwork;
+  String get socialNetworkSub => _localizations.socialNetworkSub;
+  String get discover => _localizations.discover;
+  String get following => _localizations.following;
+  String get myPetsTab => _localizations.myPetsTab;
+  String get shareSocial => _localizations.shareSocial;
+  String get shareSocialSub => _localizations.shareSocialSub;
+  String get publicGallery => _localizations.publicGallery;
+  String get publicGallerySub => _localizations.publicGallerySub;
+  String get viewPublicProfile => _localizations.viewPublicProfile;
+  String get commentPhoto => _localizations.commentPhoto;
+  String get feedEmpty => _localizations.feedEmpty;
+  String get feedEmptySub => _localizations.feedEmptySub;
+  String get discoverPets => _localizations.discoverPets;
+  String get aboutMe => _localizations.aboutMe;
+  String get privateGallery => _localizations.privateGallery;
+  String get privateGallerySub => _localizations.privateGallerySub;
+  String get noPhotosPublished => _localizations.noPhotosPublished;
+  String get comments => _localizations.comments;
+  String get addComment => _localizations.addComment;
+  String get firstComment => _localizations.firstComment;
+  String get petNotFound => _localizations.petNotFound;
+  String get errorLoadingProfile => _localizations.errorLoadingProfile;
+  String get myPetBadge => _localizations.myPetBadge;
+
+  // ── Mensajería Privada ──────────────────────────────────────────────────────
+  String get chats => _localizations.chats;
+  String get chatWith => _localizations.chatWith;
+  String get sendMessage => _localizations.sendMessage;
+  String get typeMessage => _localizations.typeMessage;
+  String get noConversations => _localizations.noConversations;
+  String get startChatSub => _localizations.startChatSub;
+  String get typing => _localizations.typing;
+
+  // ── Ecosistema B2B Clínicas ──────────────────────────────────────────────────
+  String get _currentLocale {
+    try {
+      return Localizations.localeOf(context).languageCode;
+    } catch (_) {
+      return 'es';
+    }
+  }
+
+  String get b2bClinicPortal {
+    switch (_currentLocale) {
+      case 'en': return 'B2B Clinical Panel';
+      case 'pt': return 'Painel Clínico B2B';
+      case 'fr': return 'Portail Clinique B2B';
+      case 'ca': return 'Panell Clínic B2B';
+      case 'de': return 'B2B Klinisches Portal';
+      default: return 'Panel Clínico B2B';
+    }
+  }
+
+  String get b2bClinicPortalSub {
+    switch (_currentLocale) {
+      case 'en': return 'Management for veterinarians and SaaS licenses';
+      case 'pt': return 'Gestão para veterinários e licenças SaaS';
+      case 'fr': return 'Gestion pour les vétérinaires et licences SaaS';
+      case 'ca': return 'Gestió per a veterinaris i llicències SaaS';
+      case 'de': return 'Verwaltung für Tierärzte und SaaS-Lizenzen';
+      default: return 'Gestión para veterinarios y licencias SaaS';
+    }
+  }
+
+  String get vetInvitations {
+    switch (_currentLocale) {
+      case 'en': return 'Share with Veterinarian';
+      case 'pt': return 'Compartilhar com Veterinário';
+      case 'fr': return 'Partager avec le Vétérinaire';
+      case 'ca': return 'Compartir amb Veterinari';
+      case 'de': return 'Mit Tierarzt teilen';
+      default: return 'Compartir con Veterinario';
+    }
+  }
+
+  String get vetInvitationsSub {
+    switch (_currentLocale) {
+      case 'en': return 'Grant secure access to your trusted veterinarian';
+      case 'pt': return 'Conceda acesso seguro ao seu veterinário de confiança';
+      case 'fr': return 'Accorder un accès sécurisé à votre vétérinaire';
+      case 'ca': return 'Concedeix accés segur al teu veterinari de confiança';
+      case 'de': return 'Gewähren Sie Ihrem Tierarzt sicheren Zugriff';
+      default: return 'Concede acceso seguro a tu veterinario de confianza';
+    }
+  }
+
+  String get wearablesTitle {
+    switch (_currentLocale) {
+      case 'en': return 'Wearables & Sensors';
+      case 'pt': return 'Dispositivos e Wearables';
+      case 'fr': return 'Appareils & Objets Connectés';
+      case 'ca': return 'Dispositius i Wearables';
+      case 'de': return 'Wearables & Sensoren';
+      default: return 'Dispositivos & Wearables';
+    }
+  }
+
+  String get wearablesSub {
+    switch (_currentLocale) {
+      case 'en': return 'Manage GPS collars and activity tracker sensors';
+      case 'pt': return 'Gerencie coleiras GPS e sensores de atividade';
+      case 'fr': return 'Gérer les colliers GPS et capteurs d\'activité';
+      case 'ca': return 'Gestiona collars GPS i sensors d\'activitat';
+      case 'de': return 'Verwalten Sie GPS-Halsbänder und Aktivitätssensoren';
+      default: return 'Gestiona collares GPS y sensores de actividad';
+    }
+  }
+
+  String get aiAssistantTitle {
+    switch (_currentLocale) {
+      case 'en': return 'AI Vet Assistant';
+      case 'pt': return 'Assistente Vet IA';
+      case 'fr': return 'Assistant Vétérinaire IA';
+      case 'ca': return 'Asistent Veterinari IA';
+      case 'de': return 'KI-Tierarzt-Assistent';
+      default: return 'Asistente Veterinario IA';
+    }
+  }
+
+  String get aiAssistantSub {
+    switch (_currentLocale) {
+      case 'en': return 'Symptom analysis and preventative care guidance';
+      case 'pt': return 'Análise de sintomas e orientações de cuidados preventivos';
+      case 'fr': return 'Analyse des symptômes et conseils de soins préventifs';
+      case 'ca': return 'Anàlisi de símptomes i consells de cura preventiva';
+      case 'de': return 'Symptomanalyse und Empfehlungen zur Vorsorge';
+      default: return 'Análisis de síntomas y guías de cuidado preventivo';
+    }
+  }
 }
 
-// ─── Delegate para el localizador de Flutter ──────────────────────────────────
-
-class AppStringsDelegate extends LocalizationsDelegate<AppStrings> {
-  const AppStringsDelegate();
-
-  static const supportedLocales = [
-    Locale('es'),
-    Locale('en'),
-    Locale('ca'),
-    Locale('fr'),
-    Locale('de'),
-    Locale('pt'),
-  ];
-
+class FlashLocalizationException implements Exception {
   @override
-  bool isSupported(Locale locale) =>
-      supportedLocales.any((l) => l.languageCode == locale.languageCode);
-
-  @override
-  Future<AppStrings> load(Locale locale) async => AppStrings(locale);
-
-  @override
-  bool shouldReload(AppStringsDelegate old) => false;
+  String toString() => 'Error: AppLocalizations no está registrado en el árbol de Widgets';
 }

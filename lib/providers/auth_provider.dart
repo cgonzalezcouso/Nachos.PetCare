@@ -4,6 +4,8 @@ import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'package:nachos_pet_care_flutter/models/user.dart';
 import 'package:nachos_pet_care_flutter/services/auth_service.dart';
 import 'package:nachos_pet_care_flutter/services/service_locator.dart';
+import 'package:nachos_pet_care_flutter/services/fcm_service.dart';
+
 
 
 class AuthProvider extends ChangeNotifier {
@@ -28,6 +30,7 @@ class AuthProvider extends ChangeNotifier {
     if (_authService.isLoggedIn) {
       _user = await _authService.getCurrentUser();
       notifyListeners();
+      FCMService.requestPermissionsAndSync();
     }
 
     // Escuchar cambios de sesión de Supabase en tiempo real
@@ -36,6 +39,7 @@ class AuthProvider extends ChangeNotifier {
         case AuthChangeEvent.signedIn:
           _user = await _authService.getCurrentUser();
           notifyListeners();
+          FCMService.requestPermissionsAndSync();
           break;
         case AuthChangeEvent.signedOut:
           _user = null;
@@ -128,6 +132,22 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       _user = await _authService.signInWithMicrosoft();
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _setError(e.toString().replaceAll('Exception: ', ''));
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  Future<bool> signInWithFacebook() async {
+    _setLoading(true);
+    _clearError();
+
+    try {
+      _user = await _authService.signInWithFacebook();
       notifyListeners();
       return true;
     } catch (e) {

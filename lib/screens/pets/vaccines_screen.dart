@@ -5,6 +5,8 @@ import 'package:uuid/uuid.dart';
 import 'package:nachos_pet_care_flutter/models/vaccine_reminder.dart';
 import 'package:nachos_pet_care_flutter/services/database_service.dart';
 import 'package:nachos_pet_care_flutter/services/service_locator.dart';
+import 'package:provider/provider.dart';
+import 'package:nachos_pet_care_flutter/providers/subscription_provider.dart';
 
 class VaccinesScreen extends StatefulWidget {
   final String petId;
@@ -48,6 +50,13 @@ class _VaccinesScreenState extends State<VaccinesScreen> {
   }
 
   Future<void> _addReminder() async {
+    final subProvider = context.read<SubscriptionProvider>();
+    final canAdd = await subProvider.canAddEvent(widget.petId);
+    if (!canAdd) {
+      if (mounted) context.push('/premium-paywall');
+      return;
+    }
+
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,

@@ -43,6 +43,24 @@ class AppTheme {
       ),
       filled: true,
     ),
+    navigationBarTheme: NavigationBarThemeData(
+      labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              letterSpacing: -0.2,
+            );
+          }
+          return const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+            letterSpacing: -0.2,
+          );
+        },
+      ),
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -82,6 +100,24 @@ class AppTheme {
         borderRadius: BorderRadius.circular(8),
       ),
       filled: true,
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>(
+        (states) {
+          if (states.contains(WidgetState.selected)) {
+            return const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              letterSpacing: -0.2,
+            );
+          }
+          return const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+            letterSpacing: -0.2,
+          );
+        },
+      ),
     ),
   );
 }
