@@ -1,0 +1,46 @@
+name: 🚀 Desplegar Web a Vercel
+on:
+  push:
+    branches: [main, master] # Se ejecuta automáticamente al hacer push a estas ramas
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout del repositorio
+        uses: actions/checkout@v4
+      
+      - name: 🔐 Crear archivo Dart secrets
+        run: |
+          mkdir -p lib/config
+          cat > lib/config/secrets.dart << 'EOF'
+          class AppSecrets {
+            static const String supabaseUrl = '${{ secrets.SUPABASE_URL }}';
+            static const String supabaseAnonKey = '${{ secrets.SUPABASE_ANON_KEY }}';
+            static const String googleWebClientId = '${{ secrets.GOOGLE_WEB_CLIENT_ID }}';
+            static const String googleAndroidClientId = '${{ secrets.GOOGLE_ANDROID_CLIENT_ID }}';
+          }
+          final appSecrets = AppSecrets();
+          EOF
+      
+      - name: 🐦 Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          channel: 'stable'
+          cache: true
+      
+      - name: 📦 Instalar dependencias
+        run: flutter pub get
+      
+      - name: 🏗️ Compilar Flutter Web
+        run: flutter build web --release
+      
+      - name: 🚀 Desplegar en Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./build/web
