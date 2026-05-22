@@ -175,6 +175,7 @@ Nacho's PetCare resuelve este problema ofreciendo:
 - ✅ Registro seguro de nuevas cuentas
 - ✅ Login con Google Sign-In
 - ✅ Autenticación con Microsoft
+- ✅ Autenticación con Login de Facebook
 - ✅ Gestión de perfil de usuario
 - ✅ Recuperación de contraseña
 - ✅ Selector de idioma independiente del locale del dispositivo
