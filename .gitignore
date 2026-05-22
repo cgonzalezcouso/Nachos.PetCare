@@ -53,10 +53,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Firebase/Google Services
-android/app/google-services.json
-ios/Runner/GoogleService-Info.plist
-
 # Environment variables
 .env
 .env.local
@@ -67,14 +63,13 @@ ios/Runner/GoogleService-Info.plist
 *.keystore
 
 # Generated files
-.dart_tool/
 .flutter-plugins
 .packages
 build/
 
 # IDE
 .vscode/
-.idea/
-*.swp
 *.swo
 *~
+.vercel
+.env*
