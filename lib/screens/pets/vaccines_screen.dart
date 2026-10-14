@@ -53,7 +53,8 @@ class _VaccinesScreenState extends State<VaccinesScreen> {
     final subProvider = context.read<SubscriptionProvider>();
     final canAdd = await subProvider.canAddEvent(widget.petId);
     if (!canAdd) {
-      if (mounted) context.push('/premium-paywall');
+      if (!mounted) return;
+      context.push('/premium-paywall');
       return;
     }
 
