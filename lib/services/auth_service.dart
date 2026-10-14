@@ -163,7 +163,7 @@ class AuthService {
         }
       });
 
-      return completer.future;
+      return await completer.future;
     } on AuthException catch (e) {
       AppLogger.error('AUTH ERROR (Supabase Google)', error: e.message, stackTrace: StackTrace.current);
       throw _handleAuthException(e);
@@ -224,7 +224,7 @@ class AuthService {
         }
       });
 
-      return completer.future;
+      return await completer.future;
 
     } on AuthException catch (e) {
       AppLogger.error('Error de autenticación Microsoft', error: e.message);
@@ -285,7 +285,7 @@ class AuthService {
         }
       });
 
-      return completer.future;
+      return await completer.future;
 
     } on AuthException catch (e) {
       AppLogger.error('Error de autenticación Facebook', error: e.message);
