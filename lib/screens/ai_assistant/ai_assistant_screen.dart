@@ -38,10 +38,10 @@ class _WearablePetAvatar extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 8),
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: isSelected ? colorScheme.primaryContainer.withOpacity(0.4) : Colors.transparent,
+          color: isSelected ? colorScheme.primaryContainer.withValues(alpha: 0.4) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? colorScheme.primary : Colors.grey.withOpacity(0.2),
+            color: isSelected ? colorScheme.primary : Colors.grey.withValues(alpha: 0.2),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -188,7 +188,7 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> with SingleTicker
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.smart_toy_outlined, size: 64, color: colorScheme.primary.withOpacity(0.4)),
+                    Icon(Icons.smart_toy_outlined, size: 64, color: colorScheme.primary.withValues(alpha: 0.4)),
                     const SizedBox(height: 16),
                     const Text(
                       'No hay mascotas registradas',
@@ -240,10 +240,10 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> with SingleTicker
                     decoration: BoxDecoration(
                       color: colorScheme.surface,
                       borderRadius: BorderRadius.circular(24),
-                      border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+                      border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.02),
+                          color: Colors.black.withValues(alpha: 0.02),
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -272,7 +272,7 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> with SingleTicker
                               borderRadius: BorderRadius.circular(16),
                             ),
                             filled: true,
-                            fillColor: colorScheme.surfaceVariant.withOpacity(0.2),
+                            fillColor: colorScheme.surfaceContainerHighest.withValues(alpha: 0.2),
                           ),
                         ),
                         const SizedBox(height: 14),
@@ -334,9 +334,9 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> with SingleTicker
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: colorScheme.primary.withOpacity(0.04),
+          color: colorScheme.primary.withValues(alpha: 0.04),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: colorScheme.primary.withOpacity(0.1)),
+          border: Border.all(color: colorScheme.primary.withValues(alpha: 0.1)),
         ),
         child: Column(
           children: [
@@ -385,9 +385,9 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> with SingleTicker
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: riskColor.withOpacity(0.12),
+                color: riskColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: riskColor.withOpacity(0.3), width: 1.5),
+                border: Border.all(color: riskColor.withValues(alpha: 0.3), width: 1.5),
               ),
               child: Row(
                 children: [
@@ -414,7 +414,7 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> with SingleTicker
           decoration: BoxDecoration(
             color: colorScheme.surface,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+            border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -452,7 +452,7 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> with SingleTicker
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                side: BorderSide(color: Colors.blueAccent.withOpacity(0.15)),
+                side: BorderSide(color: Colors.blueAccent.withValues(alpha: 0.15)),
               ),
               child: ListTile(
                 leading: const Icon(Icons.search, color: Colors.blueAccent),
@@ -479,7 +479,7 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> with SingleTicker
           decoration: BoxDecoration(
             color: colorScheme.surface,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+            border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
           ),
           child: ListView.builder(
             shrinkWrap: true,
@@ -513,9 +513,9 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> with SingleTicker
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: riskColor.withOpacity(0.08),
+            color: riskColor.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: riskColor.withOpacity(0.4), width: 1.5),
+            border: Border.all(color: riskColor.withValues(alpha: 0.4), width: 1.5),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -562,8 +562,8 @@ class _PresetTag extends StatelessWidget {
     return ActionChip(
       onPressed: onTap,
       elevation: 0,
-      backgroundColor: colorScheme.primary.withOpacity(0.05),
-      side: BorderSide(color: colorScheme.primary.withOpacity(0.12)),
+      backgroundColor: colorScheme.primary.withValues(alpha: 0.05),
+      side: BorderSide(color: colorScheme.primary.withValues(alpha: 0.12)),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       label: Text(
         label,
