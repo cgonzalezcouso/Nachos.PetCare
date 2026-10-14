@@ -63,9 +63,9 @@ class PremiumPaywallScreen extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.amber.withOpacity(0.1),
+                            color: Colors.amber.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.amber.withOpacity(0.3), width: 2),
+                            border: Border.all(color: Colors.amber.withValues(alpha: 0.3), width: 2),
                           ),
                           child: const Icon(
                             Icons.workspace_premium_rounded,
@@ -101,10 +101,10 @@ class PremiumPaywallScreen extends StatelessWidget {
 
                       // --- Features Card ---
                       Card(
-                        color: Colors.white.withOpacity(0.04),
+                        color: Colors.white.withValues(alpha: 0.04),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
-                          side: BorderSide(color: Colors.white.withOpacity(0.08)),
+                          side: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(20),
@@ -184,9 +184,9 @@ class PremiumPaywallScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.redAccent.withOpacity(0.1),
+                            color: Colors.redAccent.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.redAccent.withOpacity(0.3)),
+                            border: Border.all(color: Colors.redAccent.withValues(alpha: 0.3)),
                           ),
                           child: Text(
                             subProvider.error!,
@@ -232,12 +232,12 @@ class PremiumPaywallScreen extends StatelessWidget {
                                   await subProvider.manageSubscription();
                                 },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white.withOpacity(0.08),
+                            backgroundColor: Colors.white.withValues(alpha: 0.08),
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
-                              side: BorderSide(color: Colors.white.withOpacity(0.15)),
+                              side: BorderSide(color: Colors.white.withValues(alpha: 0.15)),
                             ),
                           ),
                           child: subProvider.isLoading
@@ -278,7 +278,7 @@ class PremiumPaywallScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(30),
                             ),
                             elevation: 8,
-                            shadowColor: Colors.amber.withOpacity(0.4),
+                            shadowColor: Colors.amber.withValues(alpha: 0.4),
                           ),
                           child: subProvider.isLoading
                               ? const SizedBox(
@@ -328,10 +328,10 @@ class PremiumPaywallScreen extends StatelessWidget {
                         const Divider(color: Colors.white12),
                         const SizedBox(height: 12),
                         Card(
-                          color: Colors.amber.withOpacity(0.05),
+                          color: Colors.amber.withValues(alpha: 0.05),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
-                            side: BorderSide(color: Colors.amber.withOpacity(0.2)),
+                            side: BorderSide(color: Colors.amber.withValues(alpha: 0.2)),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(16),
@@ -410,7 +410,7 @@ class PremiumPaywallScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF1A1F2C),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: Colors.amber.withOpacity(0.3), width: 1.5),
+          side: BorderSide(color: Colors.amber.withValues(alpha: 0.3), width: 1.5),
         ),
         title: Row(
           children: [
@@ -484,7 +484,7 @@ class PremiumPaywallScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.06),
+            color: Colors.white.withValues(alpha: 0.06),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(icon, color: Colors.amber[600], size: 22),
