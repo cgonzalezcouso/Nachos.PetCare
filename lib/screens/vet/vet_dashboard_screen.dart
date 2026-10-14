@@ -55,10 +55,10 @@ class _VetDashboardScreenState extends State<VetDashboardScreen> {
             margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: _isSaaSActive ? Colors.green.withOpacity(0.1) : Colors.red.withOpacity(0.1),
+              color: _isSaaSActive ? Colors.green.withValues(alpha: 0.1) : Colors.red.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: _isSaaSActive ? Colors.green.withOpacity(0.3) : Colors.red.withOpacity(0.3),
+                color: _isSaaSActive ? Colors.green.withValues(alpha: 0.3) : Colors.red.withValues(alpha: 0.3),
               ),
             ),
             child: Row(
@@ -91,7 +91,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen> {
               width: 250,
               decoration: BoxDecoration(
                 border: Border(
-                  right: BorderSide(color: colorScheme.primary.withOpacity(0.08)),
+                  right: BorderSide(color: colorScheme.primary.withValues(alpha: 0.08)),
                 ),
               ),
               child: Column(
@@ -106,7 +106,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen> {
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
                       'v3.0.0 B2B Ecosistema',
-                      style: theme.textTheme.bodySmall?.copyWith(color: colorScheme.onSurface.withOpacity(0.4)),
+                      style: theme.textTheme.bodySmall?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.4)),
                     ),
                   ),
                 ],
@@ -123,7 +123,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen> {
           ? BottomNavigationBar(
               currentIndex: _activeTabIdx,
               selectedItemColor: colorScheme.primary,
-              unselectedItemColor: colorScheme.onSurface.withOpacity(0.4),
+              unselectedItemColor: colorScheme.onSurface.withValues(alpha: 0.4),
               showUnselectedLabels: true,
               onTap: (idx) => setState(() => _activeTabIdx = idx),
               items: const [
@@ -145,7 +145,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        leading: Icon(icon, color: active ? colorScheme.primary : colorScheme.onSurface.withOpacity(0.6)),
+        leading: Icon(icon, color: active ? colorScheme.primary : colorScheme.onSurface.withValues(alpha: 0.6)),
         title: Text(
           title,
           style: TextStyle(
@@ -154,7 +154,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen> {
           ),
         ),
         selected: active,
-        selectedTileColor: colorScheme.primary.withOpacity(0.06),
+        selectedTileColor: colorScheme.primary.withValues(alpha: 0.06),
         onTap: () => setState(() => _activeTabIdx = index),
       ),
     );
@@ -212,7 +212,7 @@ class _VetOverviewTab extends StatelessWidget {
               ),
               Text(
                 'Bienvenido al centro clínico de Nachos PetCare. Supervisa tus pacientes e integraciones API.',
-                style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface.withOpacity(0.6)),
+                style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.6)),
               ),
               const SizedBox(height: 24),
 
@@ -279,7 +279,7 @@ class _VetOverviewTab extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: colorScheme.surface,
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+                        border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -311,7 +311,7 @@ class _VetOverviewTab extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: colorScheme.surface,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+                          border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -351,9 +351,9 @@ class _VetOverviewTab extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+        border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.01), blurRadius: 10, offset: const Offset(0, 4)),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.01), blurRadius: 10, offset: const Offset(0, 4)),
         ],
       ),
       child: Column(
@@ -363,11 +363,11 @@ class _VetOverviewTab extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface.withOpacity(0.5))),
+              Text(title, style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.5))),
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, color: color, size: 20),
@@ -386,7 +386,7 @@ class _VetOverviewTab extends StatelessWidget {
                 subtitle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.bodySmall?.copyWith(color: colorScheme.onSurface.withOpacity(0.4)),
+                style: theme.textTheme.bodySmall?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.4)),
               ),
             ],
           ),
@@ -403,7 +403,7 @@ class _VetOverviewTab extends StatelessWidget {
           width: 24,
           height: val,
           decoration: BoxDecoration(
-            color: highlight ? colorScheme.primary : colorScheme.primary.withOpacity(0.15),
+            color: highlight ? colorScheme.primary : colorScheme.primary.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(6),
           ),
         ),
@@ -428,11 +428,11 @@ class _VetOverviewTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                Text(desc, style: TextStyle(color: colorScheme.onSurface.withOpacity(0.6), fontSize: 12)),
+                Text(desc, style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.6), fontSize: 12)),
               ],
             ),
           ),
-          Text(time, style: TextStyle(color: colorScheme.onSurface.withOpacity(0.4), fontSize: 11)),
+          Text(time, style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.4), fontSize: 11)),
         ],
       ),
     );
@@ -467,7 +467,7 @@ class _VetPatientsTabState extends State<_VetPatientsTab> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.lock_outline, size: 64, color: colorScheme.primary.withOpacity(0.4)),
+              Icon(Icons.lock_outline, size: 64, color: colorScheme.primary.withValues(alpha: 0.4)),
               const SizedBox(height: 16),
               Text(
                 'Módulo SaaS Bloqueado',
@@ -525,10 +525,10 @@ class _VetPatientsTabState extends State<_VetPatientsTab> {
                         return Container(
                           margin: const EdgeInsets.only(bottom: 12),
                           decoration: BoxDecoration(
-                            color: isSelected ? colorScheme.primary.withOpacity(0.06) : colorScheme.surface,
+                            color: isSelected ? colorScheme.primary.withValues(alpha: 0.06) : colorScheme.surface,
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color: isSelected ? colorScheme.primary : colorScheme.primary.withOpacity(0.08),
+                              color: isSelected ? colorScheme.primary : colorScheme.primary.withValues(alpha: 0.08),
                             ),
                           ),
                           child: ListTile(
@@ -557,7 +557,7 @@ class _VetPatientsTabState extends State<_VetPatientsTab> {
                                 : Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                     decoration: BoxDecoration(
-                                      color: Colors.green.withOpacity(0.1),
+                                      color: Colors.green.withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: const Text(
@@ -584,7 +584,7 @@ class _VetPatientsTabState extends State<_VetPatientsTab> {
               flex: 3,
               child: Container(
                 decoration: BoxDecoration(
-                  border: Border(left: BorderSide(color: colorScheme.primary.withOpacity(0.08))),
+                  border: Border(left: BorderSide(color: colorScheme.primary.withValues(alpha: 0.08))),
                 ),
                 child: _selectedPatient == null
                     ? const Center(child: Text('Selecciona un paciente aceptado para ver su historial clínico.'))
@@ -620,7 +620,7 @@ class _VetPatientsTabState extends State<_VetPatientsTab> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(patient.petName, style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
-                  Text('Propietario: ${patient.ownerName}', style: TextStyle(color: colorScheme.onSurface.withOpacity(0.6))),
+                  Text('Propietario: ${patient.ownerName}', style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.6))),
                 ],
               ),
             ],
@@ -635,7 +635,7 @@ class _VetPatientsTabState extends State<_VetPatientsTab> {
             decoration: BoxDecoration(
               color: colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+              border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
             ),
             child: Column(
               children: [
@@ -708,7 +708,7 @@ class _VetPatientsTabState extends State<_VetPatientsTab> {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+        border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -717,13 +717,13 @@ class _VetPatientsTabState extends State<_VetPatientsTab> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(vet, style: const TextStyle(fontWeight: FontWeight.bold)),
-              Text(date, style: TextStyle(color: colorScheme.onSurface.withOpacity(0.5), fontSize: 12)),
+              Text(date, style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.5), fontSize: 12)),
             ],
           ),
           const SizedBox(height: 8),
           Text('Diagnóstico: $diagnosis', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
           const SizedBox(height: 4),
-          Text(desc, style: TextStyle(color: colorScheme.onSurface.withOpacity(0.7), fontSize: 12)),
+          Text(desc, style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.7), fontSize: 12)),
           const SizedBox(height: 8),
           Text('Tratamiento: $treatment', style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 12)),
         ],
@@ -795,7 +795,7 @@ class _VetSaaSTabState extends State<_VetSaaSTab> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Licencia SaaS B2B Clínicas', style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
-          Text('Adquiere el plan profesional B2B para integrar tus bases de datos y dar acceso a tus veterinarios.', style: TextStyle(color: colorScheme.onSurface.withOpacity(0.6))),
+          Text('Adquiere el plan profesional B2B para integrar tus bases de datos y dar acceso a tus veterinarios.', style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.6))),
           const SizedBox(height: 32),
 
           Row(
@@ -815,7 +815,7 @@ class _VetSaaSTabState extends State<_VetSaaSTab> {
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(color: colorScheme.primary.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+                        decoration: BoxDecoration(color: colorScheme.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
                         child: Text('CLÍNICA PROFESIONAL', style: TextStyle(color: colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 12)),
                       ),
                       const SizedBox(height: 16),
@@ -824,7 +824,7 @@ class _VetSaaSTabState extends State<_VetSaaSTab> {
                         textBaseline: TextBaseline.alphabetic,
                         children: [
                           Text('49 €', style: theme.textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold, color: colorScheme.primary)),
-                          Text('/mes', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface.withOpacity(0.6))),
+                          Text('/mes', style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.6))),
                         ],
                       ),
                       const SizedBox(height: 24),
@@ -872,7 +872,7 @@ class _VetSaaSTabState extends State<_VetSaaSTab> {
                   decoration: BoxDecoration(
                     color: colorScheme.surface,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+                    border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -927,7 +927,7 @@ class _VetSaaSTabState extends State<_VetSaaSTab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(code, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-              Text(date, style: TextStyle(color: colorScheme.onSurface.withOpacity(0.5), fontSize: 11)),
+              Text(date, style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.5), fontSize: 11)),
             ],
           ),
           Row(
@@ -936,7 +936,7 @@ class _VetSaaSTabState extends State<_VetSaaSTab> {
               const SizedBox(width: 12),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(color: Colors.green.withOpacity(0.1), borderRadius: BorderRadius.circular(6)),
+                decoration: BoxDecoration(color: Colors.green.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(6)),
                 child: const Text('PAGADO', style: TextStyle(color: Colors.green, fontSize: 10, fontWeight: FontWeight.bold)),
               ),
             ],
@@ -1035,7 +1035,7 @@ class _VetAPITabState extends State<_VetAPITab> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Desarrolladores & API REST Pública', style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold)),
-          Text('Integra la base de datos de tu clínica con tu propio software ERP/CRM utilizando nuestra API REST pública.', style: TextStyle(color: colorScheme.onSurface.withOpacity(0.6))),
+          Text('Integra la base de datos de tu clínica con tu propio software ERP/CRM utilizando nuestra API REST pública.', style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.6))),
           const SizedBox(height: 32),
 
           // 🔑 1. Sección de Claves de Acceso API
@@ -1044,7 +1044,7 @@ class _VetAPITabState extends State<_VetAPITab> {
             decoration: BoxDecoration(
               color: colorScheme.surface,
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+              border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1077,9 +1077,9 @@ class _VetAPITabState extends State<_VetAPITab> {
                         margin: const EdgeInsets.only(bottom: 12),
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: colorScheme.primary.withOpacity(0.02),
+                          color: colorScheme.primary.withValues(alpha: 0.02),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+                          border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1090,8 +1090,8 @@ class _VetAPITabState extends State<_VetAPITab> {
                                 children: [
                                   Text(key['name'] ?? 'Clave API', style: const TextStyle(fontWeight: FontWeight.bold)),
                                   const SizedBox(height: 4),
-                                  Text('Client ID: ${key['clientId']}', style: TextStyle(fontFamily: 'monospace', fontSize: 12, color: colorScheme.onSurface.withOpacity(0.7))),
-                                  Text('Client Secret: ${key['clientSecret']}', style: TextStyle(fontFamily: 'monospace', fontSize: 12, color: colorScheme.onSurface.withOpacity(0.7))),
+                                  Text('Client ID: ${key['clientId']}', style: TextStyle(fontFamily: 'monospace', fontSize: 12, color: colorScheme.onSurface.withValues(alpha: 0.7))),
+                                  Text('Client Secret: ${key['clientSecret']}', style: TextStyle(fontFamily: 'monospace', fontSize: 12, color: colorScheme.onSurface.withValues(alpha: 0.7))),
                                 ],
                               ),
                             ),
@@ -1114,7 +1114,7 @@ class _VetAPITabState extends State<_VetAPITab> {
 
           // 💻 2. Sandbox Interactiva (Playground REST API)
           Text('Sandbox Interactiva de Pruebas', style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
-          Text('Pon a prueba tus llamadas de API directamente en nuestra terminal interactiva en tiempo real.', style: TextStyle(color: colorScheme.onSurface.withOpacity(0.6))),
+          Text('Pon a prueba tus llamadas de API directamente en nuestra terminal interactiva en tiempo real.', style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.6))),
           const SizedBox(height: 16),
 
           Row(
@@ -1128,7 +1128,7 @@ class _VetAPITabState extends State<_VetAPITab> {
                   decoration: BoxDecoration(
                     color: colorScheme.surface,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+                    border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1211,7 +1211,7 @@ class _VetAPITabState extends State<_VetAPITab> {
                     color: const Color(0xFF1E1E1E),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
-                      BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 15, offset: const Offset(0, 8)),
+                      BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 15, offset: const Offset(0, 8)),
                     ],
                   ),
                   child: Column(

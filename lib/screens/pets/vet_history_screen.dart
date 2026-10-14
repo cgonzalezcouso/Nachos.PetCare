@@ -54,8 +54,10 @@ class _VetHistoryScreenState extends State<VetHistoryScreen> {
   Future<void> _addReport() async {
     final subProvider = context.read<SubscriptionProvider>();
     final canAdd = await subProvider.canAddEvent(widget.petId);
+    if (!mounted) return;
     if (!canAdd) {
-      if (mounted) context.push('/premium-paywall');
+      if (!mounted) return;
+      context.push('/premium-paywall');
       return;
     }
 
@@ -96,7 +98,8 @@ class _VetHistoryScreenState extends State<VetHistoryScreen> {
   Future<void> _exportPdf() async {
     final subProvider = context.read<SubscriptionProvider>();
     if (!subProvider.isPremium) {
-      if (mounted) context.push('/premium-paywall');
+      if (!mounted) return;
+      context.push('/premium-paywall');
       return;
     }
     try {

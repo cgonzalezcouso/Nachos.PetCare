@@ -189,7 +189,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: colorScheme.primary.withOpacity(0.06),
+                        color: colorScheme.primary.withValues(alpha: 0.06),
                         borderRadius: BorderRadius.circular(28),
                       ),
                       child: Row(
@@ -232,7 +232,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                         boxShadow: _canSend
                             ? [
                                 BoxShadow(
-                                  color: colorScheme.primary.withOpacity(0.3),
+                                  color: colorScheme.primary.withValues(alpha: 0.3),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 )
@@ -275,7 +275,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     end: Alignment.bottomRight,
                   )
                 : null,
-            color: isMe ? null : colorScheme.primary.withOpacity(0.08),
+            color: isMe ? null : colorScheme.primary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(20),
               topRight: const Radius.circular(20),
@@ -318,7 +318,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
           decoration: BoxDecoration(
-            color: colorScheme.primary.withOpacity(0.08),
+            color: colorScheme.primary.withValues(alpha: 0.08),
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
