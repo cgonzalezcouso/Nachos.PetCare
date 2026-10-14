@@ -238,7 +238,7 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.pets, size: 64, color: colorScheme.primary.withOpacity(0.4)),
+                    Icon(Icons.pets, size: 64, color: colorScheme.primary.withValues(alpha: 0.4)),
                     const SizedBox(height: 16),
                     const Text(
                       'No tienes mascotas registradas.',
@@ -285,12 +285,12 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [colorScheme.primary.withOpacity(0.06), colorScheme.secondary.withOpacity(0.03)],
+                colors: [colorScheme.primary.withValues(alpha: 0.06), colorScheme.secondary.withValues(alpha: 0.03)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: colorScheme.primary.withOpacity(0.1)),
+              border: Border.all(color: colorScheme.primary.withValues(alpha: 0.1)),
             ),
             child: Row(
               children: [
@@ -325,7 +325,7 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
             decoration: BoxDecoration(
               color: colorScheme.surface,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+              border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
             ),
             child: Column(
               children: [
@@ -458,12 +458,12 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
                   margin: const EdgeInsets.only(bottom: 20),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.red.withOpacity(0.08),
+                    color: Colors.red.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.redAccent, width: 2),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.red.withOpacity(0.1),
+                        color: Colors.red.withValues(alpha: 0.1),
                         blurRadius: 10,
                         spreadRadius: 2,
                       ),
@@ -501,9 +501,9 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
                 margin: const EdgeInsets.only(bottom: 20),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.06),
+                  color: Colors.green.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.green.withOpacity(0.3)),
+                  border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   children: [
@@ -533,7 +533,7 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: colorScheme.primary.withOpacity(0.2),
+                  color: colorScheme.primary.withValues(alpha: 0.2),
                   blurRadius: 12,
                   offset: const Offset(0, 6),
                 ),
@@ -558,7 +558,7 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -599,7 +599,7 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.greenAccent.withOpacity(0.2),
+                        color: Colors.greenAccent.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Text(
@@ -637,7 +637,7 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
                           decoration: BoxDecoration(
                             color: colorScheme.surface,
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+                            border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -660,7 +660,7 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
                                       child: CircularProgressIndicator(
                                         value: stepPercent,
                                         strokeWidth: 8,
-                                        backgroundColor: colorScheme.primary.withOpacity(0.1),
+                                        backgroundColor: colorScheme.primary.withValues(alpha: 0.1),
                                         valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary),
                                       ),
                                     ),
@@ -692,7 +692,7 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
                           decoration: BoxDecoration(
                             color: colorScheme.surface,
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+                            border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -728,7 +728,7 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                       decoration: BoxDecoration(
-                                        color: Colors.red.withOpacity(0.1),
+                                        color: Colors.red.withValues(alpha: 0.1),
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: const Text(
@@ -753,7 +753,7 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
                     decoration: BoxDecoration(
                       color: colorScheme.surface,
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+                      border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -779,7 +779,7 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
                           value: act.sleepMinutes / act.sleepGoalMinutes,
                           minHeight: 10,
                           borderRadius: BorderRadius.circular(6),
-                          backgroundColor: colorScheme.primary.withOpacity(0.1),
+                          backgroundColor: colorScheme.primary.withValues(alpha: 0.1),
                           valueColor: const AlwaysStoppedAnimation<Color>(Colors.indigo),
                         ),
                         const SizedBox(height: 8),
@@ -806,9 +806,9 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
             height: 200,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: colorScheme.surfaceVariant,
+              color: colorScheme.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: colorScheme.primary.withOpacity(0.1)),
+              border: Border.all(color: colorScheme.primary.withValues(alpha: 0.1)),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(24),
@@ -846,7 +846,7 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.7),
+                        color: Colors.black.withValues(alpha: 0.7),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -892,7 +892,7 @@ class _RadarPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = color.withOpacity(1.0 - progress)
+      ..color = color.withValues(alpha: 1.0 - progress)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3;
 
@@ -900,7 +900,7 @@ class _RadarPainter extends CustomPainter {
     final radius = (size.width / 2) * progress;
 
     canvas.drawCircle(center, radius, paint);
-    canvas.drawCircle(center, radius * 0.5, paint..color = color.withOpacity((1.0 - progress) * 0.6));
+    canvas.drawCircle(center, radius * 0.5, paint..color = color.withValues(alpha: (1.0 - progress) * 0.6));
   }
 
   @override
@@ -924,7 +924,7 @@ class _MapSimulatorPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paintGrid = Paint()
-      ..color = Colors.grey.withOpacity(0.1)
+      ..color = Colors.grey.withValues(alpha: 0.1)
       ..strokeWidth = 1.0;
 
     // Dibujar cuadricula del mapa
@@ -938,10 +938,10 @@ class _MapSimulatorPainter extends CustomPainter {
     // Dibujar geocerca circular en el centro
     final center = Offset(size.width / 2, size.height / 2);
     final safeZonePaint = Paint()
-      ..color = Colors.green.withOpacity(0.08)
+      ..color = Colors.green.withValues(alpha: 0.08)
       ..style = PaintingStyle.fill;
     final safeZoneBorder = Paint()
-      ..color = Colors.green.withOpacity(0.4)
+      ..color = Colors.green.withValues(alpha: 0.4)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0;
 
@@ -957,7 +957,7 @@ class _MapSimulatorPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final pulsePaint = Paint()
-      ..color = (safe ? Colors.blue : Colors.red).withOpacity(0.2)
+      ..color = (safe ? Colors.blue : Colors.red).withValues(alpha: 0.2)
       ..style = PaintingStyle.fill;
 
     // Efecto de pulso en la ubicación del perro
@@ -1016,7 +1016,7 @@ class _CloudProviderCard extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(color: color.withOpacity(0.1), shape: BoxShape.circle),
+                decoration: BoxDecoration(color: color.withValues(alpha: 0.1), shape: BoxShape.circle),
                 child: Icon(icon, color: color, size: 28),
               ),
               const SizedBox(height: 12),
