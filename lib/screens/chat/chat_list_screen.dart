@@ -63,7 +63,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                       )
                     : null,
                 filled: true,
-                fillColor: colorScheme.primary.withOpacity(0.06),
+                fillColor: colorScheme.primary.withValues(alpha: 0.06),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -223,7 +223,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
             Container(
               padding: const EdgeInsets.all(28),
               decoration: BoxDecoration(
-                color: colorScheme.primary.withOpacity(0.08),
+                color: colorScheme.primary.withValues(alpha: 0.08),
                 shape: BoxShape.circle,
               ),
               child: Icon(
