@@ -69,7 +69,7 @@ class _VetInvitationsScreenState extends State<VetInvitationsScreen> {
             vetEmail: email,
             clinicName: clinic,
           );
-          if (mounted) {
+          if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Invitación enviada con éxito a $email 🐾'),
@@ -120,7 +120,7 @@ class _VetInvitationsScreenState extends State<VetInvitationsScreen> {
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: colorScheme.primary.withOpacity(0.08),
+                        color: colorScheme.primary.withValues(alpha: 0.08),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(Icons.share_location_outlined, size: 64, color: colorScheme.primary),
@@ -134,7 +134,7 @@ class _VetInvitationsScreenState extends State<VetInvitationsScreen> {
                     Text(
                       'Invita a tu veterinario de confianza para que pueda ver el historial médico, vacunas y evolución de peso de tus mascotas.',
                       textAlign: TextAlign.center,
-                      style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface.withOpacity(0.6)),
+                      style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.6)),
                     ),
                   ],
                 ),
@@ -186,10 +186,10 @@ class _InvitationCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: colorScheme.primary.withOpacity(0.08)),
+        border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -204,8 +204,8 @@ class _InvitationCard extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    colorScheme.primary.withOpacity(0.05),
-                    colorScheme.primary.withOpacity(0.01),
+                    colorScheme.primary.withValues(alpha: 0.05),
+                    colorScheme.primary.withValues(alpha: 0.01),
                   ],
                 ),
               ),
@@ -213,7 +213,7 @@ class _InvitationCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 24,
-                    backgroundColor: colorScheme.primary.withOpacity(0.1),
+                    backgroundColor: colorScheme.primary.withValues(alpha: 0.1),
                     backgroundImage: inv.petPhoto != null && inv.petPhoto!.startsWith('http')
                         ? NetworkImage(inv.petPhoto!)
                         : null,
@@ -232,7 +232,7 @@ class _InvitationCard extends StatelessWidget {
                         ),
                         Text(
                           'Clínica: ${inv.clinicName}',
-                          style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface.withOpacity(0.6)),
+                          style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.6)),
                         ),
                       ],
                     ),
@@ -240,7 +240,7 @@ class _InvitationCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: statusColor.withOpacity(0.1),
+                      color: statusColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -269,7 +269,7 @@ class _InvitationCard extends StatelessWidget {
                       children: [
                         Text(
                           'Veterinario Invitado:',
-                          style: theme.textTheme.bodySmall?.copyWith(color: colorScheme.onSurface.withOpacity(0.4)),
+                          style: theme.textTheme.bodySmall?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.4)),
                         ),
                         Text(
                           inv.vetEmail,
@@ -376,7 +376,7 @@ class _NewInvitationFormState extends State<_NewInvitationForm> {
                   width: 48,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: colorScheme.onSurface.withOpacity(0.1),
+                    color: colorScheme.onSurface.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
@@ -389,7 +389,7 @@ class _NewInvitationFormState extends State<_NewInvitationForm> {
               const SizedBox(height: 8),
               Text(
                 'Completa los datos de la clínica para otorgarle acceso de lectura seguro a los historiales médicos.',
-                style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface.withOpacity(0.6)),
+                style: theme.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface.withValues(alpha: 0.6)),
               ),
               const SizedBox(height: 24),
               

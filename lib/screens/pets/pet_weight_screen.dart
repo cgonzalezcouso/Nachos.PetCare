@@ -55,8 +55,10 @@ class _PetWeightScreenState extends State<PetWeightScreen> {
   Future<void> _addWeight() async {
     final subProvider = context.read<SubscriptionProvider>();
     final canAdd = await subProvider.canAddEvent(widget.petId);
+    if (!mounted) return;
     if (!canAdd) {
-      if (mounted) context.push('/premium-paywall');
+      if (!mounted) return;
+      context.push('/premium-paywall');
       return;
     }
 
