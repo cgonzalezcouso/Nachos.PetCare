@@ -169,6 +169,7 @@ class _WearablesScreenState extends State<WearablesScreen> with SingleTickerProv
                             password: passController.text,
                             petId: petId,
                           );
+                          if (!ctx.mounted) return;
                           setModalState(() => loading = false);
 
                           if (success) {
