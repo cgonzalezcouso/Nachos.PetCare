@@ -52,6 +52,7 @@ class _VaccinesScreenState extends State<VaccinesScreen> {
   Future<void> _addReminder() async {
     final subProvider = context.read<SubscriptionProvider>();
     final canAdd = await subProvider.canAddEvent(widget.petId);
+    if (!mounted) return;
     if (!canAdd) {
       if (!mounted) return;
       context.push('/premium-paywall');
