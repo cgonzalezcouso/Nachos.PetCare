@@ -258,7 +258,7 @@ class _PublicPetProfileScreenState extends State<PublicPetProfileScreen> {
                               },
                               icon: const Icon(Icons.chat_bubble_outline),
                               style: IconButton.styleFrom(
-                                backgroundColor: colorScheme.primary.withOpacity(0.1),
+                                backgroundColor: colorScheme.primary.withValues(alpha: 0.1),
                                 foregroundColor: colorScheme.primary,
                               ),
                               tooltip: 'Enviar Mensaje',
