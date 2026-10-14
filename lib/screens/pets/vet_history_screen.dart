@@ -54,6 +54,7 @@ class _VetHistoryScreenState extends State<VetHistoryScreen> {
   Future<void> _addReport() async {
     final subProvider = context.read<SubscriptionProvider>();
     final canAdd = await subProvider.canAddEvent(widget.petId);
+    if (!mounted) return;
     if (!canAdd) {
       if (!mounted) return;
       context.push('/premium-paywall');
