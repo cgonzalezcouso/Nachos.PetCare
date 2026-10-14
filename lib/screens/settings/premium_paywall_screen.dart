@@ -359,7 +359,7 @@ class PremiumPaywallScreen extends StatelessWidget {
                                 const SizedBox(height: 16),
                                 SwitchListTile(
                                   value: subProvider.isPremium,
-                                  activeColor: Colors.amber,
+                                  activeThumbColor: Colors.amber,
                                   contentPadding: EdgeInsets.zero,
                                   title: const Text(
                                     'Plan Premium Activo',
