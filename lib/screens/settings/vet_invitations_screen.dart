@@ -69,7 +69,7 @@ class _VetInvitationsScreenState extends State<VetInvitationsScreen> {
             vetEmail: email,
             clinicName: clinic,
           );
-          if (mounted) {
+          if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Invitación enviada con éxito a $email 🐾'),
