@@ -10,6 +10,9 @@ on:
 jobs:
   ping-supabase:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
 
     steps:
       - name: Checkout del código
@@ -19,14 +22,25 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: npm
+          cache-dependency-path: tools/supabase-keeper/package-lock.json
 
       - name: Instalar dependencias
+        working-directory: tools/supabase-keeper
         run: npm ci
 
+      - name: Comprobar el mantenedor
+        working-directory: tools/supabase-keeper
+        run: npm test
+
       - name: Ejecutar Mantenedor Supabase
+        working-directory: tools/supabase-keeper
         env:
-          # Opcional: Puedes configurar tus proyectos en el Secret SUPABASE_PROJECTS de GitHub
+          # Opcional. JSON: [{"name":"app","url":"https://xxx.supabase.co","key":"..."}]
+          # Si no está definido, se usa SUPABASE_URL + SUPABASE_ANON_KEY.
           SUPABASE_PROJECTS: ${{ secrets.SUPABASE_PROJECTS }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           FAIL_ON_ERROR: 'false'
           GH_TOKEN: ${{ github.token }}
         run: npm run ping
