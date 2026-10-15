@@ -62,6 +62,9 @@ ios/Runner/GoogleService-Info.plist
 .env.local
 .env.*.local
 
+# Node (mantenedor de Supabase)
+node_modules/
+
 # Keystore files
 *.jks
 *.keystore
