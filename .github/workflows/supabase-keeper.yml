@@ -10,6 +10,10 @@ on:
 jobs:
   ping-supabase:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: scripts/supabase-keeper
 
     steps:
       - name: Checkout del código
@@ -19,14 +23,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: scripts/supabase-keeper/package-lock.json
 
       - name: Instalar dependencias
         run: npm ci
 
       - name: Ejecutar Mantenedor Supabase
         env:
-          # Opcional: Puedes configurar tus proyectos en el Secret SUPABASE_PROJECTS de GitHub
+          # Opción A: JSON array de proyectos
+          # [{"name":"app","url":"https://xxx.supabase.co","key":"..."}]
           SUPABASE_PROJECTS: ${{ secrets.SUPABASE_PROJECTS }}
+          # Opción B (fallback): secrets ya usados por flutter-ci / deploy-vercel
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           FAIL_ON_ERROR: 'false'
           GH_TOKEN: ${{ github.token }}
         run: npm run ping
