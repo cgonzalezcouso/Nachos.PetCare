@@ -1,0 +1,13 @@
+{
+  "name": "supabase-keeper",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Keep-alive ping for free-tier Supabase projects",
+  "scripts": {
+    "ping": "node ping.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
